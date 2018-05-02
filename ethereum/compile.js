@@ -17,8 +17,8 @@ var input = {
     'ContractCPList.sol': fs.readFileSync(pathContractCPList, 'utf8'),
     'ContractPI.sol': fs.readFileSync(pathContractPI, 'utf8'),
     'ContractPIList.sol': fs.readFileSync(pathContractPIList, 'utf8'),
-	'ClinicCategory.sol': fs.readFileSync(pathClinicCategory, 'utf8'),
-	'InsuranceCategory.sol': fs.readFileSync(pathInsuranceCategory, 'utf8')
+		'ClinicCategory.sol': fs.readFileSync(pathClinicCategory, 'utf8'),
+		'InsuranceCategory.sol': fs.readFileSync(pathInsuranceCategory, 'utf8')
 };
 const output = solc.compile({sources: input}, 1).contracts;
 
@@ -26,7 +26,7 @@ fs.ensureDirSync(buildPath);
 
 for (let contract in output) {
   fs.outputJsonSync(
-    path.resolve(buildPath, contract.replace(':', '') + '.json'),
+    path.resolve(buildPath, contract.substring(0, contract.indexOf('.sol')) + '.json'),
     output[contract]
   );
 }
