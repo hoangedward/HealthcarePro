@@ -149,7 +149,7 @@ class CampaignIndex extends Component {
 					gas: 4000000
         });
 
-      Router.pushRoute('/patient/insurer/new');
+      Router.pushRoute('/patient/insurer');
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
