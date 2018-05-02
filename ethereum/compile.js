@@ -26,7 +26,7 @@ fs.ensureDirSync(buildPath);
 
 for (let contract in output) {
   fs.outputJsonSync(
-    path.resolve(buildPath, contract.substring(0, contract.indexOf(':')) + '.json'),
+    path.resolve(buildPath, contract.substring(0, contract.indexOf('.sol')) + '.json'),
     output[contract]
   );
 }
