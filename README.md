@@ -27,6 +27,10 @@ ContractCP:
 Run below command to start server at localhost:3000
 	npm run dev
 	
+	
+TODO:
+	compile.js: after run, go to build folder and rename contract json file
+		Ex: ClinicCategory.solClinicCategory.json ==> ClinicCategory.json
 Some note:
 	npm install --save web3-providers-http
 	npm install -save query-string
