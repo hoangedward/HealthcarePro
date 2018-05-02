@@ -17,13 +17,13 @@
 		node compile.js
 	
 ## ContractPI:
-Step 1: Deploy static contracts:
-	Use deploy script (/ethereum/deploy_pi.js)
-	node deploy_pi.js
-		- Patient deploy InsuranceCategory
-		- Admin deploy ContractPIList
-	Edit /ethereum/ContractPIList.js: use address of deployed ContractPIList
-	Edit /pages/patient/insurer/confirm,js: use address of deployed InInsurerCategory
+	Step 1: Deploy static contracts:
+		Use deploy script (/ethereum/deploy_pi.js)
+		node deploy_pi.js
+			- Patient deploy InsuranceCategory
+			- Admin deploy ContractPIList
+		Edit /ethereum/ContractPIList.js: use address of deployed ContractPIList
+		Edit /pages/patient/insurer/confirm,js: use address of deployed InInsurerCategory
 		
 ## ContractCP:
 	TODO
@@ -33,8 +33,7 @@ Step 1: Deploy static contracts:
 	
 	
 ## TODO:
-	compile.js: after run, go to build folder and rename contract json file
-		Ex: ClinicCategory.solClinicCategory.json ==> ClinicCategory.json
+	XXX
 ## Some note:
 	npm install --save web3-providers-http
 	npm install -save query-string
