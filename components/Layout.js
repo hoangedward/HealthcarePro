@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from 'semantic-ui-react';
 import Head from 'next/head';
 import Header from './Header';
+import Footer from './Footer';
 
 export default props => {
   return (
@@ -11,10 +12,13 @@ export default props => {
           rel="stylesheet"
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
         />
+				<title>Healthcare Pro</title>
+				<link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.ico" />
       </Head>
 
       <Header />
       {props.children}
+			<Footer />
     </Container>
   );
 };

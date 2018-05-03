@@ -1,6 +1,7 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
 import { Link } from '../routes';
+// import logo from './logo.bmp'; // Tell Webpack this JS file uses this image
 
 export default () => {
   return (
@@ -10,12 +11,8 @@ export default () => {
       </Link>
 
       <Menu.Menu position="right">
-        <Link route="/">
-          <a className="item">Contracts</a>
-        </Link>
-
-        <Link route="/campaigns/new">
-          <a className="item">+</a>
+        <Link route="/admin">
+          <a color='brown' className="item">Admin</a>
         </Link>
       </Menu.Menu>
     </Menu>

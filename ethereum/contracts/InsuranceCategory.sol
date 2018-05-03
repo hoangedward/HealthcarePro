@@ -54,10 +54,8 @@ contract InsuranceCategory {
         optionG12.items[3] = itemG_3;
 		optionG12.items[4] = itemG_4;
         
-        Option[] generalOptions;
-        generalOptions.push(optionG6);
-		generalOptions.push(optionG12);
-        _availableOptionsList[1] = generalOptions;
+        _availableOptionsList[1].push(optionG6);
+        _availableOptionsList[1].push(optionG12);
         
         // Option 2: Premium - 6 months
         optionP6.items[1] = itemP_1;
@@ -75,10 +73,8 @@ contract InsuranceCategory {
 		optionP12.items[5] = itemP_5;
 		optionP12.items[6] = itemP_6;
         
-        Option[] premiumOptions;
-        premiumOptions.push(optionP6);
-		premiumOptions.push(optionP12);
-        _availableOptionsList[2] = premiumOptions;
+        _availableOptionsList[2].push(optionP6);
+        _availableOptionsList[2].push(optionP12);
         
     }
     

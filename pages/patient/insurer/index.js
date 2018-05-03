@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Grid, Segment } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
 import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
+
+import {Pi} from './pi';
 
 class CampaignIndex extends Component {
 
@@ -17,12 +19,22 @@ class CampaignIndex extends Component {
 
   renderCampaigns() {
     const items = this.props.campaigns.map(address => {
+			var summary = Pi.getSummary(address);
       return {
         header: address,
         description: (
-          <Link route={`/patient/insurer/view/${address}`}>
-            <a>View Contract</a>
-          </Link>
+					<Grid columns='equal' divided>
+						<Grid.Row stretched>
+							<Grid.Column>
+								<Link route={`/patient/insurer/view/${address}`}>
+									<a>View Contract</a>
+								</Link>
+							</Grid.Column>
+							<Grid.Column width={3}>
+								{Pi.renderStatus(summary[0])}
+							</Grid.Column>
+						</Grid.Row>
+					</Grid>
         ),
         fluid: true
       };

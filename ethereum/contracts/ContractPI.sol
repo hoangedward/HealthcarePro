@@ -50,7 +50,6 @@ contract ContractPI {
         require(msg.sender == _patient);
         uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
         require(totalContractValue > 0);
-        require(msg.value >= inContractValue);
         require(inContractValue >= totalContractValue);
         require(inStartDate >= now);
         
@@ -137,7 +136,7 @@ contract ContractPI {
     }
 		
 		function getSummary() public view returns (
-      Status, address, address, uint, uint, uint, uint, uint
+      Status, address, address, uint, uint, uint, uint, uint, uint
       ) {
 				uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
         return (
@@ -148,7 +147,8 @@ contract ContractPI {
 					_period,
 					totalContractValue,
 					_startDate,
-					_endDate
+					_endDate,
+					this.balance
         );
     }
     

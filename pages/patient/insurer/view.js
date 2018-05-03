@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
 import { Form, Button, Input, Message, Card, Image, List, Icon, Segment } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
-import { Link } from '../../../routes';
+import { Router, Link } from '../../../routes';
 
 import ContractPI from '../../../ethereum/ContractPI';
 import web3 from '../../../ethereum/web3';
 
+import Accounts from '../../../ethereum/const/Accounts.json';
+import {Pi} from './pi';
+import {datetime} from '../../../utils/datetime';
+import {eth} from '../../../utils/eth';
+
 class CampaignIndex extends Component {
 	
 	static async getInitialProps(props) {
-    const contractPI = ContractPI(props.query.address);
-
-    const summary = await contractPI.methods.getSummary().call();
+    const summary = await Pi.getSummary(props.query.address);
 
     return {
       address: props.query.address,
@@ -22,7 +25,8 @@ class CampaignIndex extends Component {
 			period: summary[4],
 			totalContractValue: summary[5],
 			startDate: summary[6],
-			endDate: summary[7]
+			endDate: summary[7],
+			balance: summary[8]
     };
   }
 	
@@ -31,28 +35,6 @@ class CampaignIndex extends Component {
 		loading: false,
 		buttonStatus: [true, true]
 	};
-	
-	renderStatus() {
-		var _status = "N/A";
-		if(this.props.status == 0) {
-				_status = "NEW";
-		}
-		
-		return (
-			_status
-		);
-	}
-	
-	renderPackName() {
-		var _packName = "N/A";
-		if(this.props.packId == 1) {
-			_packName = "General Pack";
-		}
-		else if(this.props.packId == 2) {
-			_packName = "Premium Pack";
-		}
-		return (_packName);
-	}
 	
 	isEnableButton(name) {
 		if(name == "confirm") {
@@ -69,32 +51,60 @@ class CampaignIndex extends Component {
 		}
 		
 	}
+	
+	onConfirm = async event => {
+    event.preventDefault();
+
+    this.setState({ loading: true, errorMessage: '' });
+		
+		const contractPI = ContractPI(this.props.address);
+
+    try {
+      await contractPI.methods
+        .patientConfirm(Date.now(), this.props.totalContractValue)
+        .send({
+          from: Accounts['Patient'],
+					gas: 40000000,
+					value: web3.utils.toWei(this.props.totalContractValue, 'ether')
+        });
+
+      Router.pushRoute('/patient/insurer');
+    } catch (err) {
+      this.setState({ errorMessage: err.message });
+    }
+
+    this.setState({ loading: false });
+  };
 
   render() {
     return (
       <Layout>
 				<h3>Insurance Contract Infomation</h3>
-        <div>
-					<Segment.Group>
-						<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
-						<Segment><strong>Status: </strong>{this.renderStatus()}</Segment>
-						<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
-						<Segment><strong>Insurer Address: </strong>{this.props.insurer}</Segment>
-						<Segment><strong>Pack Name: </strong>{this.renderPackName()}</Segment>
-						<Segment><strong>Total Value: </strong>{this.props.totalContractValue}</Segment>
-						<Segment><strong>Start Date: </strong>{this.props.startDate}</Segment>
-						<Segment><strong>End Date: </strong>{this.props.endDate}</Segment>
-					</Segment.Group>
+				<Form error={!!this.state.errorMessage}>
+					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
-						<Button color='teal' disabled={!this.isEnableButton("confirm")} >Confirm</Button>
-						<Button color='grey' disabled={!this.isEnableButton("cancel")} >Cancel</Button>
-						<Link route="/patient/insurer">
-							<a>
-								<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-							</a>
-						</Link>
+						<Segment.Group>
+							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
+							<Segment><strong>Status: </strong>{Pi.renderStatus(this.props.status)}</Segment>
+							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
+							<Segment><strong>Insurer Address: </strong>{this.props.insurer}</Segment>
+							<Segment><strong>Pack Name: </strong>{Pi.renderPackName(this.props.packId)} ({Pi.renderPeriod(this.props.period)})</Segment>
+							<Segment><strong>Total Value: </strong>{this.props.totalContractValue}</Segment>
+							<Segment><strong>Start Date: </strong>{datetime.fromTimestamp(this.props.startDate)}</Segment>
+							<Segment><strong>End Date: </strong>{datetime.fromTimestamp(this.props.endDate)}</Segment>
+							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>
+						</Segment.Group>
+						<div>
+							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
+							<Button color='grey' disabled={!this.isEnableButton("cancel")} >Cancel</Button>
+							<Link route="/patient/insurer">
+								<a>
+									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
+								</a>
+							</Link>
+						</div>
 					</div>
-        </div>
+				</Form>
       </Layout>
     );
   }
