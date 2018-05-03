@@ -62,14 +62,22 @@ contract ContractPI {
         
     }
     
-    function patientCancel() {
-        require(msg.sender == _patient);
+    function patientCancel(address inPatient) {
+        require(inPatient == _patient);
         require(_status == Status.NEW);
-        suicide(msg.sender);
+        suicide(inPatient);
     }
+		
+		function canCancel(address inPatient) external returns (bool) {
+			return inPatient == _patient && _status == Status.NEW;
+		}
     
     function getInsurer() returns(address) {
         return _insurer;
+    }
+		
+		function getPatient() returns(address) {
+        return _patient;
     }
     
     function requestForClaim(address inContractCP) returns (uint) {

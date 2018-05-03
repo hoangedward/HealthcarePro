@@ -43,5 +43,35 @@ contract ContractPIList {
     function getInsurerContracts(address inInsurer) returns (address[]) {
         return _insurerContractList[inInsurer];
     }
+		
+		function patientCancel(address inContract) public returns (uint) {
+			address[] contractList = _patientContractList[msg.sender];
+			for(uint i = 0; i < contractList.length; i++) {
+				if(contractList[i] == inContract) {
+					ContractPI pi = ContractPI(inContract);
+					if(pi.canCancel(msg.sender) == false) {
+						return 1;
+					}
+					address patient = pi.getPatient();
+					address insurer = pi.getInsurer();
+					removeContract(insurer, patient, i);
+					pi.patientCancel(msg.sender);
+					return 0;
+				}
+			}
+			return 1;
+		}
+		
+		function removeContract(address inInsurer, address inPatient, uint inIndex) internal {
+			address[] currentContractListOfPatient = _patientContractList[inPatient];
+			currentContractListOfPatient[inIndex] = currentContractListOfPatient[currentContractListOfPatient.length - 1];
+			delete currentContractListOfPatient[currentContractListOfPatient.length - 1];
+			currentContractListOfPatient.length--;
+			
+			address[] currentContractListOfInsurer = _insurerContractList[inInsurer];
+			currentContractListOfInsurer[inIndex] = currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
+			delete currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
+			currentContractListOfInsurer.length--;
+		}
     
 }

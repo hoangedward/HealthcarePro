@@ -4,6 +4,7 @@ import Layout from '../../../components/Layout';
 import { Router, Link } from '../../../routes';
 
 import ContractPI from '../../../ethereum/ContractPI';
+import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 
 import Accounts from '../../../ethereum/const/Accounts.json';
@@ -75,6 +76,27 @@ class CampaignIndex extends Component {
 
     this.setState({ loading: false });
   };
+	
+	onCancel = async event => {
+    event.preventDefault();
+
+    this.setState({ loading: true, errorMessage: '' });
+
+    try {
+      await ContractPIList.methods
+        .patientCancel(this.props.address)
+        .send({
+          from: Accounts['Patient'],
+					gas: 4000000
+        });
+
+      Router.pushRoute('/patient/insurer');
+    } catch (err) {
+      this.setState({ errorMessage: err.message });
+    }
+
+    this.setState({ loading: false });
+  };
 
   render() {
     return (
@@ -96,7 +118,7 @@ class CampaignIndex extends Component {
 						</Segment.Group>
 						<div>
 							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
-							<Button color='grey' disabled={!this.isEnableButton("cancel")} >Cancel</Button>
+							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={this.onCancel} >Cancel</Button>
 							<Link route="/patient/insurer">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
