@@ -33,7 +33,7 @@ class CampaignIndex extends Component {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Link route={`/patient/clinic/confirm/clinic_zero`}>
+                                <Link route={`/patient/clinic/register/clinic_zero`}>
                                     <a>
                                         <Button content="Choose" color="olive" floated="right" />
                                     </a>
@@ -60,7 +60,7 @@ class CampaignIndex extends Component {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Link route={`/patient/clinic/confirm/clinic_zero`}>
+                                <Link route={`/patient/clinic/register/clinic_zero`}>
                                     <a>
                                         <Button content="Choose" color="olive" floated="right" />
                                     </a>

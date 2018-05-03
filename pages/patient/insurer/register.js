@@ -120,7 +120,7 @@ class CampaignIndex extends Component {
 					</Card.Content>
 					<Card.Content extra>
 						<div>
-							<Button primary onClick={this.onConfirm} loading={this.state.loading}>Confirm</Button>
+							<Button primary onClick={this.onRegister} loading={this.state.loading}>Register</Button>
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' onClick={this.onBack} />
 						</div>
 					</Card.Content>
@@ -129,7 +129,7 @@ class CampaignIndex extends Component {
 		);
 	}
 	
-	onConfirm = async event => {
+	onRegister = async event => {
 		event.preventDefault();
 
     this.setState({ loading: true, errorMessage: '' });

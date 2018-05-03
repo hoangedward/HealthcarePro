@@ -37,7 +37,7 @@ class CampaignIndex extends Component {
 								</Card.Content>
 								<Card.Content extra>
 									<Button.Group fluid>
-										<Link route={`/patient/insurer/confirm/pack1_6months`}>
+										<Link route={`/patient/insurer/register/pack1_6months`}>
 											<a>
 												<Button animated='fade' color='teal'>
 													<Button.Content visible>6 Months</Button.Content>
@@ -48,7 +48,7 @@ class CampaignIndex extends Component {
 											</a>
 										</Link>
 										<Button.Or />
-										<Link route={`/patient/insurer/confirm/pack1_12months`}>
+										<Link route={`/patient/insurer/register/pack1_12months`}>
 											<a>
 												<Button animated='fade' color='olive'>
 													<Button.Content visible>1 Year</Button.Content>
@@ -82,7 +82,7 @@ class CampaignIndex extends Component {
 								</Card.Content>
 								<Card.Content extra>
 									<Button.Group fluid>
-										<Link route={`/patient/insurer/confirm/pack2_6months`}>
+										<Link route={`/patient/insurer/register/pack2_6months`}>
 											<a>
 												<Button animated='fade' color='teal'>
 													<Button.Content visible>6 Months</Button.Content>
@@ -93,7 +93,7 @@ class CampaignIndex extends Component {
 											</a>
 										</Link>
 										<Button.Or />
-										<Link route={`/patient/insurer/confirm/pack2_12months`}>
+										<Link route={`/patient/insurer/register/pack2_12months`}>
 											<a>
 												<Button animated='fade' color='olive'>
 													<Button.Content visible>1 Year</Button.Content>
