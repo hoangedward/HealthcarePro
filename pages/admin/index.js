@@ -15,12 +15,12 @@ class CampaignIndex extends Component {
 	
 	async componentDidMount() {
     var balanceMap = [];
-		balanceMap[Accounts['Admin']] = await web3.eth.getBalance(Accounts.Admin);
-		balanceMap[Accounts['Patient']] = await web3.eth.getBalance(Accounts['Patient']);
-		balanceMap[Accounts['Clinic']] = await web3.eth.getBalance(Accounts['Clinic']);
-		balanceMap[Accounts['Insurer']] = await web3.eth.getBalance(Accounts['Insurer']);
-		balanceMap[DeployAddress['ContractPIList']] = await web3.eth.getBalance(DeployAddress['ContractPIList']);
-		balanceMap[DeployAddress['InsuranceCategory']] = await web3.eth.getBalance(DeployAddress['InsuranceCategory']);
+		balanceMap[Accounts.Admin] = await web3.eth.getBalance(Accounts.Admin);
+		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
+		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
+		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
+		balanceMap[DeployAddress.ContractPIList] = await web3.eth.getBalance(DeployAddress.ContractPIList);
+		balanceMap[DeployAddress.InsuranceCategory] = await web3.eth.getBalance(DeployAddress.InsuranceCategory);
 		this.setState( {balance: balanceMap} );
   }
 	
@@ -47,30 +47,30 @@ class CampaignIndex extends Component {
 						<div class="ui segment">
 							<strong>Name: </strong> Admin
 							<br/>
-							<strong>Address: </strong> {Accounts['Admin']}
+							<strong>Address: </strong> {Accounts.Admin}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(Accounts['Admin'])} ETH
+							<strong>Balance: </strong> {this.getBalance(Accounts.Admin)} ETH
 						</div>
 						<div class="ui red segment">
 							<strong>Name: </strong> Patient
 							<br/>
-							<strong>Address: </strong> {Accounts['Patient']}
+							<strong>Address: </strong> {Accounts.Patient}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(Accounts['Patient'])} ETH
+							<strong>Balance: </strong> {this.getBalance(Accounts.Patient)} ETH
 						</div>
 						<div class="ui blue segment">
 							<strong>Name: </strong> Clinic
 							<br/>
-							<strong>Address: </strong> {Accounts['Clinic']}
+							<strong>Address: </strong> {Accounts.Clinic}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(Accounts['Clinic'])} ETH
+							<strong>Balance: </strong> {this.getBalance(Accounts.Clinic)} ETH
 						</div>
 						<div class="ui green segment">
 							<strong>Name: </strong> Insurer
 							<br/>
-							<strong>Address: </strong> {Accounts['Insurer']}
+							<strong>Address: </strong> {Accounts.Insurer}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(Accounts['Insurer'])} ETH
+							<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
 						</div>
 					</div>
 					
@@ -80,17 +80,17 @@ class CampaignIndex extends Component {
 							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> ContractPIList
 							<br/>
-							<strong>Address: </strong> {DeployAddress['ContractPIList']}
+							<strong>Address: </strong> {DeployAddress.ContractPIList}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(DeployAddress['ContractPIList'])} ETH
+							<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
 						</div>
 						<div class="ui red segment">
 							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> InsuranceCategory
 							<br/>
-							<strong>Address: </strong> {DeployAddress['InsuranceCategory']}
+							<strong>Address: </strong> {DeployAddress.InsuranceCategory}
 							<br/>
-							<strong>Balance: </strong> {this.getBalance(DeployAddress['InsuranceCategory'])} ETH
+							<strong>Balance: </strong> {this.getBalance(DeployAddress.InsuranceCategory)} ETH
 						</div>
 					</div>
         </div>

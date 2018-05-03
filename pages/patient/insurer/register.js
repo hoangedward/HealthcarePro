@@ -7,6 +7,7 @@ import { Router } from '../../../routes';
 import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 import deployed_address from '../../../ethereum/deployed_address.json';
+import Accounts from '../../../ethereum/const/Accounts.json';
 
 class CampaignIndex extends Component {
 	
@@ -135,17 +136,11 @@ class CampaignIndex extends Component {
     this.setState({ loading: true, errorMessage: '' });
 		
     try {
-      const accounts = await web3.eth.getAccounts();
-			
-			var inInsurer = accounts[3];
-			var inPatient = accounts[1];
-			// var inInsurerCategory = "0x471C92F915ae766C4964eEdC300e5b8FF41e443c";
-			var inInsurerCategory = deployed_address['InsuranceCategory'];
 			
       await ContractPIList.methods
-        .createContract(inInsurer, inPatient, this.props.packId, this.props.period, inInsurerCategory)
+        .createContract(Accounts.Insurer, Accounts.Patient, this.props.packId, this.props.period, deployed_address.InsuranceCategory)
         .send({
-          from: inPatient,
+          from: Accounts.Patient,
 					gas: 4000000
         });
 

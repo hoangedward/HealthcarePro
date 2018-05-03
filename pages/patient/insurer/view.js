@@ -64,7 +64,7 @@ class CampaignIndex extends Component {
       await contractPI.methods
         .patientConfirm(Date.now(), this.props.totalContractValue)
         .send({
-          from: Accounts['Patient'],
+          from: Accounts.Patient,
 					gas: 40000000,
 					value: web3.utils.toWei(this.props.totalContractValue, 'ether')
         });
@@ -86,7 +86,7 @@ class CampaignIndex extends Component {
       await ContractPIList.methods
         .patientCancel(this.props.address)
         .send({
-          from: Accounts['Patient'],
+          from: Accounts.Patient,
 					gas: 4000000
         });
 
