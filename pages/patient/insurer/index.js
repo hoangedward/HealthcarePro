@@ -6,6 +6,8 @@ import { Link } from '../../../routes';
 import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 
+import Accounts from '../../../ethereum/const/Accounts.json';
+
 import {Pi} from './pi';
 
 class CampaignIndex extends Component {
@@ -13,7 +15,7 @@ class CampaignIndex extends Component {
   static async getInitialProps() {
     const accounts = await web3.eth.getAccounts();
     const campaigns = await 
-		ContractPIList.methods.getPatientContracts(accounts[1]).call();
+		ContractPIList.methods.getPatientContracts(Accounts.Patient).call();
 
     return { campaigns };
    }

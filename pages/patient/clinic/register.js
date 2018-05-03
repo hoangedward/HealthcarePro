@@ -4,6 +4,7 @@ import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 import { Router } from '../../../routes';
 import deployed_address from '../../../ethereum/deployed_address.json';
+import Accounts from '../../../ethereum/const/Accounts.json';
 
 class CampaignIndex extends Component {
     state = {
@@ -25,9 +26,8 @@ class CampaignIndex extends Component {
         this.setState({ loading: true, errorMessage: '' });
 
         try {
-            const accounts = await web3.eth.getAccounts();
             var clinicCategoryAddress = deployed_address['ClinicCategory'];
-            var patientAddress = accounts[1];
+            var patientAddress = Accounts.Patient;
             var contractPIAddress = 'Retrieve from the selection on GUI';
         } catch (err) {
             this.setState({ errorMessage: err.message });
