@@ -1,7 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
 import { Link } from '../routes';
-// import logo from './logo.bmp'; // Tell Webpack this JS file uses this image
 
 export default () => {
   return (

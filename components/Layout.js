@@ -13,7 +13,6 @@ export default props => {
           href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
         />
 				<title>Healthcare Pro</title>
-				<link rel="shortcut icon" type="image/x-icon" href="../resources/images/favicon.ico" />
       </Head>
 
       <Header />

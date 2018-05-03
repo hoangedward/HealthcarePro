@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Input, Message, Card, Image, List, Icon } from 'semantic-ui-react';
+import { Form, Button, Message, Card, List } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 import { Router } from '../../../routes';
@@ -7,8 +7,6 @@ import { Router } from '../../../routes';
 import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 import deployed_address from '../../../ethereum/deployed_address.json';
-
-const queryString = require('query-string');
 
 class CampaignIndex extends Component {
 	

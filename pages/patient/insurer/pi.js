@@ -1,12 +1,4 @@
-import React, { Component } from 'react';
-import { Form, Button, Input, Message, Card, Image, List, Icon, Segment } from 'semantic-ui-react';
-import Layout from '../../../components/Layout';
-import { Router, Link } from '../../../routes';
-
 import ContractPI from '../../../ethereum/ContractPI';
-import web3 from '../../../ethereum/web3';
-
-import Accounts from '../../../ethereum/const/Accounts.json';
 
 const Pi = {  
 

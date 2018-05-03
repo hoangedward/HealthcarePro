@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid, Segment } from 'semantic-ui-react';
+import { Card, Button, Grid } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
