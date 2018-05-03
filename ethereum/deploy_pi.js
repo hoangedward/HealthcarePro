@@ -6,8 +6,10 @@ const ContractPIList = require('./build/ContractPIList.json');
 const provider = new Web3HttpProvider('http://localhost:8545');
 const web3 = new Web3(provider);
 
+const deployed_address = require('./deployed_address.js');
+
 const deploy = async () => {
-  const accounts = await web3.eth.getAccounts();
+  const accounts = await web3.eth.getAccounts(); 
 
   // InsuranceCategory
   console.log('Attempting to deploy InsuranceCategory from account', accounts[3]);
@@ -29,6 +31,11 @@ const deploy = async () => {
     .deploy({ data: ContractPIList.bytecode })
     .send({ gas: '4000000', from: accounts[0] });
 
+
   console.log('Contract ContractPIList deployed to', resultContractPIList.options.address);
+
+  // Write to json file of deployed addresses
+  writeAddressJson("InsuranceCategory", resultInsuranceCategory.options.address);
+  writeAddressJson("ContractPIList", resultContractPIList.options.address);
 };
 deploy();
