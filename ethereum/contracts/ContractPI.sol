@@ -32,7 +32,8 @@ contract ContractPI {
     uint private _period;
     uint private _packId;
     
-    mapping(address => ClaimRequest) _claimQueue;
+    mapping(address => ClaimRequest) private _claimQueue;
+    address[] private _claimAddressQueue;
     
     InsuranceCategory private _insuranceCategory;
     
@@ -99,6 +100,9 @@ contract ContractPI {
         uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, checkItems, checkPrices);
         if(totalAmount > 0) {
           _claimQueue[inContractCP] = ClaimRequest(inContractCP, _patient, false, totalAmount);
+          
+          _claimAddressQueue.push(inContractCP);
+          
           ClaimRequested(inContractCP, _patient, totalAmount);
           return 0;
         }
@@ -126,6 +130,37 @@ contract ContractPI {
         require(_endDate < now);
         _status = Status.EXPIRED;
         msg.sender.transfer(this.balance);
+    }
+    
+    function getClaimQueue() view returns (address[], address[], uint[], bool[]) {
+        uint length = 2;
+        address[] memory addressList = new address[](length);
+        address[] memory patientList = new address[](length);
+        uint[] memory amountList = new uint[](length);
+        bool[] memory paidList = new bool[](length);
+        // address[] memory addressList = new address[](_claimAddressQueue.length);
+        // address[] memory patientList = new address[](_claimAddressQueue.length);
+        // uint[] memory amountList = new uint[](_claimAddressQueue.length);
+        // bool[] memory paidList = new bool[](_claimAddressQueue.length);
+        // for(uint i = 0; i < _claimAddressQueue.length; i++) {
+        //     ClaimRequest request = _claimQueue[_claimAddressQueue[i]];
+        //     addressList.push(request.requestedContract);
+        //     patientList.push(request.patient);
+        //     paidList.push(request.paid);
+        //     amountList.push(request.amount);
+        // }
+        // Test
+        addressList[0] = _patient;
+        patientList[0] = _insurer;
+        paidList[0] = false;
+        amountList[0] = 20;
+        
+        addressList[1] = _insurer;
+        patientList[1] = _patient;
+        paidList[1] = true;
+        amountList[1] = 200;
+        
+        return (addressList, patientList, amountList, paidList);
     }
     
     function monthToMiliseconds(uint inMonth) internal returns (uint) {

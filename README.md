@@ -10,6 +10,7 @@
 ## Start Ganache
 	Download at: http://truffleframework.com/ganache/
 	Setting port number: 8545
+	Mnemonic: sponsor affair like elephant sunset close army wealth fence update awesome act
 
 ## List of account (using Ganache):
 	[0]: Admin account: use to deploy ContractList, ...

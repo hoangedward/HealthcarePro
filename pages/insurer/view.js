@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Form, Button, Message, Segment } from 'semantic-ui-react';
-import Layout from '../../../components/Layout';
-import { Router, Link } from '../../../routes';
+import Layout from '../../components/Layout';
+import { Router, Link } from '../../routes';
 
-import ContractPI from '../../../ethereum/ContractPI';
-import ContractPIList from '../../../ethereum/ContractPIList';
-import web3 from '../../../ethereum/web3';
+import ContractPI from '../../ethereum/ContractPI';
+import ContractPIList from '../../ethereum/ContractPIList';
+import web3 from '../../ethereum/web3';
 
-import Accounts from '../../../ethereum/const/Accounts.json';
-import {Pi} from '../../../utils/pi';
-import {datetime} from '../../../utils/datetime';
-import {eth} from '../../../utils/eth';
+import Accounts from '../../ethereum/const/Accounts.json';
+import {Pi} from '../../utils/pi';
+import {datetime} from '../../utils/datetime';
+import {eth} from '../../utils/eth';
 
 class CampaignIndex extends Component {
 	
@@ -33,18 +33,18 @@ class CampaignIndex extends Component {
 	
 	state = {
 		errorMessage: '',
-		loading: false,
-		buttonStatus: [true, true]
+		loading: false
 	};
 	
 	isEnableButton(name) {
-		if(name == "confirm") {
+		return true; // TEST
+		if(name == "withdraw") {
 			if(this.props.status == 0) {
 				return true;
 			}
 			return false;
 		}
-		else if(name == "cancel") {
+		else if(name == "claimQueue") {
 			if(this.props.status == 0) {
 				return true;
 			}
@@ -53,44 +53,10 @@ class CampaignIndex extends Component {
 		
 	}
 	
-	onConfirm = async event => {
+	onWithdraw = async event => {
     event.preventDefault();
-
-    this.setState({ loading: true, errorMessage: '' });
-		
-		const contractPI = ContractPI(this.props.address);
-
-    try {
-      await contractPI.methods
-        .patientConfirm(Date.now(), this.props.totalContractValue)
-        .send({
-          from: Accounts.Patient,
-					gas: 40000000,
-					value: web3.utils.toWei(this.props.totalContractValue, 'ether')
-        });
-
-      Router.pushRoute('/patient/insurer');
-    } catch (err) {
-      this.setState({ errorMessage: err.message });
-    }
-
-    this.setState({ loading: false });
-  };
-	
-	onCancel = async event => {
-    event.preventDefault();
-
-    this.setState({ loading: true, errorMessage: '' });
-
-    try {
-      await ContractPIList.methods
-        .patientCancel(this.props.address)
-        .send({
-          from: Accounts.Patient,
-					gas: 4000000
-        });
-
-      Router.pushRoute('/patient/insurer');
+		try {
+			this.setState({ loading: true, errorMessage: '' });
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -117,9 +83,13 @@ class CampaignIndex extends Component {
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>
 						</Segment.Group>
 						<div>
-							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
-							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={this.onCancel} >Cancel</Button>
-							<Link route="/patient/insurer">
+							<Button color='teal' disabled={!this.isEnableButton("withdraw")} onClick={this.onWithdraw}>Withdraw</Button>
+							<Link route={`/insurer/claimqueue/${this.props.address}`}>
+								<a>
+									<Button color='olive' disabled={!this.isEnableButton("claimQueue")} >Claim Queue</Button>
+								</a>
+							</Link>
+							<Link route="/insurer">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 								</a>

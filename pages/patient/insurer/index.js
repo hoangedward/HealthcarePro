@@ -8,7 +8,7 @@ import web3 from '../../../ethereum/web3';
 
 import Accounts from '../../../ethereum/const/Accounts.json';
 
-import {Pi} from './pi';
+import {Pi} from '../../../utils/pi';
 
 class CampaignIndex extends Component {
 
