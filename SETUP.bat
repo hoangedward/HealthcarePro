@@ -1,5 +1,4 @@
 cd ethereum
-data.bat
 deploy.bat
 
 
