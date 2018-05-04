@@ -3,8 +3,11 @@ import { Form, Card, Message, Button, Checkbox, Table } from 'semantic-ui-react'
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 import { Router } from '../../../routes';
+
 import deployed_address from '../../../ethereum/deployed_address.json';
 import Accounts from '../../../ethereum/const/Accounts.json';
+
+import ContractCPList from '../../../ethereum/ContractCPList';
 
 class CampaignIndex extends Component {
     state = {
@@ -26,12 +29,23 @@ class CampaignIndex extends Component {
         this.setState({ loading: true, errorMessage: '' });
 
         try {
-            var clinicCategoryAddress = deployed_address['ClinicCategory'];
-            var patientAddress = Accounts.Patient;
-            var contractPIAddress = 'Retrieve from the selection on GUI';
+            await ContractCPList.methods
+                .createContract(
+                    Accounts.Clinic,
+                    Accounts.Patient,
+                    deployed_address.ClinicCategory,
+                    [2,4,6])
+                .send({
+                    from: Accounts.Patient,
+                    gas: 4000000
+                });
+            // Go to the contracts list of Patient
+            Router.pushRoute('/clinic');
         } catch (err) {
             this.setState({ errorMessage: err.message });
         }
+
+        this.setState({ loading: false });
     }
 
     onBack = async event => {
@@ -43,7 +57,7 @@ class CampaignIndex extends Component {
         return(
             <Layout>
                 <div>
-                    <h3>Your contracts with '{this.props.clinic_name}'</h3>
+                    <h3>Your contract with {this.props.clinic_name}</h3>
                     <Form error={!!this.state.errorMessage}>
                         <Message error header="Oops!" content={this.state.errorMessage} />
                         <Card.Group>
@@ -58,7 +72,15 @@ class CampaignIndex extends Component {
                                             <Table.Body>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        <Checkbox label="Item 1" />
+                                                        <Checkbox label="Fever" />
+                                                    </Table.Cell>
+                                                    <Table.Cell textAlign='right'>
+                                                        1 ETH
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                                <Table.Row>
+                                                    <Table.Cell>
+                                                        <Checkbox label="Backache" />
                                                     </Table.Cell>
                                                     <Table.Cell textAlign='right'>
                                                         2 ETH
@@ -66,7 +88,7 @@ class CampaignIndex extends Component {
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        <Checkbox label="Item 2" />
+                                                        <Checkbox label="Stomach ache" />
                                                     </Table.Cell>
                                                     <Table.Cell textAlign='right'>
                                                         2 ETH
@@ -74,26 +96,26 @@ class CampaignIndex extends Component {
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        <Checkbox label="Item 3" />
+                                                        <Checkbox label="Toothache" />
                                                     </Table.Cell>
                                                     <Table.Cell textAlign='right'>
-                                                        2 ETH
+                                                        3 ETH
                                                     </Table.Cell>
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        <Checkbox label="Item 4" />
+                                                        <Checkbox label="Cancel" />
                                                     </Table.Cell>
                                                     <Table.Cell textAlign='right'>
-                                                        2 ETH
+                                                        10 ETH
                                                     </Table.Cell>
                                                 </Table.Row>
                                                 <Table.Row>
                                                     <Table.Cell>
-                                                        <Checkbox label="Item 5" />
+                                                        <Checkbox label="General examination" />
                                                     </Table.Cell>
                                                     <Table.Cell textAlign='right'>
-                                                        2 ETH
+                                                        5 ETH
                                                     </Table.Cell>
                                                 </Table.Row>
                                             </Table.Body>
@@ -101,7 +123,7 @@ class CampaignIndex extends Component {
                                         <hr/>
                                     </Card.Meta>
                                     <Card.Description>
-                                        <h4>Total price: 8 ETH</h4>
+                                        <h4>Total price: 6 ETH</h4>
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>

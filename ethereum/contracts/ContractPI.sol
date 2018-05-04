@@ -159,7 +159,23 @@ contract ContractPI {
 					this.balance
         );
     }
-    
+
+    function calculateClaimAmount(address inContractCP) returns (uint) {
+        ContractCP cp = ContractCP(inContractCP);
+        // //require(cp.getPatient() == _patient);
+        return 100;
+        // uint itemCount = cp.getItemCount();
+        // uint[] checkItems;
+        // uint[] checkPrices;
+        // for(uint i = 0; i < itemCount; i++) {
+        //     checkItems[i] = cp.getCheckItem(i);
+        //     checkPrices[i] = cp.getCheckPrice(i);
+        // }
+        
+        //uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, checkItems, checkPrices);
+        //return totalAmount;
+    }
+
     event ContractSigned(address, uint, uint);
     
     event ClaimRequested(address, address, uint);

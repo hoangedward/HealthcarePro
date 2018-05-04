@@ -18,7 +18,7 @@ class CampaignIndex extends Component {
                         <Card>
                             <Card.Content>
                                 <Card.Header>
-                                    General Clinic
+                                    Family Clinic
                                 </Card.Header>
                                 <Card.Meta>
                                     We share with you
@@ -33,7 +33,7 @@ class CampaignIndex extends Component {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Link route={`/patient/clinic/register/clinic_zero`}>
+                                <Link route={`/patient/clinic/register/FamilyClinic`}>
                                     <a>
                                         <Button content="Choose" color="olive" floated="right" />
                                     </a>
@@ -43,7 +43,7 @@ class CampaignIndex extends Component {
                         <Card>
                             <Card.Content>
                                 <Card.Header>
-                                    Premium Clinic
+                                    Home Clinic
                                 </Card.Header>
                                 <Card.Meta>
                                     You are all covered
@@ -60,7 +60,7 @@ class CampaignIndex extends Component {
                                 </Card.Description>
                             </Card.Content>
                             <Card.Content extra>
-                                <Link route={`/patient/clinic/register/clinic_zero`}>
+                                <Link route={`/patient/clinic/register/HomeClinic`}>
                                     <a>
                                         <Button content="Choose" color="olive" floated="right" />
                                     </a>

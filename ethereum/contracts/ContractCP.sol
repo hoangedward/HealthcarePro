@@ -107,15 +107,15 @@ contract ContractCP {
         return _patient;
     }
     
-    function getCheckItem(uint inIndex) view external returns (uint) {
+    function getCheckItem(uint inIndex) view returns (uint) {
         return _checkItems[inIndex];
     }
     
-    function getCheckPrice(uint inIndex) view external returns (uint) {
+    function getCheckPrice(uint inIndex) view returns (uint) {
         return _checkPrices[inIndex];
     }
     
-    function getItemCount() view external returns (uint) {
+    function getItemCount() view returns (uint) {
         return _checkItems.length;
     }
     
@@ -127,7 +127,19 @@ contract ContractCP {
         require (msg.value >= inEtherAmount * 1 ether);
         _;
     }
-    
+
+    function getSummary() public view returns (Status, address, address, uint[], uint, uint) {
+        uint totalContractValue = _contractClinicCategory.calFee(_checkItems);
+        return (
+            _status,
+            _patient,
+            _clinic,
+            _checkItems,
+            totalContractValue,
+            this.balance
+        );
+    }
+
     event InformTotalFee(uint, uint);
     
     event PatientPaid(uint);

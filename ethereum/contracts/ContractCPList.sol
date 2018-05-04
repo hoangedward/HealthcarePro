@@ -8,9 +8,6 @@ contract ContractCPList {
     
     mapping(address => address[]) private _patientContractList;
     mapping(address => address[]) private _clinicContractList;
-    
-    // Duration of implementation, we need to detect when the method is called
-    event CreateContractEvent(string message);
 
     /**
      * Create a ContractCP and save it to the list of contracts of Patient;
@@ -20,20 +17,14 @@ contract ContractCPList {
      * @param inCheckItems list of items that Patient want to check
      */
     function createContract(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems) {
-        CreateContractEvent("1");
         require(msg.sender == inPatient);
 
-        CreateContractEvent("2");
         address pi = new ContractCP(inClinic, inPatient, inClinicCategory, inCheckItems);
         // Add to Patient contracts list
-        CreateContractEvent("3");
         address[] currentContractListOfPatient = _patientContractList[inPatient];
-        CreateContractEvent("4");
         currentContractListOfPatient.push(pi);
         // Add to Clinic contracts list
-        CreateContractEvent("5");
         address[] currentContractListOfClinic = _clinicContractList[inClinic];
-        CreateContractEvent("6");
         currentContractListOfClinic.push(pi);
     }
     
