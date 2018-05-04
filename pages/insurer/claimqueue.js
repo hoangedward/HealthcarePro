@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Segment } from 'semantic-ui-react';
+import { Form, Button, Message, Segment, Item, Label, Icon } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Router, Link } from '../../routes';
 
@@ -22,36 +22,122 @@ class ClaimQueueIndex extends Component {
 		contractPI.methods.getClaimQueue().call({
 					gas: 4000000
         });
+				
+		var claimQueueArr = [];		
+		
+		var index = 0;
+		const cpList = claimQueue[0];
+		cpList.map(cp => {
+			claimQueueArr[index] = new Object();
+			claimQueueArr[index++].cp = cp;
+		});
+		
+		index = 0;
+		const patientList = claimQueue[1];
+		patientList.map(patient => {
+			claimQueueArr[index++].patient = patient;
+		});
+		
+		index = 0;
+		const amountList = claimQueue[2];
+		amountList.map(amount => {
+			claimQueueArr[index++].amount = amount;
+		});
+		
+		index = 0;
+		const paidList = claimQueue[3];
+		paidList.map(paid => {
+			claimQueueArr[index++].paid = paid;
+		});
 
-    return { claimQueue };
+    return { claimQueueArr };
   }
 
 	 state = {
-			contractStatus: []
-	 };
-	 
-	 async getSummary(address) {
-			 let summary = await Pi.getSummary(address);
-			 var _contractStatus = this.state.contractStatus;
-			 _contractStatus[address] = summary[0];// status (int)
-			 this.setState({contractStatus: _contractStatus});
-	 }
+		errorMessage: '',
+		loading: false,
+		buttonStatus: [true, true]
+	};
 	
 	renderContracts() {
-     return this.props.claimQueue[0][0];
+     const items = this.props.claimQueueArr.map(queue => {
+			 return {
+         header: (
+						<div>
+								{
+									queue.paid ? 
+													(
+														<Button disabled as='div' labelPosition='right' size='mini' floated='right'>
+															<Button color='brown' size='mini'>
+																<Icon name='check circle' />
+																Approved
+															</Button>
+															<Label size='mini' basic color='brown' pointing='left'>{queue.amount}</Label>
+														</Button>
+													)
+													: 
+													(
+														<Button as='div' labelPosition='right' size='mini' floated='right'>
+														<Button color='red' size='mini'>
+															<Icon name='hand outline left' />
+															Approve
+														</Button>
+														<Label size='mini' basic color='red' pointing='left'>{queue.amount}</Label>
+													</Button>
+													)
+								}
+								<strong>Contract CP: </strong>
+								<Link route={`/clinic/view/${queue.cp}`}>
+										 <a>
+											{queue.cp}
+										 </a>
+								</Link>
+						</div>
+					),
+         description: (
+						 <div>
+							<strong>Patient: </strong>{queue.patient}
+						 </div>
+         ),
+				 meta: (
+						<div>
+							<strong>Claim Amount: </strong>{queue.amount} ETH
+						 </div>
+				 )
+       };
+		 });return <Item.Group divided items={items} />;
    }
+	 
+	 onApprove(cp) {
+		 
+		 event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
+
+		try {
+			Router.pushRoute('/clinic');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
+
+		this.setState({ loading: false });
+		 
+	 }
 
   render() {
     return (
       <Layout>
 				<h3>Claim List</h3>
-				{this.renderContracts()}
+				<Form error={!!this.state.errorMessage}>
+					<Message error header="Oops!" content={this.state.errorMessage} />
+					{this.renderContracts()}
 					<p></p>
 					<Link route="/">
 						<a>
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 						</a>
 					</Link>
+				</Form>
       </Layout>
     );
   }
