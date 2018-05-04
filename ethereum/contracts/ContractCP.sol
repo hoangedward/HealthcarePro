@@ -10,7 +10,6 @@ contract ContractCP {
     address private _clinic;
     address private _patient;
     uint[] private _checkItems;
-    uint[] private _checkPrices;
     Status public _status;
     string private _desc;
     uint private _totalFee;
@@ -112,7 +111,7 @@ contract ContractCP {
     }
     
     function getCheckPrice(uint inIndex) view returns (uint) {
-        return _checkPrices[inIndex];
+        return _contractClinicCategory.getCheckPrice(_checkItems[inIndex]);
     }
     
     function getItemCount() view returns (uint) {

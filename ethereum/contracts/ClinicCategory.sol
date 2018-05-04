@@ -58,5 +58,9 @@ contract ClinicCategory {
 	function getOwner() external returns (address) {
 		return _clinic;
 	}
+	
+	function getCheckPrice(uint inCheckItem) view returns (uint) {
+	   return _availableItems[inCheckItem].price;
+	}
 
 }
