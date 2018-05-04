@@ -4,7 +4,6 @@ import Layout from '../../components/Layout';
 import { Router, Link } from '../../routes';
 
 import ContractPI from '../../ethereum/ContractPI';
-import ContractPIList from '../../ethereum/ContractPIList';
 import web3 from '../../ethereum/web3';
 
 import Accounts from '../../ethereum/const/Accounts.json';
@@ -50,7 +49,7 @@ class ClaimQueueIndex extends Component {
 			claimQueueArr[index++].paid = paid;
 		});
 
-    return { claimQueueArr };
+    return { address: props.query.address, claimQueueArr };
   }
 
 	 state = {
@@ -68,7 +67,7 @@ class ClaimQueueIndex extends Component {
 									queue.paid ? 
 													(
 														<Button disabled as='div' labelPosition='right' size='mini' floated='right'>
-															<Button color='brown' size='mini'>
+															<Button color='gray' size='mini'>
 																<Icon name='check circle' />
 																Approved
 															</Button>
@@ -77,7 +76,7 @@ class ClaimQueueIndex extends Component {
 													)
 													: 
 													(
-														<Button as='div' labelPosition='right' size='mini' floated='right'>
+														<Button as='div' labelPosition='right' size='medium' floated='right' onClick={this.onApprove(queue.cp, queue.amount)}>
 														<Button color='red' size='mini'>
 															<Icon name='hand outline left' />
 															Approve
@@ -108,17 +107,27 @@ class ClaimQueueIndex extends Component {
 		 });return <Item.Group divided items={items} />;
    }
 	 
-	 onApprove(cp) {
+	 onApprove = (cp, amount) => async event => {
 		 
 		 event.preventDefault();
 
 		this.setState({ loading: true, errorMessage: '' });
 
-		try {
-			Router.pushRoute('/clinic');
-		} catch (err) {
-			this.setState({ errorMessage: err.message });
-		}
+		const contractPI = ContractPI(this.props.address);
+
+    try {
+      await contractPI.methods
+        .insurerAcceptClaim(cp)
+        .send({
+          from: Accounts.Insurer,
+					gas: 40000000,
+					value: web3.utils.toWei(amount, 'ether')
+        });
+
+      Router.pushRoute('/patient/insurer');
+    } catch (err) {
+      this.setState({ errorMessage: err.message });
+    }
 
 		this.setState({ loading: false });
 		 
@@ -132,7 +141,7 @@ class ClaimQueueIndex extends Component {
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					{this.renderContracts()}
 					<p></p>
-					<Link route="/">
+					<Link route={`/insurer/view/${this.props.address}`}>
 						<a>
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 						</a>
