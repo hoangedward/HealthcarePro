@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.23;
 
 contract InsuranceCategory {
     
@@ -58,7 +58,7 @@ contract InsuranceCategory {
 	function calculateClaimAmount(uint inPackId, uint inNumberOfMonths, uint[] inCheckItems, uint[] inCheckPrices) external view returns (uint) {
         uint sum = 0;
         
-        Option matchedOption;
+        Option storage matchedOption;
         Option[] storage optionsForPack = _availableOptionsList[inPackId];
         for (uint x = 0; x < optionsForPack.length; x++) {
             if(optionsForPack[x].period == inNumberOfMonths) {
