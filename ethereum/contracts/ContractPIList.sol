@@ -15,7 +15,7 @@ contract ContractPIList {
      * @param inPatient address of Patient account
      * @param inInsurerCategory address of Insurer Category contract
      */
-    constructor(address inInsurer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) public {
+    function createContract(address inInsurer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) external {
         require(msg.sender == inPatient);
         address pi = new ContractPI(inInsurer, inPatient, inPackId, inNumberOfMonths, inInsurerCategory);
         // Add to Patient contracts list
