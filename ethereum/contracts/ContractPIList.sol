@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.23;
 import "./ContractPI.sol";
 
 /**
@@ -15,14 +15,14 @@ contract ContractPIList {
      * @param inPatient address of Patient account
      * @param inInsurerCategory address of Insurer Category contract
      */
-    function createContract(address inInsurer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) {
+    constructor(address inInsurer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) public {
         require(msg.sender == inPatient);
         address pi = new ContractPI(inInsurer, inPatient, inPackId, inNumberOfMonths, inInsurerCategory);
         // Add to Patient contracts list
-        address[] currentContractListOfPatient = _patientContractList[inPatient];
+        address[] storage currentContractListOfPatient = _patientContractList[inPatient];
         currentContractListOfPatient.push(pi);
         // Add to Insurer contracts list
-        address[] currentContractListOfInsurer = _insurerContractList[inInsurer];
+        address[] storage currentContractListOfInsurer = _insurerContractList[inInsurer];
         currentContractListOfInsurer.push(pi);
     }
     
@@ -31,7 +31,7 @@ contract ContractPIList {
      * @param inPatient address of patient
      * @return address[] list of contract addresses
      */
-    function getPatientContracts(address inPatient) returns (address[]) {
+    function getPatientContracts(address inPatient) external view returns (address[]) {
         return _patientContractList[inPatient];
     }
     
@@ -40,38 +40,38 @@ contract ContractPIList {
      * @param inInsurer address of insurer
      * @return address[] list of contract addresses
      */
-    function getInsurerContracts(address inInsurer) returns (address[]) {
+    function getInsurerContracts(address inInsurer) external view returns (address[]) {
         return _insurerContractList[inInsurer];
     }
 		
-		function patientCancel(address inContract) public returns (uint) {
-			address[] contractList = _patientContractList[msg.sender];
-			for(uint i = 0; i < contractList.length; i++) {
-				if(contractList[i] == inContract) {
-					ContractPI pi = ContractPI(inContract);
-					if(pi.canCancel(msg.sender) == false) {
-						return 1;
-					}
-					address patient = pi.getPatient();
-					address insurer = pi.getInsurer();
-					removeContract(insurer, patient, i);
-					pi.patientCancel(msg.sender);
-					return 0;
+	function patientCancel(address inContract) external returns (uint) {
+		address[] storage contractList = _patientContractList[msg.sender];
+		for(uint i = 0; i < contractList.length; i++) {
+			if(contractList[i] == inContract) {
+				ContractPI pi = ContractPI(inContract);
+				if(pi.canCancel(msg.sender) == false) {
+					return 1;
 				}
+				address patient = pi.getPatient();
+				address insurer = pi.getInsurer();
+				removeContract(insurer, patient, i);
+				pi.patientCancel(msg.sender);
+				return 0;
 			}
-			return 1;
 		}
+		return 1;
+	}
 		
-		function removeContract(address inInsurer, address inPatient, uint inIndex) internal {
-			address[] currentContractListOfPatient = _patientContractList[inPatient];
-			currentContractListOfPatient[inIndex] = currentContractListOfPatient[currentContractListOfPatient.length - 1];
-			delete currentContractListOfPatient[currentContractListOfPatient.length - 1];
-			currentContractListOfPatient.length--;
-			
-			address[] currentContractListOfInsurer = _insurerContractList[inInsurer];
-			currentContractListOfInsurer[inIndex] = currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
-			delete currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
-			currentContractListOfInsurer.length--;
-		}
+	function removeContract(address inInsurer, address inPatient, uint inIndex) internal {
+		address[] storage currentContractListOfPatient = _patientContractList[inPatient];
+		currentContractListOfPatient[inIndex] = currentContractListOfPatient[currentContractListOfPatient.length - 1];
+		delete currentContractListOfPatient[currentContractListOfPatient.length - 1];
+		currentContractListOfPatient.length--;
+		
+		address[] storage currentContractListOfInsurer = _insurerContractList[inInsurer];
+		currentContractListOfInsurer[inIndex] = currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
+		delete currentContractListOfInsurer[currentContractListOfInsurer.length - 1];
+		currentContractListOfInsurer.length--;
+	}
     
 }

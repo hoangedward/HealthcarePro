@@ -20,7 +20,7 @@ contract InsuranceCategory {
 	
 	address private _insurer;
     
-    function InsuranceCategory(address inInusrer) {
+    constructor(address inInusrer) public {
         _insurer = inInusrer;
         
         Option memory optionG6 = Option(1, 6, 20);
@@ -37,17 +37,17 @@ contract InsuranceCategory {
         
     }
     
-    function addItem(uint inPackId, uint inOptionIndex, uint inItemId, uint inPercent) {
+    function addItem(uint inPackId, uint inOptionIndex, uint inItemId, uint inPercent) external {
          Item memory item = Item(inItemId, inPercent);
         _availableOptionsList[inPackId][inOptionIndex].items[inItemId] = item;
     }
     
-    function getOwner() view returns (address) {
+    function getOwner() external view returns (address) {
         return _insurer;
     }
 
-	function _getOption(uint inPackId, uint inNumberOfMonths) internal returns (Option) {
-		Option[] optionsForPack = _availableOptionsList[inPackId];
+	function _getOption(uint inPackId, uint inNumberOfMonths) internal view returns (Option) {
+		Option[] storage optionsForPack = _availableOptionsList[inPackId];
         for (uint i = 0; i < optionsForPack.length; i++) {
             if(optionsForPack[i].period == inNumberOfMonths) {
                 return optionsForPack[i];
@@ -55,11 +55,11 @@ contract InsuranceCategory {
         }
 	}
 
-	function calculateClaimAmount(uint inPackId, uint inNumberOfMonths, uint[] inCheckItems, uint[] inCheckPrices) view returns (uint) {
+	function calculateClaimAmount(uint inPackId, uint inNumberOfMonths, uint[] inCheckItems, uint[] inCheckPrices) external view returns (uint) {
         uint sum = 0;
         
         Option matchedOption;
-        Option[] optionsForPack = _availableOptionsList[inPackId];
+        Option[] storage optionsForPack = _availableOptionsList[inPackId];
         for (uint x = 0; x < optionsForPack.length; x++) {
             if(optionsForPack[x].period == inNumberOfMonths) {
                 matchedOption = optionsForPack[x];
@@ -67,7 +67,7 @@ contract InsuranceCategory {
         }
         
         for(uint i = 0; i < inCheckItems.length; i++) {
-			Item matchedItem = matchedOption.items[1];
+			Item memory matchedItem = matchedOption.items[1];
             if(matchedItem.id > 0) {
                 sum += matchedItem.percent * inCheckPrices[i] / 100;
             }
@@ -76,7 +76,7 @@ contract InsuranceCategory {
         return sum;
     }
 
-	function calculateContractValue(uint inPackId, uint inNumberOfMonths) view returns (uint) {
+	function calculateContractValue(uint inPackId, uint inNumberOfMonths) external view returns (uint) {
         Option memory matchedOption = _getOption(inPackId, inNumberOfMonths);
         if(matchedOption.id > 0) {
             return matchedOption.price;

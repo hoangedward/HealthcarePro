@@ -1,9 +1,9 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.23;
 import "./InsuranceCategory.sol";
 
 contract InsuranceCategoryData {
     
-    function InsuranceCategoryData(address inInsuranceCategory) {
+    constructor(address inInsuranceCategory) public {
         InsuranceCategory category = InsuranceCategory(inInsuranceCategory);
         
         category.addItem(1,0,1,100);

@@ -1,5 +1,4 @@
-pragma solidity ^0.4.18;
-import "./ContractPI.sol";
+pragma solidity 0.4.23;
 
 
 contract ClinicCategory {
@@ -13,53 +12,34 @@ contract ClinicCategory {
     
     mapping(uint => Item) _availableItems;
     
-    function ClinicCategory(address inClinic) {
+    constructor(address inClinic) public {
         _clinic = inClinic;
-        
-        {
-            Item memory item1 = Item(1, 1);
-            _availableItems[1] = item1;
-        }
-        {
-            Item memory item2 = Item(2, 2);
-            _availableItems[2] = item2;
-        }
-        {
-            Item memory item3 = Item(3, 2);
-            _availableItems[3] = item3;
-        }
-		{
-            Item memory item4 = Item(4, 3);
-            _availableItems[4] = item4;
-        }
-		{
-            Item memory item5 = Item(5, 10);
-            _availableItems[5] = item5;
-        }
-		{
-            Item memory item6 = Item(6, 5);
-            _availableItems[6] = item6;
-        }
-       
+
+        _availableItems[1] = Item(1, 1);
+        _availableItems[2] = Item(2, 2);
+        _availableItems[3] = Item(3, 2);
+        _availableItems[4] = Item(4, 3);
+        _availableItems[5] = Item(5, 10);
+        _availableItems[6] = Item(6, 5);
     }
-    
-    function calFee(uint[] inCheckItems) external returns (uint) {
+
+    function calFee(uint[] inCheckItems) external view returns (uint) {
         uint totalFee = 0;
         for(uint i = 0; i < inCheckItems.length; i++) {
-            Item foundItem = _availableItems[inCheckItems[i]];
+            Item storage foundItem = _availableItems[inCheckItems[i]];
             if(foundItem.id < 1) {
-                throw;
+                revert();
             }
             totalFee += foundItem.price;
         }
         return totalFee;
     }
 
-	function getOwner() external returns (address) {
+	function getOwner() external view returns (address) {
 		return _clinic;
 	}
 	
-	function getCheckPrice(uint inCheckItem) view returns (uint) {
+	function getCheckPrice(uint inCheckItem) external view returns (uint) {
 	   return _availableItems[inCheckItem].price;
 	}
 
