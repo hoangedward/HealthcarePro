@@ -62,10 +62,10 @@ class CampaignIndex extends Component {
 
     try {
       await contractPI.methods
-        .patientConfirm(Date.now(), this.props.totalContractValue)
+        .patientConfirm(this.props.totalContractValue)
         .send({
           from: Accounts.Patient,
-					gas: 40000000,
+					gas: 4000000,
 					value: this.props.totalContractValue
         });
 

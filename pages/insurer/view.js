@@ -63,7 +63,7 @@ class CampaignIndex extends Component {
         .requestForWithdraw()
         .send({
           from: Accounts.Insurer,
-					gas: 40000000
+					gas: 4000000
         });
 
       Router.pushRoute('/insurer');

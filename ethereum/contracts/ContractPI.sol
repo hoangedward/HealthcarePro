@@ -47,16 +47,15 @@ contract ContractPI {
         _status = Status.NEW;
     }
     
-    function patientConfirm(uint inStartDate, uint inContractValue) external payable minimumAmount(inContractValue) {
+    function patientConfirm(uint inContractValue) external payable minimumAmount(inContractValue) {
         require(msg.sender == _patient);
         uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
         require(totalContractValue > 0);
         require(inContractValue >= totalContractValue);
-        require(inStartDate >= now);
         
         _contractValue = msg.value;
-        _startDate = inStartDate;
-        _endDate = inStartDate + monthToMiliseconds(_period);
+        _startDate = now;
+        _endDate = _startDate + monthToMiliseconds(_period);
         _status = Status.VALID;
         
         emit ContractSigned(msg.sender, _packId, _contractValue);

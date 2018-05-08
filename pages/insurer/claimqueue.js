@@ -120,7 +120,7 @@ class ClaimQueueIndex extends Component {
         .insurerAcceptClaim(cp)
         .send({
           from: Accounts.Insurer,
-					gas: 40000000,
+					gas: 4000000,
 					value: web3.utils.toWei(amount, 'ether')
         });
 
