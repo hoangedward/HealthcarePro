@@ -1,6 +1,7 @@
 const Web3HttpProvider = require('web3-providers-http'); // npm install --save web3-providers-http
 const Web3 = require('web3');
 const InsuranceCategory = require('./build/InsuranceCategory.json');
+const InsuranceCategoryData = require('./build/InsuranceCategoryData.json');
 const ContractPIList = require('./build/ContractPIList.json');
 const Accounts = require('./const/Accounts.json');
 
@@ -21,6 +22,17 @@ const deploy = async () => {
     .send({ gas: '4000000', from: Accounts['Insurer'] });
 
   console.log('Contract InsuranceCategory deployed to', resultInsuranceCategory.options.address);
+	
+	// InsuranceCategoryData
+  console.log('Attempting to deploy InsuranceCategoryData from account', Accounts['Insurer']);
+
+  const resultInsuranceCategoryData = await new web3.eth.Contract(
+    JSON.parse(InsuranceCategoryData.interface)
+  )
+    .deploy({ data: InsuranceCategoryData.bytecode, arguments: [resultInsuranceCategory.options.address] })
+    .send({ gas: '4000000', from: Accounts['Insurer'] });
+
+  console.log('Contract InsuranceCategoryData deployed to', resultInsuranceCategoryData.options.address);
   
   // ContractPIList
   console.log('Attempting to deploy ContractPIList from account', Accounts['Admin']);

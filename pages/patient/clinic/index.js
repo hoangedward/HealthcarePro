@@ -24,7 +24,7 @@ class CampaignIndex extends Component {
           <Grid columns='equal' divided>
               <Grid.Row stretched>
                   <Grid.Column>
-                      <Link route={`/clinic/view/${address}`}>
+                      <Link route={`/patient/client/view/${address}`}>
                           <a>View Contract</a>
                       </Link>
                   </Grid.Column>

@@ -1,4 +1,4 @@
-pragma solidity 0.4.23;
+pragma solidity ^0.4.18;
 import "./ContractPI.sol";
 import "./ClinicCategory.sol";
 
@@ -22,7 +22,7 @@ contract ContractCP {
     
     ClinicCategory private _contractClinicCategory;
     
-    constructor(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems) public {
+    function ContractCP(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems) {
         require(inCheckItems.length > 0);
         _contractClinicCategory = ClinicCategory(inClinicCategory);
         require(_contractClinicCategory.getOwner() == inClinic);
@@ -35,41 +35,39 @@ contract ContractCP {
         _totalFee = _contractClinicCategory.calFee(inCheckItems);
     }
     
-    function clinicAcceptPatient(address inContractPI) external {
+    function clinicAcceptPatient(address inContractPI) {
         require(msg.sender == _clinic);
         require(_status == Status.NEW);
         _contractPI = inContractPI;
         _status = Status.WAITING_FOR_PAID;
     }
     
-    function calculateFee() external returns (uint, uint) {
+    function calculateFee() returns (uint, uint) {
         require(msg.sender == _clinic);
         require(_status == Status.WAITING_FOR_PAID);
         ContractPI pi = ContractPI(_contractPI);
-
-        uint[] memory pays = new uint[](2) ;
+        uint[] pays;
         pays[0] = pi.requestForClaim(this);
         pays[1] = _totalFee - pays[0];
         
-        emit InformTotalFee(pays[0], pays[1]);
+        InformTotalFee(pays[0], pays[1]);
         
         return (pays[0], pays[1]);
     }
     
-    function patientPay() external payable {
+    function patientPay() payable {
         require(msg.sender == _patient);
         require(_status == Status.WAITING_FOR_PAID);
         require(_patientPaidAmount > 0);
         require(_patientPaid == false);
         require(msg.value >= _patientPaidAmount);
         _patientPaid = true;
-
-        emit PatientPaid(_patientPaidAmount);
+        PatientPaid(_patientPaidAmount);
         
         checkForPay();
     }
     
-    function insurerPay() external payable {
+    function insurerPay() payable {
         require(_status == Status.WAITING_FOR_PAID);
         require(_insurerPaidAmount > 0);
         require(_insurerPaid == false);
@@ -77,55 +75,59 @@ contract ContractCP {
         require(msg.sender == pi.getInsurer());
         require(msg.value >= _insurerPaidAmount);
         _insurerPaid = true;
-        emit InsurerPaid(_patientPaidAmount);
+        InsurerPaid(_patientPaidAmount);
         
         checkForPay();
     }
     
-    function checkForPay() internal {
+    function checkForPay() {
         require(_status == Status.WAITING_FOR_PAID);
         require(_insurerPaidAmount == 0 || _insurerPaid);
         require(_patientPaidAmount == 0 || _patientPaid);
         _status = Status.CHECKING;
-        emit ReadyToCheck();
+        ReadyToCheck();
     }
     
-    function patientConfirm() external payable {
+    function patientConfirm() payable {
         require(msg.sender == _patient);
         require(_status == Status.CHECKING);
-        _clinic.transfer(address(this).balance);
+        _clinic.transfer(this.balance);
         _status = Status.DONE;
     }
     
-    function patientCancel() external {
+    function patientCancel() {
         require(msg.sender == _patient);
         require(_status == Status.NEW);
         _status = Status.CANCELLED;
-        selfdestruct(msg.sender);
+        suicide(msg.sender);
     }
     
-    function getPatient() external view returns (address) {
+    function getPatient() view external returns (address) {
         return _patient;
     }
     
-    function getCheckItems() external view returns (uint[]) {
-        return _checkItems;
+    function getCheckItem(uint inIndex) view returns (uint) {
+        return _checkItems[inIndex];
     }
     
-    function getCheckPrices() external view returns (uint[]) {
-        return _contractClinicCategory.getCheckPrices(_checkItems);
+    function getCheckPrice(uint inIndex) view returns (uint) {
+        return _contractClinicCategory.getCheckPrice(_checkItems[inIndex]);
     }
     
-    function receive(uint inAmount) external payable minimumAmount(inAmount) {
+    function getItemCount() view returns (uint) {
+        return _checkItems.length;
+    }
+    
+    function receive(uint inAmount) payable minimumAmount(inAmount) {
         
     }
     
-    modifier minimumAmount(uint inWeiAmount) {
-        require (msg.value >= inWeiAmount);
+    modifier minimumAmount(uint inEtherAmount) {
+        require (msg.value >= inEtherAmount * 1 ether);
         _;
     }
 
-    function getSummary() external view returns (Status, address, address, uint[], uint, uint) {
+    function getSummary() public view returns (Status, address, address, uint[], uint, uint) {
         uint totalContractValue = _contractClinicCategory.calFee(_checkItems);
         return (
             _status,
@@ -133,7 +135,7 @@ contract ContractCP {
             _clinic,
             _checkItems,
             totalContractValue,
-            address(this).balance
+            this.balance
         );
     }
 

@@ -18,7 +18,7 @@ class CampaignIndex extends Component {
 	static async getInitialProps(props) {
 		const summary = await Cp.getSummary(props.query.address);
 		const patientContracts = await ContractPIList.methods.getPatientContracts(Accounts.Patient).call();
-		//const _calculateClaimAmount = await Cp.calculateClaimAmount(String(patientContracts[0]), props.query.address);
+		const _calculateClaimAmount = await Cp.calculateClaimAmount(String(patientContracts[0]), props.query.address);
 		return {
 			address: props.query.address,
 			status: summary[0],
@@ -28,7 +28,7 @@ class CampaignIndex extends Component {
 			totalContractValue: summary[4],
 			balance: summary[5],
 			firstPatientContract: patientContracts[0],
-			calculateClaimAmount: 8
+			calculateClaimAmount: _calculateClaimAmount
 		};
 	}
 

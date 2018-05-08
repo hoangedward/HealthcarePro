@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+pragma solidity ^0.4.18;
+import "./ContractPI.sol";
 
 
 contract ClinicCategory {
@@ -12,39 +13,54 @@ contract ClinicCategory {
     
     mapping(uint => Item) _availableItems;
     
-    constructor(address inClinic) public {
+    function ClinicCategory(address inClinic) {
         _clinic = inClinic;
-
-        _availableItems[1] = Item(1, 1 ether);
-        _availableItems[2] = Item(2, 2 ether);
-        _availableItems[3] = Item(3, 2 ether);
-        _availableItems[4] = Item(4, 3 ether);
-        _availableItems[5] = Item(5, 10 ether);
-        _availableItems[6] = Item(6, 5 ether);
+        
+        {
+            Item memory item1 = Item(1, 1);
+            _availableItems[1] = item1;
+        }
+        {
+            Item memory item2 = Item(2, 2);
+            _availableItems[2] = item2;
+        }
+        {
+            Item memory item3 = Item(3, 2);
+            _availableItems[3] = item3;
+        }
+		{
+            Item memory item4 = Item(4, 3);
+            _availableItems[4] = item4;
+        }
+		{
+            Item memory item5 = Item(5, 10);
+            _availableItems[5] = item5;
+        }
+		{
+            Item memory item6 = Item(6, 5);
+            _availableItems[6] = item6;
+        }
+       
     }
-
-    function calFee(uint[] inCheckItems) external view returns (uint) {
+    
+    function calFee(uint[] inCheckItems) external returns (uint) {
         uint totalFee = 0;
         for(uint i = 0; i < inCheckItems.length; i++) {
-            Item storage foundItem = _availableItems[inCheckItems[i]];
+            Item foundItem = _availableItems[inCheckItems[i]];
             if(foundItem.id < 1) {
-                revert();
+                throw;
             }
             totalFee += foundItem.price;
         }
         return totalFee;
     }
 
-	function getOwner() external view returns (address) {
+	function getOwner() external returns (address) {
 		return _clinic;
 	}
 	
-	function getCheckPrices(uint[] inCheckItems) external view returns (uint[]) {
-	   uint[] memory prices = new uint[](inCheckItems.length);
-	   for(uint i = 0; i < inCheckItems.length; i++) {
-	       prices[i] = _availableItems[inCheckItems[i]].price;
-	   }
-	   return prices;
+	function getCheckPrice(uint inCheckItem) view returns (uint) {
+	   return _availableItems[inCheckItem].price;
 	}
 
 }
