@@ -11,7 +11,6 @@ const pathContractPI = path.resolve(__dirname, 'contracts', 'ContractPI.sol');
 const pathContractPIList = path.resolve(__dirname, 'contracts', 'ContractPIList.sol');
 const pathClinicCategory = path.resolve(__dirname, 'contracts', 'ClinicCategory.sol');
 const pathInsuranceCategory = path.resolve(__dirname, 'contracts', 'InsuranceCategory.sol');
-const pathInsuranceCategoryData = path.resolve(__dirname, 'contracts', 'InsuranceCategoryData.sol');
 
 var input = {
     'ContractCP.sol': fs.readFileSync(pathContractCP, 'utf8'),
@@ -19,8 +18,7 @@ var input = {
     'ContractPI.sol': fs.readFileSync(pathContractPI, 'utf8'),
     'ContractPIList.sol': fs.readFileSync(pathContractPIList, 'utf8'),
 		'ClinicCategory.sol': fs.readFileSync(pathClinicCategory, 'utf8'),
-		'InsuranceCategory.sol': fs.readFileSync(pathInsuranceCategory, 'utf8'),
-		'InsuranceCategoryData.sol': fs.readFileSync(pathInsuranceCategoryData, 'utf8')
+		'InsuranceCategory.sol': fs.readFileSync(pathInsuranceCategory, 'utf8')
 };
 const output = solc.compile({sources: input}, 1).contracts;
 

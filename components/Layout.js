@@ -10,14 +10,14 @@ export default props => {
       <Head>
         <link
           rel="stylesheet"
-          href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.12/semantic.min.css"
+          href="/static/semantic-ui-offline/semantic.min.css"
         />
-				<title>Healthcare Pro</title>
+        <title>Healthcare Pro</title>
       </Head>
 
       <Header />
       {props.children}
-			<Footer />
+      <Footer />
     </Container>
   );
 };

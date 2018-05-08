@@ -1,4 +1,4 @@
-pragma solidity ^0.4.18;
+pragma solidity 0.4.23;
 import "./ContractCP.sol";
 import "./InsuranceCategory.sol";
 
@@ -37,17 +37,17 @@ contract ContractPI {
     
     InsuranceCategory private _insuranceCategory;
     
-    function ContractPI(address inInusrer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) {
+    constructor(address inInusrer, address inPatient, uint inPackId, uint inNumberOfMonths, address inInsurerCategory) public {
         _insuranceCategory = InsuranceCategory(inInsurerCategory);
         require(_insuranceCategory.getOwner() == inInusrer);
         _insurer = inInusrer;
         _patient = inPatient;
-				_period = inNumberOfMonths;
-				_packId = inPackId;
+		_period = inNumberOfMonths;
+		_packId = inPackId;
         _status = Status.NEW;
     }
     
-    function patientConfirm(uint inStartDate, uint inContractValue) payable minimumAmount(inContractValue) {
+    function patientConfirm(uint inStartDate, uint inContractValue) external payable minimumAmount(inContractValue) {
         require(msg.sender == _patient);
         uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
         require(totalContractValue > 0);
@@ -59,29 +59,29 @@ contract ContractPI {
         _endDate = inStartDate + monthToMiliseconds(_period);
         _status = Status.VALID;
         
-        ContractSigned(msg.sender, _packId, _contractValue);
+        emit ContractSigned(msg.sender, _packId, _contractValue);
         
     }
     
-    function patientCancel(address inPatient) {
+    function patientCancel(address inPatient) external {
         require(inPatient == _patient);
         require(_status == Status.NEW);
-        suicide(inPatient);
+        selfdestruct(inPatient);
     }
 		
-		function canCancel(address inPatient) external returns (bool) {
-			return inPatient == _patient && _status == Status.NEW;
-		}
+	function canCancel(address inPatient) external view returns (bool) {
+		return inPatient == _patient && _status == Status.NEW;
+	}
     
-    function getInsurer() returns(address) {
+    function getInsurer() external view returns(address) {
         return _insurer;
     }
 		
-		function getPatient() returns(address) {
+	function getPatient() external view returns(address) {
         return _patient;
     }
     
-    function requestForClaim(address inContractCP) returns (uint) {
+    function requestForClaim(address inContractCP) external returns (uint) {
         require(_status == Status.VALID);
         require(_endDate >= now);
         
@@ -89,31 +89,23 @@ contract ContractPI {
         require(cp.getPatient() == _patient);
         require(_claimQueue[inContractCP].requestedContract == 0);
         
-        uint itemCount = cp.getItemCount();
-        uint[] checkItems;
-        uint[] checkPrices;
-        for(uint i = 0; i < itemCount; i++) {
-            checkItems[i] = cp.getCheckItem(i);
-            checkPrices[i] = cp.getCheckPrice(i);
-        }
-        
-        uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, checkItems, checkPrices);
+        uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, cp.getCheckItems(), cp.getCheckPrices());
         if(totalAmount > 0) {
           _claimQueue[inContractCP] = ClaimRequest(inContractCP, _patient, false, totalAmount);
           
           _claimAddressQueue.push(inContractCP);
           
-          ClaimRequested(inContractCP, _patient, totalAmount);
+          emit ClaimRequested(inContractCP, _patient, totalAmount);
           return 0;
         }
         return 1;
         
     }
     
-    function insurerAcceptClaim(address inContractCP) payable {
+    function insurerAcceptClaim(address inContractCP) external payable {
         require(msg.sender == _insurer);
         require(_status == Status.VALID);
-        ClaimRequest request = _claimQueue[inContractCP];
+        ClaimRequest storage request = _claimQueue[inContractCP];
         require(request.requestedContract != 0);
         require(request.paid == false);
         require(msg.value >= request.amount);
@@ -121,18 +113,18 @@ contract ContractPI {
         cp.receive.gas(300000).value(request.amount)(request.amount);
         request.paid = true;
         
-        AcceptClaim(inContractCP, _patient, request.amount);
+        emit AcceptClaim(inContractCP, _patient, request.amount);
     }
     
-    function requestForWithdraw() payable {
+    function requestForWithdraw() external payable {
         require(msg.sender == _insurer);
         require(_status == Status.VALID);
         require(_endDate < now);
         _status = Status.EXPIRED;
-        msg.sender.transfer(this.balance);
+        msg.sender.transfer(address(this).balance);
     }
     
-    function getClaimQueue() view returns (address[], address[], uint[], bool[]) {
+    function getClaimQueue() external view returns (address[], address[], uint[], bool[]) {
         uint length = 2;
         address[] memory addressList = new address[](length);
         address[] memory patientList = new address[](length);
@@ -163,7 +155,7 @@ contract ContractPI {
         return (addressList, patientList, amountList, paidList);
     }
     
-    function monthToMiliseconds(uint inMonth) internal returns (uint) {
+    function monthToMiliseconds(uint inMonth) internal pure returns (uint) {
         uint daysPerMonth = 30;
         uint hoursPerDay = 24;
         uint minsPerHour = 60;
@@ -173,42 +165,33 @@ contract ContractPI {
     }
     
     
-    modifier minimumAmount(uint inEtherAmount) {
-        require (msg.value >= inEtherAmount * 1 ether);
+    modifier minimumAmount(uint inWeiAmount) {
+        require (msg.value >= inWeiAmount);
         _;
     }
 		
-		function getSummary() public view returns (
-      Status, address, address, uint, uint, uint, uint, uint, uint
-      ) {
-				uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
+    function getSummary() public view returns (
+      Status, address, address, uint, uint, uint, uint, uint, uint) {
+	    uint totalContractValue = _insuranceCategory.calculateContractValue(_packId, _period);
         return (
-          _status,
-					_patient,
-					_insurer,
-					_packId,
-					_period,
-					totalContractValue,
-					_startDate,
-					_endDate,
-					this.balance
+            _status,
+			_patient,
+			_insurer,
+			_packId,
+			_period,
+			totalContractValue,
+			_startDate,
+			_endDate,
+			address(this).balance
         );
     }
 
-    function calculateClaimAmount(address inContractCP) returns (uint) {
+    function calculateClaimAmount(address inContractCP) external view returns (uint) {
         ContractCP cp = ContractCP(inContractCP);
-        // //require(cp.getPatient() == _patient);
-        return 100;
-        // uint itemCount = cp.getItemCount();
-        // uint[] checkItems;
-        // uint[] checkPrices;
-        // for(uint i = 0; i < itemCount; i++) {
-        //     checkItems[i] = cp.getCheckItem(i);
-        //     checkPrices[i] = cp.getCheckPrice(i);
-        // }
+        require(cp.getPatient() == _patient);
         
-        //uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, checkItems, checkPrices);
-        //return totalAmount;
+        uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, cp.getCheckItems(), cp.getCheckPrices());
+        return totalAmount;
     }
 
     event ContractSigned(address, uint, uint);
