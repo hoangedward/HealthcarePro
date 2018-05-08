@@ -55,8 +55,18 @@ class CampaignIndex extends Component {
 	
 	onWithdraw = async event => {
     event.preventDefault();
-		try {
-			this.setState({ loading: true, errorMessage: '' });
+		
+		const contractPI = ContractPI(this.props.address);
+
+    try {
+      await contractPI.methods
+        .requestForWithdraw()
+        .send({
+          from: Accounts.Insurer,
+					gas: 40000000
+        });
+
+      Router.pushRoute('/insurer');
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
