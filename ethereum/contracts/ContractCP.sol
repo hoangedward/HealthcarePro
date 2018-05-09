@@ -34,11 +34,11 @@ contract ContractCP {
         _totalFee = _contractClinicCategory.calFee(inCheckItems);
     }
 
-    function getStatus() public view returns (Status) {
+    function getStatus() external view returns (Status) {
         return _status;
     }
 
-    function getTotalFee() public view returns (uint) {
+    function getTotalFee() external view returns (uint) {
         return _totalFee;
     }
     
@@ -49,7 +49,7 @@ contract ContractCP {
         _status = Status.WAITING_FOR_PAID;
     }
     
-    function calculateFee() public returns (uint, uint) {
+    function calculateFee() external {
         require(msg.sender == _clinic);
         require(_status == Status.WAITING_FOR_PAID);
         ContractPI pi = ContractPI(_contractPI);
@@ -58,7 +58,9 @@ contract ContractCP {
         _patientPaidAmount = _totalFee - _insurerPaidAmount;
 
         emit InformTotalFee(_insurerPaidAmount, _patientPaidAmount);
-        
+    }
+
+    function getPayInformation() external view returns (uint, uint) {
         return (_insurerPaidAmount, _patientPaidAmount);
     }
     
