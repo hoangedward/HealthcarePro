@@ -95,9 +95,8 @@ contract ContractPI {
           _claimAddressQueue.push(inContractCP);
           
           emit ClaimRequested(inContractCP, _patient, totalAmount);
-          return 0;
         }
-        return 1;
+        return totalAmount;
         
     }
     

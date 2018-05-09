@@ -1,3 +1,5 @@
-npm run test
+@echo off
+
+cmd /c npm run test
 
 pause

@@ -31,8 +31,15 @@ contract ContractCP {
         _status = Status.NEW;
         _checkItems = inCheckItems;
         
-        
         _totalFee = _contractClinicCategory.calFee(inCheckItems);
+    }
+
+    function getStatus() public view returns (Status) {
+        return _status;
+    }
+
+    function getTotalFee() public view returns (uint) {
+        return _totalFee;
     }
     
     function clinicAcceptPatient(address inContractPI) external {
@@ -42,18 +49,17 @@ contract ContractCP {
         _status = Status.WAITING_FOR_PAID;
     }
     
-    function calculateFee() external returns (uint, uint) {
+    function calculateFee() public returns (uint, uint) {
         require(msg.sender == _clinic);
         require(_status == Status.WAITING_FOR_PAID);
         ContractPI pi = ContractPI(_contractPI);
+        
+        _insurerPaidAmount = pi.requestForClaim(this);
+        _patientPaidAmount = _totalFee - _insurerPaidAmount;
 
-        uint[] memory pays = new uint[](2) ;
-        pays[0] = pi.requestForClaim(this);
-        pays[1] = _totalFee - pays[0];
+        emit InformTotalFee(_insurerPaidAmount, _patientPaidAmount);
         
-        emit InformTotalFee(pays[0], pays[1]);
-        
-        return (pays[0], pays[1]);
+        return (_insurerPaidAmount, _patientPaidAmount);
     }
     
     function patientPay() external payable {
@@ -84,9 +90,9 @@ contract ContractCP {
     
     function checkForPay() internal {
         require(_status == Status.WAITING_FOR_PAID);
-        require(_insurerPaidAmount == 0 || _insurerPaid);
-        require(_patientPaidAmount == 0 || _patientPaid);
-        _status = Status.CHECKING;
+        if(_insurerPaid && _patientPaid) {
+            _status = Status.CHECKING;
+        }
         emit ReadyToCheck();
     }
     
