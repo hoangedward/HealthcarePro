@@ -15,7 +15,7 @@ describe('End to end test', () => {
 
     // Default gas for function call
     const DEF_GAS = 4000000;
-    
+
     // By default, all Ganache accounts are unlocked and ready for payment without confirmation from user
     let accounts = await web3.eth.getAccounts();
 
@@ -25,7 +25,7 @@ describe('End to end test', () => {
     let accountClinic = accounts[2];
     let accountInsurer = accounts[3];
 
-    
+
     // *****************************************************************
     // Step 1.1: Deploy Clinic Category Contract - Clinic
     // *****************************************************************
@@ -35,24 +35,24 @@ describe('End to end test', () => {
     )
       .deploy({ data: ClinicCategoryJSON.bytecode, arguments: [accountClinic] })
       .send({ gas: DEF_GAS, from: accountClinic });
-  
+
     console.log('Contract ClinicCategory deployed to', resultClinicCategory.options.address);
     assert.ok(resultClinicCategory.options.address);
 
     // calFee
     // 1+2+2+3+10+5=23
-    assert.equal(web3.utils.toWei('23', 'ether'), 
-      await resultClinicCategory.methods.calFee([1,2,3,4,5,6]).call());
+    assert.equal(web3.utils.toWei('23', 'ether'),
+      await resultClinicCategory.methods.calFee([1, 2, 3, 4, 5, 6]).call());
 
     // getCheckPrices
-    let checkPrices = await resultClinicCategory.methods.getCheckPrices([1,2,3,4,5,6]).call();
+    let checkPrices = await resultClinicCategory.methods.getCheckPrices([1, 2, 3, 4, 5, 6]).call();
     assert.equal(toWei('1', 'ether'), checkPrices[0]);
     assert.equal(toWei('2', 'ether'), checkPrices[1]);
     assert.equal(toWei('2', 'ether'), checkPrices[2]);
     assert.equal(toWei('3', 'ether'), checkPrices[3]);
     assert.equal(toWei('10', 'ether'), checkPrices[4]);
     assert.equal(toWei('5', 'ether'), checkPrices[5]);
-    
+
     // *****************************************************************
     // Step 1.2: Deploy Clinic List Contract - Admin
     // *****************************************************************
@@ -62,11 +62,11 @@ describe('End to end test', () => {
     )
       .deploy({ data: ContractCPListJSON.bytecode })
       .send({ gas: DEF_GAS, from: accountAdmin });
-  
+
     console.log('Contract ContractCPList deployed to', contractCPList.options.address);
     assert.ok(contractCPList.options.address);
 
-    
+
     // *****************************************************************
     // Step 2.1: Deploy Insurer Category Contract - Insurer
     // *****************************************************************
@@ -76,29 +76,29 @@ describe('End to end test', () => {
     )
       .deploy({ data: InsuranceCategoryJSON.bytecode, arguments: [accountInsurer] })
       .send({ gas: DEF_GAS, from: accountInsurer });
-  
+
     console.log('Contract InsuranceCategory deployed to', resultInsuranceCategory.options.address);
     assert.ok(resultInsuranceCategory.options.address);
 
     // calculateContractValue
-    assert.equal(toWei('20', 'ether'), 
+    assert.equal(toWei('20', 'ether'),
       await resultInsuranceCategory.methods.calculateContractValue(1, 6).call())
-    assert.equal(toWei('30', 'ether'), 
+    assert.equal(toWei('30', 'ether'),
       await resultInsuranceCategory.methods.calculateContractValue(1, 12).call())
-    assert.equal(toWei('30', 'ether'), 
+    assert.equal(toWei('30', 'ether'),
       await resultInsuranceCategory.methods.calculateContractValue(2, 6).call())
-    assert.equal(toWei('40', 'ether'), 
+    assert.equal(toWei('40', 'ether'),
       await resultInsuranceCategory.methods.calculateContractValue(2, 12).call())
 
     // calculateClaimAmount
-    assert.equal(700, 
-      await resultInsuranceCategory.methods.calculateClaimAmount(1, 6, [1,2,3,4], [100,200,300,400]).call());
-    assert.equal(520, 
-      await resultInsuranceCategory.methods.calculateClaimAmount(1, 12, [2,3,4], [100,300,400]).call());
-    assert.equal(800, 
-      await resultInsuranceCategory.methods.calculateClaimAmount(2, 6, [1,2,3], [100,300,400]).call());
-    assert.equal(1860, 
-      await resultInsuranceCategory.methods.calculateClaimAmount(2, 12, [1,2,3,4,5,6], [100,300,400,200,500,1000]).call());
+    assert.equal(700,
+      await resultInsuranceCategory.methods.calculateClaimAmount(1, 6, [1, 2, 3, 4], [100, 200, 300, 400]).call());
+    assert.equal(520,
+      await resultInsuranceCategory.methods.calculateClaimAmount(1, 12, [2, 3, 4], [100, 300, 400]).call());
+    assert.equal(800,
+      await resultInsuranceCategory.methods.calculateClaimAmount(2, 6, [1, 2, 3], [100, 300, 400]).call());
+    assert.equal(1860,
+      await resultInsuranceCategory.methods.calculateClaimAmount(2, 12, [1, 2, 3, 4, 5, 6], [100, 300, 400, 200, 500, 1000]).call());
 
     // *****************************************************************
     // Step 2.2: Deploy Insurer List Contract - Admin
@@ -109,8 +109,8 @@ describe('End to end test', () => {
     )
       .deploy({ data: ContractPIListJSON.bytecode })
       .send({ gas: DEF_GAS, from: accountAdmin });
-  
-      console.log('Contract ContractPIList deployed to', contractPiList.options.address);
+
+    console.log('Contract ContractPIList deployed to', contractPiList.options.address);
     assert.ok(contractPiList.options.address);
 
 
@@ -141,11 +141,11 @@ describe('End to end test', () => {
         value: toWei('20', 'ether')
       });
 
-      await outBalance('Patient', accountPatient);
-      await outBalance('Contract PI', deployedPiAddress[0]);
+    await outBalance('Patient', accountPatient);
+    await outBalance('ContractPI', deployedPiAddress[0]);
 
-      assert.equal('80.0', fromWeiRound(await web3.eth.getBalance(accountPatient), 'ether'));
-      assert.equal('20.0', fromWeiRound(await web3.eth.getBalance(deployedPiAddress[0]), 'ether'));
+    assert.equal('80.0', fromWeiRound(await web3.eth.getBalance(accountPatient), 'ether'));
+    assert.equal('20.0', fromWeiRound(await web3.eth.getBalance(deployedPiAddress[0]), 'ether'));
 
 
     // *****************************************************************
@@ -154,13 +154,13 @@ describe('End to end test', () => {
     console.log('Step 4.1: Patient create a CP contract');
     await contractCPList.methods
       .createContract(
-          accountClinic,
-          accountPatient,
-          resultClinicCategory.options.address,
-          [3])
+        accountClinic,
+        accountPatient,
+        resultClinicCategory.options.address,
+        [3])
       .send({
-          from: accountPatient,
-          gas: DEF_GAS
+        from: accountPatient,
+        gas: DEF_GAS
       });
 
     const deployedCpAddress = await contractCPList.methods.getPatientContracts(accountPatient).call();
@@ -204,7 +204,7 @@ describe('End to end test', () => {
       .getPayInformation()
       .call();
 
-    console.log("Insurer should pay: " + pays[0] + '. Patient should pay: ' + pays[1]);
+    console.log("Insurer should pay: " + toEth(pays[0]) + '. Patient should pay: ' + toEth(pays[1]));
     assert.equal(toWei('1.6', 'ether'), pays[0]);
     assert.equal(toWei('0.4', 'ether'), pays[1]);
 
@@ -242,8 +242,8 @@ describe('End to end test', () => {
     assert.equal(2, await contractCP.methods.getStatus().call());
 
     assert.equal(toWei('2', 'ether'), await web3.eth.getBalance(deployedCpAddress[0]));
-    
-    await outBalance('CP balance', deployedCpAddress[0]);
+
+    await outBalance('ContractCP', deployedCpAddress[0]);
 
 
     // *****************************************************************
@@ -262,7 +262,7 @@ describe('End to end test', () => {
     assert.equal('98.4', fromWeiRound(await web3.eth.getBalance(accountInsurer), 'ether'));
     assert.equal('79.6', fromWeiRound(await web3.eth.getBalance(accountPatient), 'ether'));
 
-    await outBalance('CP balance', deployedCpAddress[0]);
+    await outBalance('ContractCP', deployedCpAddress[0]);
     await outBalance('Clinic', accountClinic);
     await outBalance('Insurer', accountInsurer);
     await outBalance('Patient', accountPatient);
@@ -282,7 +282,7 @@ async function outEth(wei) {
   console.log(eth);
 }
 
-async function toEth(wei) {
+function toEth(wei) {
   let eth = web3.utils.fromWei(wei, 'ether');
   balance = parseFloat(eth).toFixed(1);
   return balance + ' ETH';

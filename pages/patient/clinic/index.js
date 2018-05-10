@@ -22,16 +22,16 @@ class CampaignIndex extends Component {
         header: address,
         description: (
           <Grid columns='equal' divided>
-              <Grid.Row stretched>
-                  <Grid.Column>
-                      <Link route={`/clinic/view/${address}`}>
-                          <a>View Contract</a>
-                      </Link>
+            <Grid.Row stretched>
+              <Grid.Column>
+                <Link route={`/clinic/view/${address}`}>
+                  <a>View Contract</a>
+                </Link>
+              </Grid.Column>
+              <Grid.Column width={3}>
+                Valid
                   </Grid.Column>
-                  <Grid.Column width={3}>
-                    Valid
-                  </Grid.Column>
-              </Grid.Row>
+            </Grid.Row>
           </Grid>
         ),
         fluid: true
@@ -60,7 +60,7 @@ class CampaignIndex extends Component {
               <Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
             </a>
           </Link>
-					<p></p>
+          <p></p>
           {this.renderCampaigns()}
         </div>
       </Layout>

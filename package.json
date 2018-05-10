@@ -11,8 +11,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bigchaindb-driver": "^4.0.0",
     "fs-extra": "^5.0.0",
     "ganache-cli": "^6.0.3",
+    "ipfs-api": "^20.2.1",
     "mocha": "^4.1.0",
     "next": "^4.1.4",
     "next-routes": "^1.2.0",

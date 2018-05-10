@@ -4,19 +4,19 @@ import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
 class CampaignIndex extends Component {
-	
+
 	state = {
 		errorMessage: '',
 		loading: false
 	};
 
-  render() {
-    return (
-      <Layout>
-        <div>
-          <h3>New Contract with Insurer</h3>
-          <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
-						
+	render() {
+		return (
+			<Layout>
+				<div>
+					<h3>New Contract with Insurer</h3>
+					<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+
 						<Card.Group>
 							<Card>
 								<Card.Content>
@@ -113,11 +113,11 @@ class CampaignIndex extends Component {
 							</a>
 						</Link>
 						<Message error header="Oops!" content={this.state.errorMessage} />
-          </Form>
-        </div>
-      </Layout>
-    );
-  }
+					</Form>
+				</div>
+			</Layout>
+		);
+	}
 }
 
 export default CampaignIndex;

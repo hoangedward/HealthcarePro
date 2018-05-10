@@ -10,21 +10,21 @@ class CampaignIndex extends Component {
       <Layout>
         <div>
           <h3>Please choose operation</h3>
-					<Link route="/patient/clinic">
+          <Link route="/patient/clinic">
             <a>
               <Button basic color='green' content="Your Clinic" />
             </a>
           </Link>
-					<Link route="/patient/insurer">
+          <Link route="/patient/insurer">
             <a>
               <Button basic color='blue' content="Your Insurer" />
             </a>
           </Link>
-					<Link route="/">
-						<a>
-							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-						</a>
-					</Link>
+          <Link route="/">
+            <a>
+              <Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
+            </a>
+          </Link>
         </div>
       </Layout>
     );

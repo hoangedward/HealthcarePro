@@ -8,35 +8,35 @@ import Accounts from '../../ethereum/const/Accounts.json';
 import DeployAddress from '../../ethereum/deployed_address.json';
 
 class CampaignIndex extends Component {
-	
+
 	state = {
 		balance: []
 	};
-	
+
 	async componentDidMount() {
-    var balanceMap = [];
+		var balanceMap = [];
 		balanceMap[Accounts.Admin] = await web3.eth.getBalance(Accounts.Admin);
 		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
 		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
 		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
 		balanceMap[DeployAddress.ContractPIList] = await web3.eth.getBalance(DeployAddress.ContractPIList);
 		balanceMap[DeployAddress.InsuranceCategory] = await web3.eth.getBalance(DeployAddress.InsuranceCategory);
-		this.setState( {balance: balanceMap} );
-  }
-	
+		this.setState({ balance: balanceMap });
+	}
+
 	getBalance(account) {
 		var balance = this.state.balance[account];
-		if(typeof balance === "undefined") {
+		if (typeof balance === "undefined") {
 			balance = '0';
 		}
 		return web3.utils.fromWei('' + balance, 'ether');
 	}
 
-  render() {
-    return (
-      <Layout>
-        <div>
-          <h3>Administration Page</h3>
+	render() {
+		return (
+			<Layout>
+				<div>
+					<h3>Administration Page</h3>
 					<Link route="/">
 						<a>
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
@@ -46,57 +46,57 @@ class CampaignIndex extends Component {
 					<div class="ui segments">
 						<div class="ui segment">
 							<strong>Name: </strong> Admin
-							<br/>
+							<br />
 							<strong>Address: </strong> {Accounts.Admin}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(Accounts.Admin)} ETH
 						</div>
 						<div class="ui red segment">
 							<strong>Name: </strong> Patient
-							<br/>
+							<br />
 							<strong>Address: </strong> {Accounts.Patient}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(Accounts.Patient)} ETH
 						</div>
 						<div class="ui blue segment">
 							<strong>Name: </strong> Clinic
-							<br/>
+							<br />
 							<strong>Address: </strong> {Accounts.Clinic}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(Accounts.Clinic)} ETH
 						</div>
 						<div class="ui green segment">
 							<strong>Name: </strong> Insurer
-							<br/>
+							<br />
 							<strong>Address: </strong> {Accounts.Insurer}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
 						</div>
 					</div>
-					
+
 					<h4>Insurance Static Contracts</h4>
 					<div class="ui segments">
 						<div class="ui segment">
 							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> ContractPIList
-							<br/>
+							<br />
 							<strong>Address: </strong> {DeployAddress.ContractPIList}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
 						</div>
 						<div class="ui red segment">
 							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> InsuranceCategory
-							<br/>
+							<br />
 							<strong>Address: </strong> {DeployAddress.InsuranceCategory}
-							<br/>
+							<br />
 							<strong>Balance: </strong> {this.getBalance(DeployAddress.InsuranceCategory)} ETH
 						</div>
 					</div>
-        </div>
-      </Layout>
-    );
-  }
+				</div>
+			</Layout>
+		);
+	}
 }
 
 export default CampaignIndex;

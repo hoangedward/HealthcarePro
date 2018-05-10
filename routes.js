@@ -9,8 +9,10 @@ routes
 	.add('/patient/clinic/register/:clinic_name', '/patient/clinic/register')
 
 	.add('/clinic/view/:address', '/clinic/view')
-	
+
 	.add('/insurer/view/:address', '/insurer/view')
 	.add('/insurer/claimqueue/:address', '/insurer/claimqueue')
+
+	.add('/ipfs', '/ipfs')
 
 module.exports = routes;

@@ -8,17 +8,17 @@ import ContractPIList from '../../ethereum/ContractPIList';
 import web3 from '../../ethereum/web3';
 
 import Accounts from '../../ethereum/const/Accounts.json';
-import {Pi} from '../../utils/pi';
-import {datetime} from '../../utils/datetime';
-import {eth} from '../../utils/eth';
+import { Pi } from '../../utils/pi';
+import { datetime } from '../../utils/datetime';
+import { eth } from '../../utils/eth';
 
 class CampaignIndex extends Component {
-	
-	static async getInitialProps(props) {
-    const summary = await Pi.getSummary(props.query.address);
 
-    return {
-      address: props.query.address,
+	static async getInitialProps(props) {
+		const summary = await Pi.getSummary(props.query.address);
+
+		return {
+			address: props.query.address,
 			status: summary[0],
 			patient: summary[1],
 			insurer: summary[2],
@@ -28,55 +28,55 @@ class CampaignIndex extends Component {
 			startDate: summary[6],
 			endDate: summary[7],
 			balance: summary[8]
-    };
-  }
-	
+		};
+	}
+
 	state = {
 		errorMessage: '',
 		loading: false
 	};
-	
+
 	isEnableButton(name) {
 		return true; // TEST
-		if(name == "withdraw") {
-			if(this.props.status == 0) {
+		if (name == "withdraw") {
+			if (this.props.status == 0) {
 				return true;
 			}
 			return false;
 		}
-		else if(name == "claimQueue") {
-			if(this.props.status == 0) {
+		else if (name == "claimQueue") {
+			if (this.props.status == 0) {
 				return true;
 			}
 			return false;
 		}
-		
+
 	}
-	
+
 	onWithdraw = async event => {
-    event.preventDefault();
-		
+		event.preventDefault();
+
 		const contractPI = ContractPI(this.props.address);
 
-    try {
-      await contractPI.methods
-        .requestForWithdraw()
-        .send({
-          from: Accounts.Insurer,
+		try {
+			await contractPI.methods
+				.requestForWithdraw()
+				.send({
+					from: Accounts.Insurer,
 					gas: 4000000
-        });
+				});
 
-      Router.pushRoute('/insurer');
-    } catch (err) {
-      this.setState({ errorMessage: err.message });
-    }
+			Router.pushRoute('/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
 
-    this.setState({ loading: false });
-  };
+		this.setState({ loading: false });
+	};
 
-  render() {
-    return (
-      <Layout>
+	render() {
+		return (
+			<Layout>
 				<h3>Insurance Contract Infomation</h3>
 				<Form error={!!this.state.errorMessage}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
@@ -107,9 +107,9 @@ class CampaignIndex extends Component {
 						</div>
 					</div>
 				</Form>
-      </Layout>
-    );
-  }
+			</Layout>
+		);
+	}
 }
 
 export default CampaignIndex;

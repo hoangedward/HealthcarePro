@@ -10,40 +10,40 @@ import deployed_address from '../../../ethereum/deployed_address.json';
 import Accounts from '../../../ethereum/const/Accounts.json';
 
 class CampaignIndex extends Component {
-	
+
 	static async getInitialProps(props) {
 		var _packId = '';
 		var _period = '';
-		if(props.query.pack == "pack1_6months") {
+		if (props.query.pack == "pack1_6months") {
 			_packId = '1';
 			_period = '6';
 		}
-		else if(props.query.pack == "pack1_12months") {
+		else if (props.query.pack == "pack1_12months") {
 			_packId = '1';
 			_period = '12';
 		}
-		else if(props.query.pack == "pack2_6months") {
+		else if (props.query.pack == "pack2_6months") {
 			_packId = '2';
 			_period = '6';
 		}
-		else if(props.query.pack == "pack2_12months") {
+		else if (props.query.pack == "pack2_12months") {
 			_packId = '2';
 			_period = '12';
 		}
-    return {
-      pack: props.query.pack,
+		return {
+			pack: props.query.pack,
 			packId: _packId,
 			period: _period
-    };
-  }
-		
+		};
+	}
+
 	renderInsuranceInformation() {
-		
+
 		var packName = "";
 		var periodName = "";
 		var price = "";
 		var item = "";
-		if(this.props.pack == "pack1_6months") {
+		if (this.props.pack == "pack1_6months") {
 			packName = "General Pack";
 			price = "20.00 ETH";
 			item = (
@@ -57,7 +57,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if(this.props.pack == "pack1_12months") {
+		else if (this.props.pack == "pack1_12months") {
 			packName = "General Pack";
 			price = "30.00 ETH";
 			item = (
@@ -71,7 +71,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if(this.props.pack == "pack2_6months") {
+		else if (this.props.pack == "pack2_6months") {
 			packName = "Premium Pack";
 			price = "30.00 ETH";
 			item = (
@@ -87,7 +87,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if(this.props.pack == "pack2_12months") {
+		else if (this.props.pack == "pack2_12months") {
 			packName = "Premium Pack";
 			price = "40.00 ETH";
 			item = (
@@ -103,7 +103,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		
+
 		return (
 			<Card.Group>
 				<Card>
@@ -129,34 +129,34 @@ class CampaignIndex extends Component {
 			</Card.Group>
 		);
 	}
-	
+
 	onRegister = async event => {
 		event.preventDefault();
 
-    this.setState({ loading: true, errorMessage: '' });
-		
-    try {
-			
-      await ContractPIList.methods
-        .createContract(Accounts.Insurer, Accounts.Patient, this.props.packId, this.props.period, deployed_address.InsuranceCategory)
-        .send({
-          from: Accounts.Patient,
+		this.setState({ loading: true, errorMessage: '' });
+
+		try {
+
+			await ContractPIList.methods
+				.createContract(Accounts.Insurer, Accounts.Patient, this.props.packId, this.props.period, deployed_address.InsuranceCategory)
+				.send({
+					from: Accounts.Patient,
 					gas: 4000000
-        });
+				});
 
-      Router.pushRoute('/patient/insurer');
-    } catch (err) {
-      this.setState({ errorMessage: err.message });
-    }
+			Router.pushRoute('/patient/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
 
-    this.setState({ loading: false });
+		this.setState({ loading: false });
 	};
-	
+
 	onBack = async event => {
 		event.preventDefault();
 		Router.pushRoute('/patient/insurer/new');
 	};
-	
+
 	state = {
 		errorMessage: '',
 		loading: false,
@@ -164,21 +164,21 @@ class CampaignIndex extends Component {
 		period: ''
 	};
 
-  render() {
-    return (
-      <Layout>
-        <div>
-          <h3>Please confirm your registration</h3>
-          <Form error={!!this.state.errorMessage}>
+	render() {
+		return (
+			<Layout>
+				<div>
+					<h3>Please confirm your registration</h3>
+					<Form error={!!this.state.errorMessage}>
 						<Message error header="Oops!" content={this.state.errorMessage} />
-						
+
 						{this.renderInsuranceInformation()}
-						
-          </Form>
-        </div>
-      </Layout>
-    );
-  }
+
+					</Form>
+				</div>
+			</Layout>
+		);
+	}
 }
 
 export default CampaignIndex;

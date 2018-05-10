@@ -34,7 +34,7 @@ class CampaignIndex extends Component {
                     Accounts.Clinic,
                     Accounts.Patient,
                     deployed_address.ClinicCategory,
-                    [2,4,6])
+                    [2, 4, 6])
                 .send({
                     from: Accounts.Patient,
                     gas: 4000000
@@ -54,7 +54,7 @@ class CampaignIndex extends Component {
     }
 
     render() {
-        return(
+        return (
             <Layout>
                 <div>
                     <h3>Your contract with {this.props.clinic_name}</h3>
@@ -67,7 +67,7 @@ class CampaignIndex extends Component {
                                         Select your choice:
                                     </Card.Header>
                                     <Card.Meta>
-                                        <h4/>
+                                        <h4 />
                                         <Table>
                                             <Table.Body>
                                                 <Table.Row>
@@ -120,7 +120,7 @@ class CampaignIndex extends Component {
                                                 </Table.Row>
                                             </Table.Body>
                                         </Table>
-                                        <hr/>
+                                        <hr />
                                     </Card.Meta>
                                     <Card.Description>
                                         <h4>Total price: 6 ETH</h4>

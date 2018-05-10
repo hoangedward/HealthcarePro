@@ -1,16 +1,16 @@
-const datetime = {  
+const datetime = {
 
-  fromTimestamp: function fromTimestamp(timestamp) {
-		
-		if(timestamp*1 == 0) {
+	fromTimestamp: function fromTimestamp(timestamp) {
+
+		if (timestamp * 1 == 0) {
 			return "-";
 		}
 
 		// Months array
-		var months_arr = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+		var months_arr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 		// Convert timestamp to milliseconds
-		var date = new Date(timestamp*1);
+		var date = new Date(timestamp * 1);
 		// return date.toDateString();
 
 		// Year
@@ -32,7 +32,7 @@ const datetime = {
 		var seconds = "0" + date.getSeconds();
 
 		// Display date time in MM-dd-yyyy h:m:s format
-		var convdataTime = month+'-'+day+'-'+year+' '+hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+		var convdataTime = month + '-' + day + '-' + year + ' ' + hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
 
 		return convdataTime;
 	}

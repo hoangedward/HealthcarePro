@@ -8,17 +8,17 @@ import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 
 import Accounts from '../../../ethereum/const/Accounts.json';
-import {Pi} from '../../../utils/pi';
-import {datetime} from '../../../utils/datetime';
-import {eth} from '../../../utils/eth';
+import { Pi } from '../../../utils/pi';
+import { datetime } from '../../../utils/datetime';
+import { eth } from '../../../utils/eth';
 
 class CampaignIndex extends Component {
-	
-	static async getInitialProps(props) {
-    const summary = await Pi.getSummary(props.query.address);
 
-    return {
-      address: props.query.address,
+	static async getInitialProps(props) {
+		const summary = await Pi.getSummary(props.query.address);
+
+		return {
+			address: props.query.address,
 			status: summary[0],
 			patient: summary[1],
 			insurer: summary[2],
@@ -28,79 +28,79 @@ class CampaignIndex extends Component {
 			startDate: summary[6],
 			endDate: summary[7],
 			balance: summary[8]
-    };
-  }
-	
+		};
+	}
+
 	state = {
 		errorMessage: '',
 		loading: false,
 		buttonStatus: [true, true]
 	};
-	
-	isEnableButton(name) {
-		if(name == "confirm") {
-			if(this.props.status == 0) {
-				return true;
-			}
-			return false;
-		}
-		else if(name == "cancel") {
-			if(this.props.status == 0) {
-				return true;
-			}
-			return false;
-		}
-		
-	}
-	
-	onConfirm = async event => {
-    event.preventDefault();
 
-    this.setState({ loading: true, errorMessage: '' });
-		
+	isEnableButton(name) {
+		if (name == "confirm") {
+			if (this.props.status == 0) {
+				return true;
+			}
+			return false;
+		}
+		else if (name == "cancel") {
+			if (this.props.status == 0) {
+				return true;
+			}
+			return false;
+		}
+
+	}
+
+	onConfirm = async event => {
+		event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
+
 		const contractPI = ContractPI(this.props.address);
 
-    try {
-      await contractPI.methods
-        .patientConfirm(this.props.totalContractValue)
-        .send({
-          from: Accounts.Patient,
+		try {
+			await contractPI.methods
+				.patientConfirm(this.props.totalContractValue)
+				.send({
+					from: Accounts.Patient,
 					gas: 4000000,
 					value: this.props.totalContractValue
-        });
+				});
 
-      Router.pushRoute('/patient/insurer');
-    } catch (err) {
-      this.setState({ errorMessage: err.message });
-    }
+			Router.pushRoute('/patient/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
 
-    this.setState({ loading: false });
-  };
-	
+		this.setState({ loading: false });
+	};
+
 	onCancel = async event => {
-    event.preventDefault();
+		event.preventDefault();
 
-    this.setState({ loading: true, errorMessage: '' });
+		this.setState({ loading: true, errorMessage: '' });
 
-    try {
-      await ContractPIList.methods
-        .patientCancel(this.props.address)
-        .send({
-          from: Accounts.Patient,
+		try {
+			await ContractPIList.methods
+				.patientCancel(this.props.address)
+				.send({
+					from: Accounts.Patient,
 					gas: 4000000
-        });
+				});
 
-      Router.pushRoute('/patient/insurer');
-    } catch (err) {
-      this.setState({ errorMessage: err.message });
-    }
+			Router.pushRoute('/patient/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
 
-    this.setState({ loading: false });
-  };
+		this.setState({ loading: false });
+	};
 
-  render() {
-    return (
-      <Layout>
+	render() {
+		return (
+			<Layout>
 				<h3>Insurance Contract Infomation</h3>
 				<Form error={!!this.state.errorMessage}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
@@ -127,9 +127,9 @@ class CampaignIndex extends Component {
 						</div>
 					</div>
 				</Form>
-      </Layout>
-    );
-  }
+			</Layout>
+		);
+	}
 }
 
 export default CampaignIndex;

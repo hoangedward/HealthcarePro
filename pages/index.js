@@ -15,21 +15,26 @@ class CampaignIndex extends Component {
               <Button basic color='red' content="Patient" />
             </a>
           </Link>
-					<Link route="/clinic">
+          <Link route="/clinic">
             <a>
               <Button basic color='green' content="Clinic" />
             </a>
           </Link>
-					<Link route="/insurer">
+          <Link route="/insurer">
             <a>
               <Button basic color='blue' content="Insurer" />
             </a>
           </Link>
-					<Link route="/admin">
-						<a>
-							<Button content='Admin' color='brown' floated='right' />
-						</a>
-					</Link>
+          <Link route="/ipfs">
+            <a>
+              <Button content='IPFS' color='brown' floated='right' />
+            </a>
+          </Link>
+          <Link route="/admin">
+            <a>
+              <Button content='Admin' color='brown' floated='right' />
+            </a>
+          </Link>
         </div>
       </Layout>
     );

@@ -1,0 +1,52 @@
+IPFS Note
+
+Home page:
+	https://ipfs.io/
+
+Download
+	https://ipfs.io/docs/install/
+	
+Install
+	After downloading, unzip the archive, and move ipfs.exe somewhere in your %PATH%.
+
+	Test it out:
+
+	> ipfs help
+	USAGE:
+
+			ipfs - Global p2p merkle-dag filesystem.
+	...
+	Congratulations! You now have a working IPFS installation on your computer.
+	
+Start
+	On terminal 1:
+		cd go-ipfs
+		ipfs init
+		ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+		ipfs daemon
+			Initializing daemon...
+			Swarm listening on /ip4/127.0.0.1/tcp/4001
+			Swarm listening on /ip4/169.254.163.164/tcp/4001
+			Swarm listening on /ip4/172.18.15.120/tcp/4001
+			Swarm listening on /ip6/::1/tcp/4001
+			Swarm listening on /p2p-circuit/ipfs/QmbMwTobZ9hNmJpQf6HtndbqLWLXkTGTzz3HFifEwBZEEv
+			Swarm announcing /ip4/127.0.0.1/tcp/4001
+			Swarm announcing /ip4/169.254.163.164/tcp/4001
+			Swarm announcing /ip4/172.18.15.120/tcp/4001
+			Swarm announcing /ip6/::1/tcp/4001
+			API server listening on /ip4/127.0.0.1/tcp/5001
+			Gateway (readonly) server listening on /ip4/127.0.0.1/tcp/8080
+			Daemon is ready
+
+Test
+	Place a file iPhoneX.bmp in go-ipfs folder
+	On terminal 2:
+		cd go-ipfs
+		ipfs add iPhoneX.bmp
+			added QmUTW6v6qfi8rwdPwBnj3MFko2wi18LspX6yVef9uRQpdo iPhoneX.bmp
+		See result at: https://ipfs.io/ipfs/QmUTW6v6qfi8rwdPwBnj3MFko2wi18LspX6yVef9uRQpdo
+		
+Use API
+	We can use the hash QmUTW6v6qfi8rwdPwBnj3MFko2wi18LspX6yVef9uRQpdo in our application and use ipfs API to access to this file.
+	https://github.com/ipfs/js-ipfs-api
+	npm install --save ipfs-api
