@@ -26,20 +26,21 @@ class IpfsIndex extends Component {
                     <h3>Test IPFS</h3>
                     <Form error={!!this.state.errorMessage}>
                         <Message error header="Oops!" content={this.state.errorMessage} />
+                        <div>
+                            <input type="file"
+                                name="myFile"
+                                onChange={this.onChange} />
 
-                        <input type="file"
-                            name="myFile"
-                            onChange={this.onChange} />
+                            <p></p>
+                            <Button icon='cloud upload' loading={this.state.loading} color='red' onClick={this.uploadFile} />
+                            <p></p>
 
-                        <Button circular icon='cloud upload' color='red' onClick={this.uploadFile} />
-
-                        <p></p>
-
-                        After upload to IPFS, your image will be appeared here!!
-                        {
-                            this.state.imageId != '' ?
-                                <Image src={'https://ipfs.io/ipfs/' + this.state.imageId} size='small' rounded /> : ''
-                        }
+                            <h4>After upload to IPFS, your image will be appeared here!!</h4>
+                            {
+                                this.state.imageId != '' ?
+                                    <Image src={'https://ipfs.io/ipfs/' + this.state.imageId} size='large' rounded /> : ''
+                            }
+                        </div>
 
                     </Form>
                 </div>
@@ -48,26 +49,48 @@ class IpfsIndex extends Component {
     }
 
     onChange = async event => {
+        event.preventDefault();
+
         this.setState({ selectedFile: event.target.files[0] });
     }
 
     uploadFile = async event => {
+        event.preventDefault();
 
         this.setState({ loading: true, errorMessage: '' });
 
         try {
-            const reader = new window.FileReader();
-            await reader.readAsBinaryString(this.state.selectedFile);
-
-            const buffer = Buffer.from(reader.result);
-            const id = await ipfs.files.add(buffer);
-            // this.setState({ imageId: id.hash });
-            this.setState({ imageId: 'QmStqeYPDCTbgKGUwns2nZixC5dBDactoCe1FB8htpmrt1' });
+            this.readFileAsArrayBuffer(this.state.selectedFile, async (data) => {
+                const buffer = Buffer.from(data);
+                const id = await ipfs.files.add(buffer);
+                this.setState({ imageId: id[0].hash });
+            });
         } catch (err) {
             this.setState({ errorMessage: err.message });
         }
 
         this.setState({ loading: false });
+    }
+
+    readFileAsArrayBuffer(file, success, error) {
+        var fr = new FileReader();
+        fr.addEventListener('error', error, false);
+        if (fr.readAsBinaryString) {
+            fr.addEventListener('load', function () {
+                var string = this.resultString != null ? this.resultString : this.result;
+                var result = new Uint8Array(string.length);
+                for (var i = 0; i < string.length; i++) {
+                    result[i] = string.charCodeAt(i);
+                }
+                success(result.buffer);
+            }, false);
+            return fr.readAsBinaryString(file);
+        } else {
+            fr.addEventListener('load', function () {
+                success(this.result);
+            }, false);
+            return fr.readAsArrayBuffer(file);
+        }
     }
 }
 
