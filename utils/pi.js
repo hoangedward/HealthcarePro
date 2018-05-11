@@ -10,12 +10,35 @@ const Pi = {
 	renderStatus: function renderStatus(status) {
 		var _status = "N/A";
 		if (status == 0) {
-			_status = "Waiting for patient confirm";
+			_status = "[NEW] Waiting for patient confirm";
 		}
 		else if (status == 1) {
-			_status = "Valid";
+			_status = "[VALID] Patient can use now";
+		}
+		else if (status == 2) {
+			_status = "[EXPIRED] Insurer can withdraw";
+		}
+		else if (status == 3) {
+			_status = "[CANCELLED] by Patient";
 		}
 		return _status;
+	},
+
+	renderStatusColor: function renderStatusColor(status) {
+		let color = 'black';
+		if (status == 0) {
+			color = 'olive';
+		}
+		else if (status == 1) {
+			color = 'green';
+		}
+		else if (status == 2) {
+			color = 'brown';
+		}
+		else if (status == 3) {
+			color = 'black';
+		}
+		return color;
 	},
 
 	renderPackName: function renderPackName(packId) {
