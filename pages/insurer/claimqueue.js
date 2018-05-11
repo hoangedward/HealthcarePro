@@ -71,7 +71,7 @@ class ClaimQueueIndex extends Component {
 											<Icon name='check circle' />
 											Approved
 															</Button>
-										<Label size='mini' basic color='brown' pointing='left'>{queue.amount}</Label>
+										<Label size='mini' basic color='brown' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
 									</Button>
 								)
 								:
@@ -81,7 +81,7 @@ class ClaimQueueIndex extends Component {
 											<Icon name='hand outline left' />
 											Approve
 														</Button>
-										<Label size='mini' basic color='red' pointing='left'>{queue.amount}</Label>
+										<Label size='mini' basic color='red' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
 									</Button>
 								)
 						}
@@ -96,12 +96,18 @@ class ClaimQueueIndex extends Component {
 				description: (
 					<div>
 						<strong>Patient: </strong>{queue.patient}
+						<p></p>
+						<Link route={`/clinic/document/${queue.cp}`}>
+						<a>
+							<Button basic color='blue' content='View Document' icon='image' labelPosition='right' />
+						</a>
+					</Link>
 					</div>
 				),
 				meta: (
 					<div>
-						<strong>Claim Amount: </strong>{queue.amount} ETH
-						 </div>
+						<strong>Claim Amount: </strong>{eth.fromWei(queue.amount)} ETH
+					</div>
 				)
 			};
 		}); return <Item.Group divided items={items} />;
@@ -121,10 +127,10 @@ class ClaimQueueIndex extends Component {
 				.send({
 					from: Accounts.Insurer,
 					gas: 4000000,
-					value: web3.utils.toWei(amount, 'ether')
+					value: amount
 				});
 
-			Router.pushRoute('/patient/insurer');
+			Router.pushRoute('/insurer');
 		} catch (err) {
 			this.setState({ errorMessage: err.message });
 		}

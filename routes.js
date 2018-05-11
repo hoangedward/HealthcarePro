@@ -7,8 +7,10 @@ routes
 
 	.add('/patient/clinic/new', '/patient/clinic/new')
 	.add('/patient/clinic/register/:clinic_name', '/patient/clinic/register')
+	.add('/patient/clinic/view/:address', '/patient/clinic/view')
 
 	.add('/clinic/view/:address', '/clinic/view')
+	.add('/clinic/document/:address', '/clinic/document')
 
 	.add('/insurer/view/:address', '/insurer/view')
 	.add('/insurer/claimqueue/:address', '/insurer/claimqueue')

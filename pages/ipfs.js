@@ -5,6 +5,8 @@ import { Link } from '../routes';
 
 const ipfsAPI = require('ipfs-api');
 
+import { file } from '../utils/file';
+
 // Start ipfs local
 // cd go-ipfs
 // ipfs daemon
@@ -38,7 +40,10 @@ class IpfsIndex extends Component {
                             <h4>After upload to IPFS, your image will be appeared here!!</h4>
                             {
                                 this.state.imageId != '' ?
-                                    <Image src={'https://ipfs.io/ipfs/' + this.state.imageId} size='large' rounded /> : ''
+                                    <Image src={'https://ipfs.io/ipfs/' + this.state.imageId} size='large' rounded
+                                        as='a'
+                                        href={'https://ipfs.io/ipfs/' + this.state.imageId}
+                                        target='_blank' /> : ''
                             }
                         </div>
 
@@ -60,7 +65,7 @@ class IpfsIndex extends Component {
         this.setState({ loading: true, errorMessage: '' });
 
         try {
-            this.readFileAsArrayBuffer(this.state.selectedFile, async (data) => {
+            file.readFileAsArrayBuffer(this.state.selectedFile, async (data) => {
                 const buffer = Buffer.from(data);
                 const id = await ipfs.files.add(buffer);
                 this.setState({ imageId: id[0].hash });
@@ -70,27 +75,6 @@ class IpfsIndex extends Component {
         }
 
         this.setState({ loading: false });
-    }
-
-    readFileAsArrayBuffer(file, success, error) {
-        var fr = new FileReader();
-        fr.addEventListener('error', error, false);
-        if (fr.readAsBinaryString) {
-            fr.addEventListener('load', function () {
-                var string = this.resultString != null ? this.resultString : this.result;
-                var result = new Uint8Array(string.length);
-                for (var i = 0; i < string.length; i++) {
-                    result[i] = string.charCodeAt(i);
-                }
-                success(result.buffer);
-            }, false);
-            return fr.readAsBinaryString(file);
-        } else {
-            fr.addEventListener('load', function () {
-                success(this.result);
-            }, false);
-            return fr.readAsArrayBuffer(file);
-        }
     }
 }
 

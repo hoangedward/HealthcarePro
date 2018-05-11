@@ -1,5 +1,9 @@
 # Healthcare Pro
 
+## Config proxy:
+	Copy \MISC\.gitconfig and \MISC\.npmrc to C:\Users\{UserName}
+
+
 ## Run below command to install/download node modules
 	npm install
 	You might need to install Windows Build Tool

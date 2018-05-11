@@ -40,7 +40,7 @@ class CampaignIndex extends Component {
                     gas: 4000000
                 });
             // Go to the contracts list of Patient
-            Router.pushRoute('/clinic');
+            Router.pushRoute('/patient/clinic');
         } catch (err) {
             this.setState({ errorMessage: err.message });
         }

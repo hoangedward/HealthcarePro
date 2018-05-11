@@ -19,6 +19,10 @@ contract ContractCP {
     uint private _patientPaidAmount;
     bool private _insurerPaid;
     uint private _insurerPaidAmount;
+
+    // For simply, I just want to store 1 document link
+    // Ethereum now is not support return string[]
+    string private _documentLink;
     
     ClinicCategory private _contractClinicCategory;
     
@@ -82,7 +86,7 @@ contract ContractCP {
         require(_insurerPaidAmount > 0);
         require(_insurerPaid == false);
         ContractPI pi = ContractPI(_contractPI);
-        require(msg.sender == pi.getInsurer());
+        require(msg.sender == _contractPI);
         require(msg.value >= _insurerPaidAmount);
         _insurerPaid = true;
         emit InsurerPaid(_patientPaidAmount);
@@ -133,7 +137,15 @@ contract ContractCP {
         _;
     }
 
-    function getSummary() external view returns (Status, address, address, uint[], uint, uint) {
+    function setDocument(string inDocumentLink) external {
+        _documentLink = inDocumentLink;
+    }
+
+    function getDocument() external view returns (string) {
+        return _documentLink;
+    }
+
+    function getSummary() external view returns (Status, address, address, uint[], uint, uint, string, address, uint, uint) {
         uint totalContractValue = _contractClinicCategory.calFee(_checkItems);
         return (
             _status,
@@ -141,7 +153,11 @@ contract ContractCP {
             _clinic,
             _checkItems,
             totalContractValue,
-            address(this).balance
+            address(this).balance,
+            _documentLink,
+            _contractPI,
+            _patientPaidAmount,
+            _insurerPaidAmount
         );
     }
 

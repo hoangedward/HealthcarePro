@@ -108,7 +108,7 @@ contract ContractPI {
         require(request.paid == false);
         require(msg.value >= request.amount);
         ContractCP cp = ContractCP(inContractCP);
-        cp.receive.gas(300000).value(request.amount)(request.amount);
+        cp.insurerPay.gas(4000000).value(request.amount)();
         request.paid = true;
         
         emit AcceptClaim(inContractCP, _patient, request.amount);
@@ -123,32 +123,33 @@ contract ContractPI {
     }
     
     function getClaimQueue() external view returns (address[], address[], uint[], bool[]) {
-        uint length = 2;
-        address[] memory addressList = new address[](length);
-        address[] memory patientList = new address[](length);
-        uint[] memory amountList = new uint[](length);
-        bool[] memory paidList = new bool[](length);
-        // address[] memory addressList = new address[](_claimAddressQueue.length);
-        // address[] memory patientList = new address[](_claimAddressQueue.length);
-        // uint[] memory amountList = new uint[](_claimAddressQueue.length);
-        // bool[] memory paidList = new bool[](_claimAddressQueue.length);
-        // for(uint i = 0; i < _claimAddressQueue.length; i++) {
-        //     ClaimRequest request = _claimQueue[_claimAddressQueue[i]];
-        //     addressList.push(request.requestedContract);
-        //     patientList.push(request.patient);
-        //     paidList.push(request.paid);
-        //     amountList.push(request.amount);
-        // }
-        // Test
-        addressList[0] = _patient;
-        patientList[0] = _insurer;
-        paidList[0] = false;
-        amountList[0] = 20;
+        // // Test
+        // uint length = 2;
+        // address[] memory addressList = new address[](length);
+        // address[] memory patientList = new address[](length);
+        // uint[] memory amountList = new uint[](length);
+        // bool[] memory paidList = new bool[](length);
+        // addressList[0] = _patient;
+        // patientList[0] = _insurer;
+        // paidList[0] = false;
+        // amountList[0] = 20;
         
-        addressList[1] = _insurer;
-        patientList[1] = _patient;
-        paidList[1] = true;
-        amountList[1] = 200;
+        // addressList[1] = _insurer;
+        // patientList[1] = _patient;
+        // paidList[1] = true;
+        // amountList[1] = 200;
+
+        address[] memory addressList = new address[](_claimAddressQueue.length);
+        address[] memory patientList = new address[](_claimAddressQueue.length);
+        uint[] memory amountList = new uint[](_claimAddressQueue.length);
+        bool[] memory paidList = new bool[](_claimAddressQueue.length);
+        for(uint i = 0; i < _claimAddressQueue.length; i++) {
+            ClaimRequest memory request = _claimQueue[_claimAddressQueue[i]];
+            addressList[i] = request.requestedContract;
+            patientList[i] = request.patient;
+            paidList[i] = request.paid;
+            amountList[i] = request.amount;
+        }
         
         return (addressList, patientList, amountList, paidList);
     }

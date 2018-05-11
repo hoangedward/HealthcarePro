@@ -1,0 +1,9 @@
+[url "https://github.com/"]
+	insteadOf = git://github.com/
+[http]
+	sslVerify = false
+[user]
+	name = hoangxl
+	email = hoangxl@hitachiconsulting.com
+[difftool "sourcetree"]
+	cmd = 'C:/Program Files/WinMerge/WinMergeU.exe' \"$LOCAL\" \"$REMOTE\"

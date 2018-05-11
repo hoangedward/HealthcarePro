@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Segment, Label, Input } from 'semantic-ui-react';
-import Layout from '../../components/Layout';
-import { Router, Link } from '../../routes';
+import { Form, Button, Message, Segment, Label, Icon } from 'semantic-ui-react';
+import Layout from '../../../components/Layout';
+import { Router, Link } from '../../../routes';
 
-import ContractCP from '../../ethereum/ContractCP';
-import ContractCPList from '../../ethereum/ContractCPList';
-import ContractPIList from '../../ethereum/ContractPIList';
-import web3 from '../../ethereum/web3';
+import ContractCP from '../../../ethereum/ContractCP';
+import ContractCPList from '../../../ethereum/ContractCPList';
+import ContractPIList from '../../../ethereum/ContractPIList';
+import web3 from '../../../ethereum/web3';
 
-import Accounts from '../../ethereum/const/Accounts.json';
-import { Cp } from './cp';
-import { datetime } from '../../utils/datetime';
-import { eth } from '../../utils/eth';
+import Accounts from '../../../ethereum/const/Accounts.json';
+import { Cp } from '../../clinic/cp';
+import { datetime } from '../../../utils/datetime';
+import { eth } from '../../../utils/eth';
 
 class CampaignIndex extends Component {
 
@@ -34,20 +34,24 @@ class CampaignIndex extends Component {
 
 	state = {
 		errorMessage: '',
-		loading: false,
-		buttonStatus: [true, true],
-		insuranceAddress: ''
+		loading: false
 	};
 
 	isEnableButton(name) {
-		if (name == "confirm") {
+		if (name == "cancel") {
 			if (this.props.status == 0) {
 				return true;
 			}
 			return false;
 		}
-		else if (name == "requestPayment") {
+		else if (name == "pay") {
 			if (this.props.status == 1) {
+				return true;
+			}
+			return false;
+		}
+		else if (name == "finish") {
+			if (this.props.status == 2) {
 				return true;
 			}
 			return false;
@@ -55,22 +59,20 @@ class CampaignIndex extends Component {
 
 	}
 
-	onConfirm = async event => {
+	onCancel = async event => {
 		event.preventDefault();
 
 		this.setState({ loading: true, errorMessage: '' });
 
-		const contractCP = ContractCP(this.props.address);
-
 		try {
-			await contractCP.methods
-				.clinicAcceptPatient(this.state.insuranceAddress)
+			await ContractCPList.methods
+				.patientCancel(this.props.address)
 				.send({
-					from: Accounts.Clinic,
-					gas: 6000000
+					from: Accounts.Patient,
+					gas: 4000000
 				});
 
-			Router.pushRoute('/clinic');
+			Router.pushRoute('/patient/clinic');
 		} catch (err) {
 			this.setState({ errorMessage: err.message });
 		}
@@ -78,7 +80,8 @@ class CampaignIndex extends Component {
 		this.setState({ loading: false });
 	};
 
-	onRequestPayment = async event => {
+	onPayment = async event => {
+
 		event.preventDefault();
 
 		this.setState({ loading: true, errorMessage: '' });
@@ -87,18 +90,45 @@ class CampaignIndex extends Component {
 
 		try {
 			await contractCP.methods
-				.calculateFee()
+				.patientPay()
 				.send({
-					from: Accounts.Clinic,
-					gas: 4000000
+					from: Accounts.Patient,
+					gas: 4000000,
+					value: this.props.patientPaidAmount
 				});
 
-			Router.pushRoute('/clinic');
+			Router.pushRoute('/patient/clinic');
 		} catch (err) {
 			this.setState({ errorMessage: err.message });
 		}
 
 		this.setState({ loading: false });
+
+	};
+
+	onFinish = async event => {
+
+		event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
+
+		const contractCP = ContractCP(this.props.address);
+
+		try {
+			await contractCP.methods
+				.patientConfirm()
+				.send({
+					from: Accounts.Patient,
+					gas: 4000000
+				});
+
+			Router.pushRoute('/patient/clinic');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
+
+		this.setState({ loading: false });
+
 	};
 
 	render() {
@@ -126,24 +156,18 @@ class CampaignIndex extends Component {
 									</a>
 								</Link>
 							</Segment>
-							<Segment>
-								<div>
-									<Input
-										placeholder='Enter insurance address...'
-										fluid
-										label="address"
-										labelPosition="right"
-										value={this.state.insuranceAddress}
-										onChange={event =>
-											this.setState({ insuranceAddress: event.target.value })}
-									/>
-								</div>
-							</Segment>
 						</Segment.Group>
 						<div>
-							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
-							<Button color='orange' disabled={!this.isEnableButton("requestPayment")} onClick={this.onRequestPayment}>Request Payment</Button>
-							<Link route="/clinic">
+							<Button color='orange' icon labelPosition='right' disabled={!this.isEnableButton("pay")} onClick={this.onPayment}>
+								<Icon name='money' />
+								Pay
+							</Button>
+							<Button color='green' icon labelPosition='right' disabled={!this.isEnableButton("finish")} onClick={this.onFinish}>
+								<Icon name='smile' />
+								Finish
+							</Button>
+							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={this.onCancel} >Cancel</Button>
+							<Link route="/patient/clinic">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 								</a>

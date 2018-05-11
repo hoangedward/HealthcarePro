@@ -1,5 +1,6 @@
 import ContractCP from '../../ethereum/ContractCP';
 import ContractPI from '../../ethereum/ContractPI';
+import Accounts from '../../ethereum/const/Accounts.json';
 
 const Cp = {
 	ItemNames: { 1: 'Fever', 2: 'Backache', 3: 'Stomach ache', 4: 'Toothache', 5: 'Cancel', 6: 'General examination' },
@@ -8,6 +9,19 @@ const Cp = {
 	getSummary: function getSummary(address) {
 		const contractCP = ContractCP(address);
 		return contractCP.methods.getSummary().call();
+	},
+
+	getDocument: function getDocument(address) {
+		const contractCP = ContractCP(address);
+		return contractCP.methods.getDocument().call();
+	},
+
+	setDocument: function setDocument(address, document) {
+		const contractCP = ContractCP(address);
+		return contractCP.methods.setDocument(document).send({
+			from: Accounts.Clinic,
+			gas: 6000000
+		});
 	},
 
 	renderStatus: function renderStatus(status) {
