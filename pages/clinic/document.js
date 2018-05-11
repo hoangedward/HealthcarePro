@@ -35,6 +35,7 @@ class ClinicDocumentIndex extends Component {
 	}
 
 	state = {
+		readyUpload: false,
 		errorMessage: '',
 		loading: false,
 		selectedFile: [],
@@ -44,7 +45,7 @@ class ClinicDocumentIndex extends Component {
 	onChange = async event => {
 		event.preventDefault();
 
-		this.setState({ selectedFile: event.target.files[0] });
+		this.setState({ selectedFile: event.target.files[0], readyUpload: true });
 	}
 
 	uploadFile = async event => {
@@ -57,12 +58,12 @@ class ClinicDocumentIndex extends Component {
 				const buffer = Buffer.from(data);
 				const id = await ipfs.files.add(buffer);
 				await Cp.setDocument(this.props.address, id[0].hash);
+				this.setState({ loading: false, document: id[0].hash });
 			});
 		} catch (err) {
 			this.setState({ errorMessage: err.message });
+			this.setState({ loading: false });
 		}
-
-		this.setState({ loading: false });
 	}
 
 	render() {
@@ -76,11 +77,13 @@ class ClinicDocumentIndex extends Component {
 							<Grid.Row stretched>
 								<Grid.Column>
 									<input type="file"
+										accept='image/*'
 										name="myFile"
 										onChange={this.onChange} />
 								</Grid.Column>
 								<Grid.Column width={1}>
-									<Button icon='cloud upload' loading={this.state.loading} color='red' onClick={this.uploadFile} />
+									<Button icon='cloud upload' loading={this.state.loading} color='red' 
+									disabled={!this.state.readyUpload} onClick={this.uploadFile} />
 								</Grid.Column>
 							</Grid.Row>
 						</Grid>
