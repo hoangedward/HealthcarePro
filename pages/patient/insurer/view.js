@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Message, Segment, Modal, Header, Label } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
+import EtherUint from '../../../components/EtherUint';
 import { Router, Link } from '../../../routes';
 
 import ContractPI from '../../../ethereum/ContractPI';
@@ -113,7 +114,7 @@ class CampaignIndex extends Component {
 							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
 							<Segment><strong>Insurer Address: </strong>{this.props.insurer}</Segment>
 							<Segment><strong>Pack Name: </strong>{Pi.renderPackName(this.props.packId)} ({Pi.renderPeriod(this.props.period)})</Segment>
-							<Segment><strong>Total Value: </strong><Label color='violet'>{eth.fromWei(this.props.totalContractValue, 'ether')}<Label.Detail> ETH</Label.Detail></Label></Segment>
+							<Segment><strong>Total Value: </strong><EtherUint value={this.props.totalContractValue}/></Segment>
 							<Segment><strong>Start Date: </strong>{datetime.fromTimestamp(this.props.startDate)}</Segment>
 							<Segment><strong>End Date: </strong>{datetime.fromTimestamp(this.props.endDate)}</Segment>
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>

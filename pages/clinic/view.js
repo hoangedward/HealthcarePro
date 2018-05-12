@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Button, Message, Segment, Label, Input } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
+import EtherUint from '../../components/EtherUint';
 import { Router, Link } from '../../routes';
 
 import ContractCP from '../../ethereum/ContractCP';
@@ -115,7 +116,7 @@ class CampaignIndex extends Component {
 							<Segment><strong>Insurance Address: </strong>{eth.renderAccount(this.props.contractPi)}</Segment>
 							<Segment><strong>Clinic Address: </strong>{this.props.clinic}</Segment>
 							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.props.checkedItems).join(', ')}</Segment>
-							<Segment><strong>Total Value: </strong><Label color='violet'>{eth.fromWei(this.props.totalContractValue, 'ether')}<Label.Detail> ETH</Label.Detail></Label></Segment>
+							<Segment><strong>Total Value: </strong><EtherUint value={this.props.totalContractValue}/></Segment>
 							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.props.patientPaidAmount, 'ether')} ETH</Segment>
 							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.props.insurerPaidAmount, 'ether')} ETH</Segment>
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>

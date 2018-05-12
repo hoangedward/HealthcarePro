@@ -140,7 +140,7 @@ class CampaignIndex extends Component {
                                         <hr />
                                     </Card.Meta>
                                     <Card.Description>
-                                        <h4>Total price: {this.state.totalPrice}</h4>
+                                        <h4>Total price: {this.state.totalPrice} ETH</h4>
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
