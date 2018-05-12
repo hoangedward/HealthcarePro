@@ -9,14 +9,22 @@ import Accounts from '../../../ethereum/const/Accounts.json';
 
 import ContractCPList from '../../../ethereum/ContractCPList';
 
-const items = [
-    { id: 1, name: 'Fever', price: 1, clinic: ['FamilyClinic', 'HomeClinic'] },
-    { id: 2, name: 'Backache', price: 2, clinic: ['FamilyClinic', 'HomeClinic'] },
-    { id: 3, name: 'Stomach ache', price: 2, clinic: ['FamilyClinic', 'HomeClinic'] },
-    { id: 4, name: 'Toothache', price: 3, clinic: ['FamilyClinic', 'HomeClinic'] },
-    { id: 5, name: 'Cancel', price: 10, clinic: ['HomeClinic'] },
-    { id: 6, name: 'General examination', price: 5, clinic: ['HomeClinic'] }
-];
+const items = {
+    'FamilyClinic': [
+        { id: 1, name: 'Fever', price: 1 },
+        { id: 2, name: 'Backache', price: 2 },
+        { id: 3, name: 'Stomach ache', price: 2 },
+        { id: 4, name: 'Toothache', price: 3 }
+    ],
+    'HomeClinic': [
+        { id: 1, name: 'Fever', price: 1 },
+        { id: 2, name: 'Backache', price: 2 },
+        { id: 3, name: 'Stomach ache', price: 2 },
+        { id: 4, name: 'Toothache', price: 3 },
+        { id: 5, name: 'Cancel', price: 10 },
+        { id: 6, name: 'General examination', price: 5 }
+    ]
+};
 
 class CampaignIndex extends Component {
 
@@ -37,13 +45,13 @@ class CampaignIndex extends Component {
 
     getCheckedItem() {
         let checkedItems = [];
-        items.map(
-            item => {
+        items[this.props.clinic_name]
+            .map(item => {
                 if (this.state.itemState[item.name]) {
                     checkedItems.push(item.id);
                 }
             }
-        );
+            );
         return checkedItems;
     }
 
@@ -79,12 +87,7 @@ class CampaignIndex extends Component {
     }
 
     renderTable() {
-        let rows = items
-            .filter(
-                item => {
-                    return item.clinic.indexOf(this.props.clinic_name) >= 0
-                }
-            )
+        let rows = items[this.props.clinic_name]
             .map(item => {
                 return (
                     <Table.Row>
