@@ -36,7 +36,6 @@ class CampaignIndex extends Component {
 	state = {
 		errorMessage: '',
 		loading: false,
-		buttonStatus: [true, true],
 		insuranceAddress: ''
 	};
 
@@ -47,13 +46,6 @@ class CampaignIndex extends Component {
 			}
 			return false;
 		}
-		else if (name == "requestPayment") {
-			if (this.props.status == 1) {
-				return true;
-			}
-			return false;
-		}
-
 	}
 
 	onConfirm = async event => {
@@ -69,29 +61,6 @@ class CampaignIndex extends Component {
 				.send({
 					from: Accounts.Clinic,
 					gas: 6000000
-				});
-
-			Router.pushRoute('/clinic');
-		} catch (err) {
-			this.setState({ errorMessage: err.message });
-		}
-
-		this.setState({ loading: false });
-	};
-
-	onRequestPayment = async event => {
-		event.preventDefault();
-
-		this.setState({ loading: true, errorMessage: '' });
-
-		const contractCP = ContractCP(this.props.address);
-
-		try {
-			await contractCP.methods
-				.calculateFee()
-				.send({
-					from: Accounts.Clinic,
-					gas: 4000000
 				});
 
 			Router.pushRoute('/clinic');
@@ -146,7 +115,6 @@ class CampaignIndex extends Component {
 						</Segment.Group>
 						<div>
 							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
-							<Button color='orange' disabled={!this.isEnableButton("requestPayment")} onClick={this.onRequestPayment}>Request Payment</Button>
 							<Link route="/clinic">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />

@@ -50,12 +50,13 @@ contract ContractCP {
         require(msg.sender == _clinic);
         require(_status == Status.NEW);
         _contractPI = inContractPI;
+        calculateFee();
         _status = Status.WAITING_FOR_PAID;
     }
     
-    function calculateFee() external {
+    function calculateFee() internal {
         require(msg.sender == _clinic);
-        require(_status == Status.WAITING_FOR_PAID);
+        require(_status == Status.NEW);
         if(_contractPI != 0) {
             ContractPI pi = ContractPI(_contractPI);
             _insurerPaidAmount = pi.requestForClaim(this);
