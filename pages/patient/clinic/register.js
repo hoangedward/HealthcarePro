@@ -9,18 +9,42 @@ import Accounts from '../../../ethereum/const/Accounts.json';
 
 import ContractCPList from '../../../ethereum/ContractCPList';
 
+const items = [
+    { id: 1, name: 'Fever', price: 1, clinic: ['FamilyClinic', 'HomeClinic'] },
+    { id: 2, name: 'Backache', price: 2, clinic: ['FamilyClinic', 'HomeClinic'] },
+    { id: 3, name: 'Stomach ache', price: 2, clinic: ['FamilyClinic', 'HomeClinic'] },
+    { id: 4, name: 'Toothache', price: 3, clinic: ['FamilyClinic', 'HomeClinic'] },
+    { id: 5, name: 'Cancel', price: 10, clinic: ['HomeClinic'] },
+    { id: 6, name: 'General examination', price: 5, clinic: ['HomeClinic'] }
+];
+
 class CampaignIndex extends Component {
+
     state = {
         errorMessage: '',
         loading: false,
         packId: '',
-        period: ''
+        period: '',
+        totalPrice: 0,
+        itemState: []
     }
 
     static async getInitialProps(props) {
         return {
             clinic_name: props.query.clinic_name
         };
+    }
+
+    getCheckedItem() {
+        let checkedItems = [];
+        items.map(
+            item => {
+                if (this.state.itemState[item.name]) {
+                    checkedItems.push(item.id);
+                }
+            }
+        );
+        return checkedItems;
     }
 
     onRegister = async event => {
@@ -34,7 +58,8 @@ class CampaignIndex extends Component {
                     Accounts.Clinic,
                     Accounts.Patient,
                     deployed_address.ClinicCategory,
-                    [2, 4, 6])
+                    this.getCheckedItem()
+                )
                 .send({
                     from: Accounts.Patient,
                     gas: 4000000
@@ -53,6 +78,49 @@ class CampaignIndex extends Component {
         Router.pushRoute('/patient/clinic/new');
     }
 
+    renderTable() {
+        let rows = items
+            .filter(
+                item => {
+                    return item.clinic.indexOf(this.props.clinic_name) >= 0
+                }
+            )
+            .map(item => {
+                return (
+                    <Table.Row>
+                        <Table.Cell>
+                            <Checkbox label={item.name} onChange={this.itemChange(item.name, item.price)} checked={this.state.itemState[item.name]} />
+                        </Table.Cell>
+                        <Table.Cell textAlign='right'>
+                            {item.price} ETH
+                        </Table.Cell>
+                    </Table.Row>
+                );
+            }
+            );
+
+        return <Table.Body children={rows} />
+    }
+
+    itemChange = (name, price) => async event => {
+        event.preventDefault();
+
+        let totalPrice = this.state.totalPrice;
+        let itemState = this.state.itemState;
+
+        itemState[name] = !itemState[name];
+
+        if (itemState[name] == true) {
+            totalPrice += price;
+        }
+        else {
+            totalPrice -= price;
+        }
+
+        this.setState({ totalPrice: totalPrice, itemState: itemState });
+
+    }
+
     render() {
         return (
             <Layout>
@@ -68,62 +136,11 @@ class CampaignIndex extends Component {
                                     </Card.Header>
                                     <Card.Meta>
                                         <h4 />
-                                        <Table>
-                                            <Table.Body>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="Fever" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        1 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="Backache" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        2 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="Stomach ache" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        2 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="Toothache" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        3 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="Cancel" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        10 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                                <Table.Row>
-                                                    <Table.Cell>
-                                                        <Checkbox label="General examination" />
-                                                    </Table.Cell>
-                                                    <Table.Cell textAlign='right'>
-                                                        5 ETH
-                                                    </Table.Cell>
-                                                </Table.Row>
-                                            </Table.Body>
-                                        </Table>
+                                        {this.renderTable()}
                                         <hr />
                                     </Card.Meta>
                                     <Card.Description>
-                                        <h4>Total price: 6 ETH</h4>
+                                        <h4>Total price: {this.state.totalPrice}</h4>
                                     </Card.Description>
                                 </Card.Content>
                                 <Card.Content extra>
