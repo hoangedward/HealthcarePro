@@ -14,6 +14,13 @@ const eth = {
 			value = '0';
 		}
 		return web3.utils.toWei('' + value, uint);
+	},
+
+	renderAccount: function renderAccount(account) {
+		if(account == '0x0000000000000000000000000000000000000000') {
+			return 'Unspecified';
+		}
+		return account;
 	}
 }
 

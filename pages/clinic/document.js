@@ -87,6 +87,7 @@ class ClinicDocumentIndex extends Component {
 								</Grid.Column>
 							</Grid.Row>
 						</Grid>
+						<h4>Uploaded Document</h4>
 						<Segment.Group>
 							<Segment>
 								{

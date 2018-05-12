@@ -37,18 +37,14 @@ class CampaignIndex extends Component {
 	};
 
 	isEnableButton(name) {
-		return true; // TEST
 		if (name == "withdraw") {
-			if (this.props.status == 0) {
+			if (this.props.endDate >= Date.now()) {
 				return true;
 			}
 			return false;
 		}
 		else if (name == "claimQueue") {
-			if (this.props.status == 0) {
-				return true;
-			}
-			return false;
+			return true;
 		}
 
 	}
@@ -87,7 +83,7 @@ class CampaignIndex extends Component {
 							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
 							<Segment><strong>Insurer Address: </strong>{this.props.insurer}</Segment>
 							<Segment><strong>Pack Name: </strong>{Pi.renderPackName(this.props.packId)} ({Pi.renderPeriod(this.props.period)})</Segment>
-							<Segment><strong>Total Value: </strong>{eth.fromWei(this.props.totalContractValue, 'ether')} ETH</Segment>
+							<Segment><strong>Total Value: </strong><Label color='violet'>{eth.fromWei(this.props.totalContractValue, 'ether')}<Label.Detail> ETH</Label.Detail></Label></Segment>
 							<Segment><strong>Start Date: </strong>{datetime.fromTimestamp(this.props.startDate)}</Segment>
 							<Segment><strong>End Date: </strong>{datetime.fromTimestamp(this.props.endDate)}</Segment>
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>

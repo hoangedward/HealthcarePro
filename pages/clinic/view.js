@@ -112,10 +112,10 @@ class CampaignIndex extends Component {
 							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
 							<Segment><strong>Status: </strong><Label color="green">{Cp.renderStatus(this.props.status)}</Label></Segment>
 							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
-							<Segment><strong>Insurance Address: </strong>{this.props.contractPi}</Segment>
+							<Segment><strong>Insurance Address: </strong>{eth.renderAccount(this.props.contractPi)}</Segment>
 							<Segment><strong>Clinic Address: </strong>{this.props.clinic}</Segment>
 							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.props.checkedItems).join(', ')}</Segment>
-							<Segment><strong>Total Value: </strong>{eth.fromWei(this.props.totalContractValue, 'ether')} ETH</Segment>
+							<Segment><strong>Total Value: </strong><Label color='violet'>{eth.fromWei(this.props.totalContractValue, 'ether')}<Label.Detail> ETH</Label.Detail></Label></Segment>
 							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.props.patientPaidAmount, 'ether')} ETH</Segment>
 							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.props.insurerPaidAmount, 'ether')} ETH</Segment>
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>
@@ -126,19 +126,22 @@ class CampaignIndex extends Component {
 									</a>
 								</Link>
 							</Segment>
-							<Segment>
-								<div>
-									<Input
-										placeholder='Enter insurance address...'
-										fluid
-										label="address"
-										labelPosition="right"
-										value={this.state.insuranceAddress}
-										onChange={event =>
-											this.setState({ insuranceAddress: event.target.value })}
-									/>
-								</div>
-							</Segment>
+							{this.props.status == 0 ?
+								<Segment>
+									<div>
+												<Input
+													placeholder='Enter insurance address...'
+													fluid
+													label="address"
+													labelPosition="right"
+													value={this.state.insuranceAddress}
+													onChange={event =>
+														this.setState({ insuranceAddress: event.target.value })}
+													/>
+									</div>
+								</Segment>
+								: ''
+							}
 						</Segment.Group>
 						<div>
 							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
