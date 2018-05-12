@@ -35,7 +35,8 @@ class CampaignIndex extends Component {
 		errorMessage: '',
 		loading: false,
 		buttonStatus: [true, true],
-		confirmOpen: false
+		confirmOpen: false,
+		cancelOpen: false
 	};
 
 	isEnableButton(name) {
@@ -120,8 +121,7 @@ class CampaignIndex extends Component {
 						<div>
 							<Modal open={this.state.confirmOpen} size='tiny'
 								trigger={<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={() => {this.setState({confirmOpen: true})}}>Confirm</Button>}
-								closeOnRootNodeClick='false'
-							>
+								closeOnRootNodeClick='false'>
 								<Modal.Header>Confirm the transaction</Modal.Header>
 								<Modal.Content>
 									<p>Do you want to sumbit this transaction?</p>
@@ -131,13 +131,27 @@ class CampaignIndex extends Component {
 											<Label.Detail>ETH</Label.Detail>
 										</Label>
 									</p>
+									<p>To Account: <strong>{this.props.address}</strong></p>
 								</Modal.Content>
 								<Modal.Actions>
 									<Button negative onClick={() => {this.setState({confirmOpen: false})}}>No</Button>
 									<Button positive labelPosition='right' icon='checkmark' content='Yes' onClick={this.onConfirm} loading={this.state.loading} />
 								</Modal.Actions>
 							</Modal>
-							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={this.onCancel} >Cancel</Button>
+
+							<Modal open={this.state.cancelOpen} size='tiny'
+								trigger={<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={() => {this.setState({cancelOpen: true})}}>Cancel</Button>}
+								closeOnRootNodeClick='false'>
+								<Modal.Header>Confirm the transaction</Modal.Header>
+								<Modal.Content>
+									<p>Are you sure to cancel this transaction?</p>
+								</Modal.Content>
+								<Modal.Actions>
+									<Button negative onClick={() => {this.setState({cancelOpen: false})}}>No</Button>
+									<Button positive labelPosition='right' icon='checkmark' content='Yes' onClick={this.onCancel} loading={this.state.loading} />
+								</Modal.Actions>
+							</Modal>
+
 							<Link route="/patient/insurer">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
