@@ -56,9 +56,10 @@ contract ContractCP {
     function calculateFee() external {
         require(msg.sender == _clinic);
         require(_status == Status.WAITING_FOR_PAID);
-        ContractPI pi = ContractPI(_contractPI);
-        
-        _insurerPaidAmount = pi.requestForClaim(this);
+        if(_contractPI != 0) {
+            ContractPI pi = ContractPI(_contractPI);
+            _insurerPaidAmount = pi.requestForClaim(this);
+        }
         _patientPaidAmount = _totalFee - _insurerPaidAmount;
 
         emit InformTotalFee(_insurerPaidAmount, _patientPaidAmount);
