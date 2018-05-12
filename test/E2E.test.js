@@ -190,16 +190,8 @@ describe('End to end test', () => {
 
 
     // *****************************************************************
-    // Step 5: Clinic reqest for pay: calculateFee
+    // Step 5: Check payment information for each Patient/Insurer
     // *****************************************************************
-    console.log('Step 5: Clinic reqest for pay: calculateFee');
-    await contractCP.methods
-      .calculateFee()
-      .send({
-        from: accountClinic,
-        gas: DEF_GAS
-      });
-
     const pays = await contractCP.methods
       .getPayInformation()
       .call();
@@ -230,8 +222,8 @@ describe('End to end test', () => {
     // Step 6.2: Insurer pay
     // *****************************************************************
     console.log('Step 6.2: Insurer pay');
-    await contractCP.methods
-      .insurerPay()
+    await contractPI.methods
+      .insurerAcceptClaim(deployedCpAddress[0])
       .send({
         from: accountInsurer,
         gas: DEF_GAS,
