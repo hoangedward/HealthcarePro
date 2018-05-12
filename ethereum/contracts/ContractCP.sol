@@ -60,6 +60,10 @@ contract ContractCP {
             ContractPI pi = ContractPI(_contractPI);
             _insurerPaidAmount = pi.requestForClaim(this);
         }
+        else {
+            // No insurance
+            _insurerPaid = true;
+        }
         _patientPaidAmount = _totalFee - _insurerPaidAmount;
 
         emit InformTotalFee(_insurerPaidAmount, _patientPaidAmount);
@@ -86,7 +90,6 @@ contract ContractCP {
         require(_status == Status.WAITING_FOR_PAID);
         require(_insurerPaidAmount > 0);
         require(_insurerPaid == false);
-        ContractPI pi = ContractPI(_contractPI);
         require(msg.sender == _contractPI);
         require(msg.value >= _insurerPaidAmount);
         _insurerPaid = true;
