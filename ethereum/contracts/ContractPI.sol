@@ -58,7 +58,7 @@ contract ContractPI {
         _endDate = _startDate + monthToMiliseconds(_period);
         _status = Status.VALID;
         
-        emit ContractSigned(msg.sender, _packId, _contractValue);
+        emit ContractSigned(now, msg.sender, _insurer, _packId, _period, _contractValue);
         
     }
     
@@ -193,7 +193,7 @@ contract ContractPI {
         return totalAmount;
     }
 
-    event ContractSigned(address _from, uint _packId, uint _contractValue);
+    event ContractSigned(uint _time, address _patient, address _insurer, uint _packId, uint _period, uint _contractValue);
     
     event ClaimRequested(address, address, uint);
     

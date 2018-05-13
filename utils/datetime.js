@@ -10,7 +10,7 @@ const datetime = {
 		var months_arr = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 		// Convert timestamp to milliseconds
-		var date = new Date(timestamp * 1);
+		var date = new Date(timestamp * 1000);
 		// return date.toDateString();
 
 		// Year
