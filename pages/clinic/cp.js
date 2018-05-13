@@ -5,6 +5,7 @@ import Accounts from '../../ethereum/const/Accounts.json';
 const Cp = {
 	ItemNames: { 1: 'Fever', 2: 'Backache', 3: 'Stomach ache', 4: 'Toothache', 5: 'Cancel', 6: 'General examination' },
 	StatusNames: ['NEW', 'WAITING_FOR_PAID', 'CHECKING', 'DONE', 'CANCELLED'],
+	StatusColors: ['olive', 'blue', 'brown', 'green', 'black'],
 
 	getSummary: function getSummary(address) {
 		const contractCP = ContractCP(address);
@@ -26,6 +27,10 @@ const Cp = {
 
 	renderStatus: function renderStatus(status) {
 		return Cp.StatusNames[status];
+	},
+
+	renderStatusColor: function renderStatusColor(status) {
+		return Cp.StatusColors[status];
 	},
 
 	renderCheckedItems: function renderCheckedItems(inCheckedItems) {
@@ -52,7 +57,6 @@ const Cp = {
 	calculateClaimAmount: function calculateClaimAmount(contractPIAddress, contractCPAddress) {
 		const contractPI = ContractPI(contractPIAddress);
 		return contractPI.methods.calculateClaimAmount(contractCPAddress).call();
-		//return contractPI.methods.getSummary().call();
 	}
 }
 

@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid } from 'semantic-ui-react';
+import { Card, Button, Grid, Label } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
 import web3 from '../../../ethereum/web3';
+import { Cp } from '../../clinic/cp';
 
 import ContractCPList from '../../../ethereum/ContractCPList';
 
@@ -16,8 +17,20 @@ class CampaignIndex extends Component {
     return { campaigns };
   }
 
+  state = {
+    contractStatus: []
+  };
+
+  async getSummary(address) {
+    let summary = await Cp.getSummary(address);
+    var _contractStatus = this.state.contractStatus;
+    _contractStatus[address] = summary[0];// status (int)
+    this.setState({ contractStatus: _contractStatus });
+  }
+
   renderCampaigns() {
     const items = this.props.campaigns.map(address => {
+      this.getSummary(address);
       return {
         header: address,
         description: (
@@ -29,8 +42,8 @@ class CampaignIndex extends Component {
                 </Link>
               </Grid.Column>
               <Grid.Column width={3}>
-                Valid
-                  </Grid.Column>
+                <Label color={Cp.renderStatusColor(this.state.contractStatus[address])}>{Cp.renderStatus(this.state.contractStatus[address])}</Label>
+              </Grid.Column>
             </Grid.Row>
           </Grid>
         ),

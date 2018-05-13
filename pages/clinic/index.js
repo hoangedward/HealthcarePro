@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid } from 'semantic-ui-react';
+import { Card, Button, Grid, Label } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 
@@ -45,7 +45,7 @@ class CampaignIndex extends Component {
                 </Link>
               </Grid.Column>
               <Grid.Column width={3}>
-                {Cp.renderStatus(this.state.contractStatus[address])}
+              <Label color={Cp.renderStatusColor(this.state.contractStatus[address])}>{Cp.renderStatus(this.state.contractStatus[address])}</Label>
               </Grid.Column>
             </Grid.Row>
           </Grid>

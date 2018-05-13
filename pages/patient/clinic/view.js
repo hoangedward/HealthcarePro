@@ -141,7 +141,7 @@ class CampaignIndex extends Component {
 					<div>
 						<Segment.Group>
 							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
-							<Segment><strong>Status: </strong><Label color="green">{Cp.renderStatus(this.props.status)}</Label></Segment>
+							<Segment><strong>Status: </strong><Label color={Cp.renderStatusColor(this.props.status)}>{Cp.renderStatus(this.props.status)}</Label></Segment>
 							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
 							<Segment><strong>Insurance Address: </strong>{this.props.contractPi}</Segment>
 							<Segment><strong>Clinic Address: </strong>{this.props.clinic}</Segment>
