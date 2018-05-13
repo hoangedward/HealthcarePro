@@ -60,22 +60,28 @@ class CampaignIndex extends Component {
 
         this.setState({ loading: true, errorMessage: '' });
 
-        try {
-            await ContractCPList.methods
-                .createContract(
-                    Accounts.Clinic,
-                    Accounts.Patient,
-                    deployed_address.ClinicCategory,
-                    this.getCheckedItem()
-                )
-                .send({
-                    from: Accounts.Patient,
-                    gas: 4000000
-                });
-            // Go to the contracts list of Patient
-            Router.pushRoute('/patient/clinic');
-        } catch (err) {
-            this.setState({ errorMessage: err.message });
+        let checkedItems = this.getCheckedItem();
+        if(checkedItems == undefined || checkedItems.length < 1) {
+            this.setState({ errorMessage: 'Please select at least 1 item!!!' });
+        }
+        else {
+            try {
+                await ContractCPList.methods
+                    .createContract(
+                        Accounts.Clinic,
+                        Accounts.Patient,
+                        deployed_address.ClinicCategory,
+                        checkedItems
+                    )
+                    .send({
+                        from: Accounts.Patient,
+                        gas: 4000000
+                    });
+                // Go to the contracts list of Patient
+                Router.pushRoute('/patient/clinic');
+            } catch (err) {
+                this.setState({ errorMessage: err.message });
+            }
         }
 
         this.setState({ loading: false });
