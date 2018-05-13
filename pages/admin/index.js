@@ -77,7 +77,6 @@ class CampaignIndex extends Component {
 					<h4>Insurance Static Contracts</h4>
 					<div class="ui segments">
 						<div class="ui segment">
-							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> ContractPIList
 							<br />
 							<strong>Address: </strong> {DeployAddress.ContractPIList}
@@ -85,7 +84,6 @@ class CampaignIndex extends Component {
 							<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
 						</div>
 						<div class="ui red segment">
-							<Button content='Deploy' primary floated='right' />
 							<strong>Name: </strong> InsuranceCategory
 							<br />
 							<strong>Address: </strong> {DeployAddress.InsuranceCategory}

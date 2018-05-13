@@ -193,7 +193,7 @@ contract ContractPI {
         return totalAmount;
     }
 
-    event ContractSigned(address, uint, uint);
+    event ContractSigned(address _from, uint _packId, uint _contractValue);
     
     event ClaimRequested(address, address, uint);
     

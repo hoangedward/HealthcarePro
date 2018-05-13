@@ -10,6 +10,9 @@ export default () => {
       </Link>
 
       <Menu.Menu position="right">
+        <Link route="/admin/event">
+          <a color='brown' className="item">Solidity Event</a>
+        </Link>
         <Link route="/admin">
           <a color='brown' className="item">Admin</a>
         </Link>

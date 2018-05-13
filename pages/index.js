@@ -25,11 +25,6 @@ class CampaignIndex extends Component {
               <Button basic color='blue' content="Insurer" />
             </a>
           </Link>
-          <Link route="/ipfs">
-            <a>
-              <Button content='IPFS' color='brown' floated='right' />
-            </a>
-          </Link>
           <Link route="/admin">
             <a>
               <Button content='Admin' color='brown' floated='right' />

@@ -17,4 +17,6 @@ routes
 
 	.add('/ipfs', '/ipfs')
 
+	.add('/admin/event', '/admin/event')
+
 module.exports = routes;
