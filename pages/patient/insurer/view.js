@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Segment, Modal, Header, Label } from 'semantic-ui-react';
+import { Form, Button, Message, Segment, Label } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import EtherUint from '../../../components/EtherUint';
+import {ConfirmTransaction, Confirm} from '../../../components/Confirm';
 import { Router, Link } from '../../../routes';
 
 import ContractPI from '../../../ethereum/ContractPI';
@@ -126,38 +127,28 @@ class CampaignIndex extends Component {
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.state.balance, 'ether')} ETH</Segment>
 						</Segment.Group>
 						<div>
-							<Modal open={this.state.confirmOpen} size='tiny'
-								trigger={<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={() => {this.setState({confirmOpen: true})}}>Confirm</Button>}
-								closeOnRootNodeClick='false'>
-								<Modal.Header>Confirm the transaction</Modal.Header>
-								<Modal.Content>
-									<p>Do you want to sumbit this transaction?</p>
-									<p><strong>Amount: </strong>
-										<Label color='violet'>
-											{eth.fromWei(this.state.totalContractValue, 'ether')}
-											<Label.Detail>ETH</Label.Detail>
-										</Label>
-									</p>
-									<p>To Account: <strong>{this.state.address}</strong></p>
-								</Modal.Content>
-								<Modal.Actions>
-									<Button negative onClick={() => {this.setState({confirmOpen: false})}}>No</Button>
-									<Button positive labelPosition='right' icon='checkmark' content='Yes' onClick={this.onConfirm} loading={this.state.loading} />
-								</Modal.Actions>
-							</Modal>
+							<ConfirmTransaction 
+								name='Confirm'
+								open={this.state.confirmOpen}
+								disabled={!this.isEnableButton("confirm")}
+								onClick={() => {this.setState({confirmOpen: true})}}
+								amount={this.state.totalContractValue}
+								toAccount={this.state.address}
+								onNo={() => {this.setState({confirmOpen: false})}}
+								onYes={this.onConfirm}
+								loading={this.state.loading}
+							/>
 
-							<Modal open={this.state.cancelOpen} size='tiny'
-								trigger={<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={() => {this.setState({cancelOpen: true})}}>Cancel</Button>}
-								closeOnRootNodeClick='false'>
-								<Modal.Header>Confirm the transaction</Modal.Header>
-								<Modal.Content>
-									<p>Are you sure to cancel this transaction?</p>
-								</Modal.Content>
-								<Modal.Actions>
-									<Button negative onClick={() => {this.setState({cancelOpen: false})}}>No</Button>
-									<Button positive labelPosition='right' icon='checkmark' content='Yes' onClick={this.onCancel} loading={this.state.loading} />
-								</Modal.Actions>
-							</Modal>
+							<Confirm
+								name='Cancel'
+								open={this.state.cancelOpen}
+								disabled={!this.isEnableButton("cancel")}
+								onClick={() => {this.setState({cancelOpen: true})}}
+								onNo={() => {this.setState({cancelOpen: false})}}
+								onYes={this.onCancel}
+								loading={this.state.loading}
+
+							/>
 
 							<Link route="/patient/insurer">
 								<a>
