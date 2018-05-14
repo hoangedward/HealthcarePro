@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Card, Message, Button, Checkbox, Table } from 'semantic-ui-react';
+import { Form, Card, Message, Button, Checkbox, Table, Segment, Input } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 import { Router } from '../../../routes';
@@ -34,7 +34,8 @@ class CampaignIndex extends Component {
         packId: '',
         period: '',
         totalPrice: 0,
-        itemState: []
+        itemState: [],
+        insuranceAddress: ''
     }
 
     static async getInitialProps(props) {
@@ -71,7 +72,8 @@ class CampaignIndex extends Component {
                         Accounts.Clinic,
                         Accounts.Patient,
                         deployed_address.ClinicCategory,
-                        checkedItems
+                        checkedItems,
+                        this.state.insuranceAddress
                     )
                     .send({
                         from: Accounts.Patient,
@@ -137,6 +139,19 @@ class CampaignIndex extends Component {
                     <h3>Your contract with {this.props.clinic_name}</h3>
                     <Form error={!!this.state.errorMessage}>
                         <Message error header="Oops!" content={this.state.errorMessage} />
+                        <Segment.Group>
+                            <Segment>
+                                <Input
+                                    placeholder='Enter insurance address...'
+                                    fluid
+                                    label="address"
+                                    labelPosition="right"
+                                    value={this.state.insuranceAddress}
+                                    onChange={event =>
+                                        this.setState({ insuranceAddress: event.target.value })}
+                                    />
+                            </Segment>
+                        </Segment.Group>
                         <Card.Group>
                             <Card>
                                 <Card.Content>

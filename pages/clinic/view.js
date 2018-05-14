@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Segment, Label, Input } from 'semantic-ui-react';
+import { Form, Button, Message, Segment, Label } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import EtherUint from '../../components/EtherUint';
 import { Router, Link } from '../../routes';
@@ -35,8 +35,7 @@ class CampaignIndex extends Component {
 
 	state = {
 		errorMessage: '',
-		loading: false,
-		insuranceAddress: ''
+		loading: false
 	};
 
 	isEnableButton(name) {
@@ -57,7 +56,7 @@ class CampaignIndex extends Component {
 
 		try {
 			await contractCP.methods
-				.clinicAcceptPatient(this.state.insuranceAddress)
+				.clinicAcceptPatient()
 				.send({
 					from: Accounts.Clinic,
 					gas: 6000000
@@ -96,22 +95,6 @@ class CampaignIndex extends Component {
 									</a>
 								</Link>
 							</Segment>
-							{this.props.status == 0 ?
-								<Segment>
-									<div>
-												<Input
-													placeholder='Enter insurance address...'
-													fluid
-													label="address"
-													labelPosition="right"
-													value={this.state.insuranceAddress}
-													onChange={event =>
-														this.setState({ insuranceAddress: event.target.value })}
-													/>
-									</div>
-								</Segment>
-								: ''
-							}
 						</Segment.Group>
 						<div>
 							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>

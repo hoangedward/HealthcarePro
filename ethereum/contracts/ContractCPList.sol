@@ -15,11 +15,12 @@ contract ContractCPList {
      * @param inPatient address of Patient account
      * @param inClinicCategory address of Clinic Cateogry Contract
      * @param inCheckItems list of items that Patient want to check
+     * @param inContractPI address of Patient's insurance contract
      */
-    function createContract(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems) external {
+    function createContract(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems, address inContractPI) external {
         require(msg.sender == inPatient);
 
-        address pi = new ContractCP(inClinic, inPatient, inClinicCategory, inCheckItems);
+        address pi = new ContractCP(inClinic, inPatient, inClinicCategory, inCheckItems, inContractPI);
         // Add to Patient contracts list
         address[] storage currentContractListOfPatient = _patientContractList[inPatient];
         currentContractListOfPatient.push(pi);

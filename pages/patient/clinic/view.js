@@ -143,7 +143,7 @@ class CampaignIndex extends Component {
 							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
 							<Segment><strong>Status: </strong><Label color={Cp.renderStatusColor(this.props.status)}>{Cp.renderStatus(this.props.status)}</Label></Segment>
 							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
-							<Segment><strong>Insurance Address: </strong>{this.props.contractPi}</Segment>
+							<Segment><strong>Insurance Address: </strong>{eth.renderAccount(this.props.contractPi)}</Segment>
 							<Segment><strong>Clinic Address: </strong>{this.props.clinic}</Segment>
 							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.props.checkedItems).join(', ')}</Segment>
 							<Segment><strong>Total Value: </strong><EtherUint value={this.props.totalContractValue}/></Segment>

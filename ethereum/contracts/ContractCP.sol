@@ -26,7 +26,7 @@ contract ContractCP {
     
     ClinicCategory private _contractClinicCategory;
     
-    constructor(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems) public {
+    constructor(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems, address inContractPI) public {
         require(inCheckItems.length > 0);
         _contractClinicCategory = ClinicCategory(inClinicCategory);
         require(_contractClinicCategory.getOwner() == inClinic);
@@ -34,6 +34,7 @@ contract ContractCP {
         _patient = inPatient;
         _status = Status.NEW;
         _checkItems = inCheckItems;
+        _contractPI = inContractPI;
         
         _totalFee = _contractClinicCategory.calFee(inCheckItems);
     }
@@ -46,10 +47,9 @@ contract ContractCP {
         return _totalFee;
     }
     
-    function clinicAcceptPatient(address inContractPI) external {
+    function clinicAcceptPatient() external {
         require(msg.sender == _clinic);
         require(_status == Status.NEW);
-        _contractPI = inContractPI;
         calculateFee();
         _status = Status.WAITING_FOR_PAID;
     }
