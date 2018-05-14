@@ -23,17 +23,6 @@ class CampaignIndex extends Component {
 		eventList: []
 	};
 
-	async componentDidMount() {
-		var balanceMap = [];
-		balanceMap[Accounts.Admin] = await web3.eth.getBalance(Accounts.Admin);
-		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
-		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
-		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
-		balanceMap[DeployAddress.ContractPIList] = await web3.eth.getBalance(DeployAddress.ContractPIList);
-		balanceMap[DeployAddress.InsuranceCategory] = await web3.eth.getBalance(DeployAddress.InsuranceCategory);
-		this.setState({ balance: balanceMap });
-	}
-
 	onSearch = async event => {
 
 		event.preventDefault();

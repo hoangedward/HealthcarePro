@@ -14,8 +14,11 @@ import { eth } from '../../utils/eth';
 class ClaimQueueIndex extends Component {
 
 	static async getInitialProps(props) {
+		return { address: props.query.address };
+	}
 
-		const contractPI = ContractPI(props.query.address);
+	async componentDidMount() {
+		const contractPI = ContractPI(this.props.address);
 
 		const claimQueue = await
 			contractPI.methods.getClaimQueue().call({
@@ -49,17 +52,18 @@ class ClaimQueueIndex extends Component {
 			claimQueueArr[index++].paid = paid;
 		});
 
-		return { address: props.query.address, claimQueueArr };
+		this.setState({claimQueueArr: claimQueueArr, address: this.props.address});
 	}
 
 	state = {
 		errorMessage: '',
 		loading: false,
-		buttonStatus: [true, true]
+		buttonStatus: [true, true],
+		claimQueueArr: []
 	};
 
 	renderContracts() {
-		const items = this.props.claimQueueArr.map(queue => {
+		const items = this.state.claimQueueArr.map(queue => {
 			return {
 				header: (
 					<div>
@@ -119,7 +123,7 @@ class ClaimQueueIndex extends Component {
 
 		this.setState({ loading: true, errorMessage: '' });
 
-		const contractPI = ContractPI(this.props.address);
+		const contractPI = ContractPI(this.state.address);
 
 		try {
 			await contractPI.methods
@@ -147,7 +151,7 @@ class ClaimQueueIndex extends Component {
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					{this.renderContracts()}
 					<p></p>
-					<Link route={`/insurer/view/${this.props.address}`}>
+					<Link route={`/insurer/view/${this.state.address}`}>
 						<a>
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 						</a>

@@ -12,29 +12,33 @@ import Accounts from '../../../ethereum/const/Accounts.json';
 class CampaignIndex extends Component {
 
 	static async getInitialProps(props) {
+		return {pack: props.query.pack};
+	}
+
+	async componentDidMount() {
 		var _packId = '';
 		var _period = '';
-		if (props.query.pack == "pack1_6months") {
+		if (this.props.pack == "pack1_6months") {
 			_packId = '1';
 			_period = '6';
 		}
-		else if (props.query.pack == "pack1_12months") {
+		else if (this.props.pack == "pack1_12months") {
 			_packId = '1';
 			_period = '12';
 		}
-		else if (props.query.pack == "pack2_6months") {
+		else if (this.props.pack == "pack2_6months") {
 			_packId = '2';
 			_period = '6';
 		}
-		else if (props.query.pack == "pack2_12months") {
+		else if (this.props.pack == "pack2_12months") {
 			_packId = '2';
 			_period = '12';
 		}
-		return {
-			pack: props.query.pack,
+		this.setState( {
+			pack: this.props.pack,
 			packId: _packId,
 			period: _period
-		};
+		} );
 	}
 
 	renderInsuranceInformation() {
@@ -43,7 +47,7 @@ class CampaignIndex extends Component {
 		var periodName = "";
 		var price = "";
 		var item = "";
-		if (this.props.pack == "pack1_6months") {
+		if (this.state.pack == "pack1_6months") {
 			packName = "General Pack";
 			price = "20.00 ETH";
 			item = (
@@ -57,7 +61,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if (this.props.pack == "pack1_12months") {
+		else if (this.state.pack == "pack1_12months") {
 			packName = "General Pack";
 			price = "30.00 ETH";
 			item = (
@@ -71,7 +75,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if (this.props.pack == "pack2_6months") {
+		else if (this.state.pack == "pack2_6months") {
 			packName = "Premium Pack";
 			price = "30.00 ETH";
 			item = (
@@ -87,7 +91,7 @@ class CampaignIndex extends Component {
 				</div>
 			);
 		}
-		else if (this.props.pack == "pack2_12months") {
+		else if (this.state.pack == "pack2_12months") {
 			packName = "Premium Pack";
 			price = "40.00 ETH";
 			item = (
@@ -138,7 +142,7 @@ class CampaignIndex extends Component {
 		try {
 
 			await ContractPIList.methods
-				.createContract(Accounts.Insurer, Accounts.Patient, this.props.packId, this.props.period, deployed_address.InsuranceCategory)
+				.createContract(Accounts.Insurer, Accounts.Patient, this.state.packId, this.state.period, deployed_address.InsuranceCategory)
 				.send({
 					from: Accounts.Patient,
 					gas: 4000000

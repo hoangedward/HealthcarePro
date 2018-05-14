@@ -16,10 +16,15 @@ import { eth } from '../../utils/eth';
 class CampaignIndex extends Component {
 
 	static async getInitialProps(props) {
-		const summary = await Pi.getSummary(props.query.address);
-
 		return {
 			address: props.query.address,
+		};
+	}
+
+	async componentDidMount() {
+		const summary = await Pi.getSummary(this.props.address);
+		this.setState( {
+			address: this.props.address,
 			status: summary[0],
 			patient: summary[1],
 			insurer: summary[2],
@@ -29,17 +34,18 @@ class CampaignIndex extends Component {
 			startDate: summary[6],
 			endDate: summary[7],
 			balance: summary[8]
-		};
+		});
+
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false
+		loading: false,
 	};
 
 	isEnableButton(name) {
 		if (name == "withdraw") {
-			if (this.props.endDate >= Date.now()) {
+			if (this.state.endDate >= Date.now()) {
 				return true;
 			}
 			return false;
@@ -53,7 +59,7 @@ class CampaignIndex extends Component {
 	onWithdraw = async event => {
 		event.preventDefault();
 
-		const contractPI = ContractPI(this.props.address);
+		const contractPI = ContractPI(this.state.address);
 
 		try {
 			await contractPI.methods
@@ -79,19 +85,19 @@ class CampaignIndex extends Component {
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Segment.Group>
-							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
-							<Segment><strong>Status: </strong><Label color={Pi.renderStatusColor(this.props.status)}>{Pi.renderStatus(this.props.status)}</Label></Segment>
-							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
-							<Segment><strong>Insurer Address: </strong>{this.props.insurer}</Segment>
-							<Segment><strong>Pack Name: </strong>{Pi.renderPackName(this.props.packId)} ({Pi.renderPeriod(this.props.period)})</Segment>
-							<Segment><strong>Total Value: </strong><EtherUint value={this.props.totalContractValue}/></Segment>
-							<Segment><strong>Start Date: </strong>{datetime.fromTimestamp(this.props.startDate)}</Segment>
-							<Segment><strong>End Date: </strong>{datetime.fromTimestamp(this.props.endDate)}</Segment>
-							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>
+							<Segment><strong>Contract Address: </strong>{this.state.address}</Segment>
+							<Segment><strong>Status: </strong><Label color={Pi.renderStatusColor(this.state.status)}>{Pi.renderStatus(this.state.status)}</Label></Segment>
+							<Segment><strong>Patient Address: </strong>{this.state.patient}</Segment>
+							<Segment><strong>Insurer Address: </strong>{this.state.insurer}</Segment>
+							<Segment><strong>Pack Name: </strong>{Pi.renderPackName(this.state.packId)} ({Pi.renderPeriod(this.state.period)})</Segment>
+							<Segment><strong>Total Value: </strong><EtherUint value={this.state.totalContractValue}/></Segment>
+							<Segment><strong>Start Date: </strong>{datetime.fromTimestamp(this.state.startDate)}</Segment>
+							<Segment><strong>End Date: </strong>{datetime.fromTimestamp(this.state.endDate)}</Segment>
+							<Segment><strong>Balance: </strong>{eth.fromWei(this.state.balance, 'ether')} ETH</Segment>
 						</Segment.Group>
 						<div>
 							<Button color='teal' disabled={!this.isEnableButton("withdraw")} onClick={this.onWithdraw}>Withdraw</Button>
-							<Link route={`/insurer/claimqueue/${this.props.address}`}>
+							<Link route={`/insurer/claimqueue/${this.state.address}`}>
 								<a>
 									<Button color='olive' disabled={!this.isEnableButton("claimQueue")} >Claim Queue</Button>
 								</a>

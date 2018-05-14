@@ -12,15 +12,16 @@ import { Pi } from '../../utils/pi';
 
 class InsurerIndex extends Component {
 
-	static async getInitialProps() {
+	async componentDidMount() {
 		const contracts = await
 			ContractPIList.methods.getInsurerContracts(Accounts.Insurer).call();
 
-		return { contracts };
+		this.setState({ contracts: contracts });
 	}
 
 	state = {
-		contractStatus: []
+		contractStatus: [],
+		contracts: []
 	};
 
 	async getSummary(address) {
@@ -31,7 +32,7 @@ class InsurerIndex extends Component {
 	}
 
 	renderContracts() {
-		const items = this.props.contracts.map(address => {
+		const items = this.state.contracts.map(address => {
 			this.getSummary(address);
 			return {
 				header: address,

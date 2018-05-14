@@ -31,7 +31,7 @@ class ClinicDocumentIndex extends Component {
 		const document = await Cp.getDocument(this.props.address);
 		// For test
 		//this.setState({ document: 'QmStqeYPDCTbgKGUwns2nZixC5dBDactoCe1FB8htpmrt1' });
-		this.setState({ document: document });
+		this.setState({ document: document, address: this.props.address });
 	}
 
 	state = {
@@ -57,7 +57,7 @@ class ClinicDocumentIndex extends Component {
 			file.readFileAsArrayBuffer(this.state.selectedFile, async (data) => {
 				const buffer = Buffer.from(data);
 				const id = await ipfs.files.add(buffer);
-				await Cp.setDocument(this.props.address, id[0].hash);
+				await Cp.setDocument(this.state.address, id[0].hash);
 				this.setState({ loading: false, document: id[0].hash });
 			});
 		} catch (err) {
@@ -104,7 +104,7 @@ class ClinicDocumentIndex extends Component {
 					<p></p>
 
 					<div>
-						<Link route={`/clinic/view/${this.props.address}`}>
+						<Link route={`/clinic/view/${this.state.address}`}>
 							<a>
 								<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 							</a>

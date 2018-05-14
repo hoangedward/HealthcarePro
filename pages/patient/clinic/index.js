@@ -12,13 +12,14 @@ import Accounts from '../../../ethereum/const/Accounts.json';
 
 class CampaignIndex extends Component {
 
-  static async getInitialProps(props) {
+  async componentDidMount() {
     const campaigns = await ContractCPList.methods.getPatientContracts(Accounts.Patient).call();
-    return { campaigns };
+    this.setState( { campaigns: campaigns } );
   }
 
   state = {
-    contractStatus: []
+    contractStatus: [],
+    campaigns: []
   };
 
   async getSummary(address) {
@@ -29,7 +30,7 @@ class CampaignIndex extends Component {
   }
 
   renderCampaigns() {
-    const items = this.props.campaigns.map(address => {
+    const items = this.state.campaigns.map(address => {
       this.getSummary(address);
       return {
         header: address,

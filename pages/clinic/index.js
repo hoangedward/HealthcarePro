@@ -12,16 +12,17 @@ import { Cp } from './cp';
 
 class CampaignIndex extends Component {
 
-  static async getInitialProps() {
+  async componentDidMount() {
     const accounts = await web3.eth.getAccounts();
     const campaigns = await
       ContractCPList.methods.getClinicContracts(Accounts.Clinic).call();
 
-    return { campaigns };
+    this.setState( { campaigns: campaigns } );
   }
 
   state = {
-    contractStatus: []
+    contractStatus: [],
+    campaigns: []
   };
 
   async getSummary(address) {
@@ -32,7 +33,7 @@ class CampaignIndex extends Component {
   }
 
   renderCampaigns() {
-    const items = this.props.campaigns.map(address => {
+    const items = this.state.campaigns.map(address => {
       this.getSummary(address);
       return {
         header: address,

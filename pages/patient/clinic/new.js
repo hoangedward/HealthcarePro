@@ -4,6 +4,7 @@ import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
 class CampaignIndex extends Component {
+    
     state = {
         errorMessage: ''
     };

@@ -17,9 +17,15 @@ import { eth } from '../../../utils/eth';
 class CampaignIndex extends Component {
 
 	static async getInitialProps(props) {
-		const summary = await Cp.getSummary(props.query.address);
 		return {
 			address: props.query.address,
+		};
+	}
+
+	async componentDidMount() {
+		const summary = await Cp.getSummary(this.props.address);
+		this.setState( {
+			address: this.props.address,
 			status: summary[0],
 			patient: summary[1],
 			clinic: summary[2],
@@ -30,29 +36,31 @@ class CampaignIndex extends Component {
 			contractPi: summary[7],
 			patientPaidAmount: summary[8],
 			insurerPaidAmount: summary[9]
-		};
+		} );
+		this.setState({ loading: false });
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false
+		loading: true,
+		checkedItems: []
 	};
 
 	isEnableButton(name) {
 		if (name == "cancel") {
-			if (this.props.status == 0) {
+			if (this.state.status == 0) {
 				return true;
 			}
 			return false;
 		}
 		else if (name == "pay") {
-			if (this.props.status == 1) {
+			if (this.state.status == 1) {
 				return true;
 			}
 			return false;
 		}
 		else if (name == "finish") {
-			if (this.props.status == 2) {
+			if (this.state.status == 2) {
 				return true;
 			}
 			return false;
@@ -67,7 +75,7 @@ class CampaignIndex extends Component {
 
 		try {
 			await ContractCPList.methods
-				.patientCancel(this.props.address)
+				.patientCancel(this.state.address)
 				.send({
 					from: Accounts.Patient,
 					gas: 4000000
@@ -87,7 +95,7 @@ class CampaignIndex extends Component {
 
 		this.setState({ loading: true, errorMessage: '' });
 
-		const contractCP = ContractCP(this.props.address);
+		const contractCP = ContractCP(this.state.address);
 
 		try {
 			await contractCP.methods
@@ -95,7 +103,7 @@ class CampaignIndex extends Component {
 				.send({
 					from: Accounts.Patient,
 					gas: 4000000,
-					value: this.props.patientPaidAmount
+					value: this.state.patientPaidAmount
 				});
 
 			Router.pushRoute('/patient/clinic');
@@ -113,7 +121,7 @@ class CampaignIndex extends Component {
 
 		this.setState({ loading: true, errorMessage: '' });
 
-		const contractCP = ContractCP(this.props.address);
+		const contractCP = ContractCP(this.state.address);
 
 		try {
 			await contractCP.methods
@@ -136,22 +144,22 @@ class CampaignIndex extends Component {
 		return (
 			<Layout>
 				<h3>Patient Contract Infomation</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Segment.Group>
-							<Segment><strong>Contract Address: </strong>{this.props.address}</Segment>
-							<Segment><strong>Status: </strong><Label color={Cp.renderStatusColor(this.props.status)}>{Cp.renderStatus(this.props.status)}</Label></Segment>
-							<Segment><strong>Patient Address: </strong>{this.props.patient}</Segment>
-							<Segment><strong>Insurance Address: </strong>{eth.renderAccount(this.props.contractPi)}</Segment>
-							<Segment><strong>Clinic Address: </strong>{this.props.clinic}</Segment>
-							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.props.checkedItems).join(', ')}</Segment>
-							<Segment><strong>Total Value: </strong><EtherUint value={this.props.totalContractValue}/></Segment>
-							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.props.patientPaidAmount, 'ether')} ETH</Segment>
-							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.props.insurerPaidAmount, 'ether')} ETH</Segment>
-							<Segment><strong>Balance: </strong>{eth.fromWei(this.props.balance, 'ether')} ETH</Segment>
+							<Segment><strong>Contract Address: </strong>{this.state.address}</Segment>
+							<Segment><strong>Status: </strong><Label color={Cp.renderStatusColor(this.state.status)}>{Cp.renderStatus(this.state.status)}</Label></Segment>
+							<Segment><strong>Patient Address: </strong>{this.state.patient}</Segment>
+							<Segment><strong>Insurance Address: </strong>{eth.renderAccount(this.state.contractPi)}</Segment>
+							<Segment><strong>Clinic Address: </strong>{this.state.clinic}</Segment>
+							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.state.checkedItems).join(', ')}</Segment>
+							<Segment><strong>Total Value: </strong><EtherUint value={this.state.totalContractValue}/></Segment>
+							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.state.patientPaidAmount, 'ether')} ETH</Segment>
+							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.state.insurerPaidAmount, 'ether')} ETH</Segment>
+							<Segment><strong>Balance: </strong>{eth.fromWei(this.state.balance, 'ether')} ETH</Segment>
 							<Segment>
-								<Link route={`/clinic/document/${this.props.address}`}>
+								<Link route={`/clinic/document/${this.state.address}`}>
 									<a>
 										<Button basic color='blue' content='View Document' icon='image' labelPosition='right' />
 									</a>
