@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid, Label } from 'semantic-ui-react';
+import { Card, Button, Grid, Label, Form } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 
@@ -16,12 +16,13 @@ class InsurerIndex extends Component {
 		const contracts = await
 			ContractPIList.methods.getInsurerContracts(Accounts.Insurer).call();
 
-		this.setState({ contracts: contracts });
+		this.setState({ contracts: contracts, loading: false });
 	}
 
 	state = {
 		contractStatus: [],
-		contracts: []
+		contracts: [],
+		loading: true
 	};
 
 	async getSummary(address) {
@@ -60,16 +61,18 @@ class InsurerIndex extends Component {
 	render() {
 		return (
 			<Layout>
-				<div>
-					<h3>Your contracts with Patient</h3>
-					{this.renderContracts()}
-					<p></p>
-					<Link route="/">
-						<a>
-							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-						</a>
-					</Link>
-				</div>
+				<Form loading={this.state.loading}>
+					<div>
+						<h3>Your contracts with Patient</h3>
+						{this.renderContracts()}
+						<p></p>
+						<Link route="/">
+							<a>
+								<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
+							</a>
+						</Link>
+					</div>
+				</Form>
 			</Layout>
 		);
 	}

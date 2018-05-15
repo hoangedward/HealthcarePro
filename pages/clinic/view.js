@@ -35,24 +35,18 @@ class CampaignIndex extends Component {
 			document: summary[6],
 			contractPi: summary[7],
 			patientPaidAmount: summary[8],
-			insurerPaidAmount: summary[9]
+			insurerPaidAmount: summary[9],
+			isEnabledConfirm: (summary[0] == 0),
+			loading: false
 		});
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false,
-		checkedItems: []
+		loading: true,
+		checkedItems: [],
+		isEnabledConfirm: false
 	};
-
-	isEnableButton(name) {
-		if (name == "confirm") {
-			if (this.state.status == 0) {
-				return true;
-			}
-			return false;
-		}
-	}
 
 	onConfirm = async event => {
 		event.preventDefault();
@@ -81,7 +75,7 @@ class CampaignIndex extends Component {
 		return (
 			<Layout>
 				<h3>Patient Contract Infomation</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Segment.Group>
@@ -104,7 +98,7 @@ class CampaignIndex extends Component {
 							</Segment>
 						</Segment.Group>
 						<div>
-							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
+							<Button color='teal' disabled={!this.state.isEnabledConfirm} onClick={this.onConfirm}>Confirm</Button>
 							<Link route="/clinic">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />

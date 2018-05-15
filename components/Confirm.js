@@ -4,7 +4,6 @@ import { eth } from '../utils/eth';
 const ConfirmTransaction = props => {
   return (
     <Modal open={props.open} size='tiny'
-		trigger={<Button color='teal' disabled={props.disabled} onClick={props.onClick}>{props.name}</Button>}
 		closeOnRootNodeClick='false'>
 		<Modal.Header>Confirm the transaction</Modal.Header>
 		<Modal.Content>
@@ -28,7 +27,6 @@ const ConfirmTransaction = props => {
 const Confirm = props => {
   return (
     <Modal open={props.open} size='tiny'
-		trigger={<Button color='grey' disabled={props.disabled} onClick={props.onClick}>{props.name}</Button>}
 		closeOnRootNodeClick='false'>
 		<Modal.Header>Confirm</Modal.Header>
 		<Modal.Content>

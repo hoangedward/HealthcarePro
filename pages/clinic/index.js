@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid, Label } from 'semantic-ui-react';
+import { Card, Button, Grid, Label, Form } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 
@@ -11,24 +11,50 @@ import Accounts from '../../ethereum/const/Accounts.json';
 import { Cp } from './cp';
 
 class CampaignIndex extends Component {
+  // async initialize() {
+  //   const accounts = await web3.eth.getAccounts();
+  //   const campaigns = await ContractCPList.methods
+  //     .getClinicContracts(Accounts.Clinic)
+  //     .call();
+
+  //   this.setState({ campaigns: campaigns });
+  //   web3.eth.filter("latest", function (err, block) {
+  //     console.log("phong");
+  //   });
+  // }
+
+  // async intitBlockWatcher() {
+  //   const filter = web3.eth.filter('latest');
+  //   filter.watch((error, result) => {
+  //     if (!error) {
+  //       Console.log("Hello");
+  //       initialize();
+  //     }
+  //   });
+  // }
 
   async componentDidMount() {
     const accounts = await web3.eth.getAccounts();
-    const campaigns = await
-      ContractCPList.methods.getClinicContracts(Accounts.Clinic).call();
+    const campaigns = await ContractCPList.methods
+      .getClinicContracts(Accounts.Clinic)
+      .call();
 
-    this.setState( { campaigns: campaigns } );
+    this.setState({ campaigns: campaigns, loading: false });
+    // web3.eth.filter("latest", function(err, block) {
+    //   console.log(block);
+    // });
   }
 
   state = {
     contractStatus: [],
-    campaigns: []
+    campaigns: [],
+    loading: true
   };
 
   async getSummary(address) {
     let summary = await Cp.getSummary(address);
     var _contractStatus = this.state.contractStatus;
-    _contractStatus[address] = summary[0];// status (int)
+    _contractStatus[address] = summary[0]; // status (int)
     this.setState({ contractStatus: _contractStatus });
   }
 
@@ -38,7 +64,7 @@ class CampaignIndex extends Component {
       return {
         header: address,
         description: (
-          <Grid columns='equal' divided>
+          <Grid columns="equal" divided>
             <Grid.Row stretched>
               <Grid.Column>
                 <Link route={`/clinic/view/${address}`}>
@@ -46,7 +72,13 @@ class CampaignIndex extends Component {
                 </Link>
               </Grid.Column>
               <Grid.Column width={3}>
-              <Label color={Cp.renderStatusColor(this.state.contractStatus[address])}>{Cp.renderStatus(this.state.contractStatus[address])}</Label>
+                <Label
+                  color={Cp.renderStatusColor(
+                    this.state.contractStatus[address]
+                  )}
+                >
+                  {Cp.renderStatus(this.state.contractStatus[address])}
+                </Label>
               </Grid.Column>
             </Grid.Row>
           </Grid>
@@ -61,16 +93,23 @@ class CampaignIndex extends Component {
   render() {
     return (
       <Layout>
-        <div>
-          <h3>Your contracts with Patient</h3>
-          <Link route="/">
-            <a>
-              <Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-            </a>
-          </Link>
-          <p></p>
-          {this.renderCampaigns()}
-        </div>
+        <Form loading={this.state.loading}>
+          <div>
+            <h3>Your contracts with Patient</h3>
+            <Link route="/">
+              <a>
+                <Button
+                  content="Back"
+                  icon="left arrow"
+                  labelPosition="left"
+                  floated="right"
+                />
+              </a>
+            </Link>
+            <p />
+            {this.renderCampaigns()}
+          </div>
+        </Form>
       </Layout>
     );
   }

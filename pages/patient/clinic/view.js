@@ -14,6 +14,8 @@ import { Cp } from '../../clinic/cp';
 import { datetime } from '../../../utils/datetime';
 import { eth } from '../../../utils/eth';
 
+import {ConfirmTransaction, Confirm} from '../../../components/Confirm';
+
 class CampaignIndex extends Component {
 
 	static async getInitialProps(props) {
@@ -35,15 +37,17 @@ class CampaignIndex extends Component {
 			document: summary[6],
 			contractPi: summary[7],
 			patientPaidAmount: summary[8],
-			insurerPaidAmount: summary[9]
+			insurerPaidAmount: summary[9],
+			loading: false
 		} );
-		this.setState({ loading: false });
 	}
 
 	state = {
 		errorMessage: '',
 		loading: true,
-		checkedItems: []
+		checkedItems: [],
+		confirmOpen: false,
+		cancelOpen: false
 	};
 
 	isEnableButton(name) {
@@ -167,7 +171,15 @@ class CampaignIndex extends Component {
 							</Segment>
 						</Segment.Group>
 						<div>
-							<Button color='orange' icon labelPosition='right' disabled={!this.isEnableButton("pay")} onClick={this.onPayment}>
+							<ConfirmTransaction 
+									open={this.state.confirmOpen}
+									amount={this.state.patientPaidAmount}
+									toAccount={this.state.address}
+									onNo={() => {this.setState({confirmOpen: false})}}
+									onYes={this.onPayment}
+									loading={this.state.loading}
+								/>
+							<Button color='orange' icon labelPosition='right' disabled={!this.isEnableButton("pay")} onClick={() => {this.setState({confirmOpen: true})}}>
 								<Icon name='money' />
 								Pay
 							</Button>
@@ -175,7 +187,13 @@ class CampaignIndex extends Component {
 								<Icon name='smile' />
 								Finish
 							</Button>
-							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={this.onCancel} >Cancel</Button>
+							<Confirm
+								open={this.state.cancelOpen}
+								onNo={() => {this.setState({cancelOpen: false})}}
+								onYes={this.onCancel}
+								loading={this.state.loading}
+							/>
+							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={() => {this.setState({cancelOpen: true})}} >Cancel</Button>
 							<Link route="/patient/clinic">
 								<a>
 									<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />

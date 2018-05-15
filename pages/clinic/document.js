@@ -31,13 +31,13 @@ class ClinicDocumentIndex extends Component {
 		const document = await Cp.getDocument(this.props.address);
 		// For test
 		//this.setState({ document: 'QmStqeYPDCTbgKGUwns2nZixC5dBDactoCe1FB8htpmrt1' });
-		this.setState({ document: document, address: this.props.address });
+		this.setState({ document: document, address: this.props.address, loading: false });
 	}
 
 	state = {
 		readyUpload: false,
 		errorMessage: '',
-		loading: false,
+		loading: true,
 		selectedFile: [],
 		document: ''
 	};
@@ -70,7 +70,7 @@ class ClinicDocumentIndex extends Component {
 		return (
 			<Layout>
 				<h3>Clinic Document</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Grid columns='equal' divided>

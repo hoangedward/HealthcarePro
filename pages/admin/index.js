@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button } from 'semantic-ui-react';
+import { Card, Button, Form } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 import web3 from '../../ethereum/web3';
@@ -10,7 +10,8 @@ import DeployAddress from '../../ethereum/deployed_address.json';
 class CampaignIndex extends Component {
 
 	state = {
-		balance: []
+		balance: [],
+		loading: true		
 	};
 
 	async componentDidMount() {
@@ -19,9 +20,11 @@ class CampaignIndex extends Component {
 		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
 		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
 		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
+		balanceMap[DeployAddress.ContractCPList] = await web3.eth.getBalance(DeployAddress.ContractCPList);
+		balanceMap[DeployAddress.ClinicCategory] = await web3.eth.getBalance(DeployAddress.ClinicCategory);
 		balanceMap[DeployAddress.ContractPIList] = await web3.eth.getBalance(DeployAddress.ContractPIList);
 		balanceMap[DeployAddress.InsuranceCategory] = await web3.eth.getBalance(DeployAddress.InsuranceCategory);
-		this.setState({ balance: balanceMap });
+		this.setState({ balance: balanceMap, loading: false });
 	}
 
 	getBalance(account) {
@@ -35,63 +38,83 @@ class CampaignIndex extends Component {
 	render() {
 		return (
 			<Layout>
-				<div>
-					<h3>Administration Page</h3>
-					<Link route="/">
-						<a>
-							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-						</a>
-					</Link>
-					<h4>Account Infomation</h4>
-					<div class="ui segments">
-						<div class="ui segment">
-							<strong>Name: </strong> Admin
-							<br />
-							<strong>Address: </strong> {Accounts.Admin}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(Accounts.Admin)} ETH
+				<Form loading={this.state.loading}>
+					<div>
+						<h3>Administration Page</h3>
+						<Link route="/">
+							<a>
+								<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
+							</a>
+						</Link>
+						<h4>Account Infomation</h4>
+						<div class="ui segments">
+							<div class="ui segment">
+								<strong>Name: </strong> Admin
+								<br />
+								<strong>Address: </strong> {Accounts.Admin}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(Accounts.Admin)} ETH
+							</div>
+							<div class="ui red segment">
+								<strong>Name: </strong> Patient
+								<br />
+								<strong>Address: </strong> {Accounts.Patient}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(Accounts.Patient)} ETH
+							</div>
+							<div class="ui blue segment">
+								<strong>Name: </strong> Clinic
+								<br />
+								<strong>Address: </strong> {Accounts.Clinic}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(Accounts.Clinic)} ETH
+							</div>
+							<div class="ui green segment">
+								<strong>Name: </strong> Insurer
+								<br />
+								<strong>Address: </strong> {Accounts.Insurer}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
+							</div>
 						</div>
-						<div class="ui red segment">
-							<strong>Name: </strong> Patient
-							<br />
-							<strong>Address: </strong> {Accounts.Patient}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(Accounts.Patient)} ETH
-						</div>
-						<div class="ui blue segment">
-							<strong>Name: </strong> Clinic
-							<br />
-							<strong>Address: </strong> {Accounts.Clinic}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(Accounts.Clinic)} ETH
-						</div>
-						<div class="ui green segment">
-							<strong>Name: </strong> Insurer
-							<br />
-							<strong>Address: </strong> {Accounts.Insurer}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
-						</div>
-					</div>
 
-					<h4>Insurance Static Contracts</h4>
-					<div class="ui segments">
-						<div class="ui segment">
-							<strong>Name: </strong> ContractPIList
-							<br />
-							<strong>Address: </strong> {DeployAddress.ContractPIList}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
+						<h4>Clinic Static Contracts</h4>
+						<div className="ui segments">
+							<div className="ui segment">
+								<strong>Name: </strong> ContractCPList
+								<br/>
+								<strong>Address: </strong> {DeployAddress.ContractCPList}
+								<br/>
+								<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractCPList)} ETH
+							</div>
+							<div className="ui segment blue">
+								<strong>Name: </strong> ClinicCategory
+								<br/>
+								<strong>Address: </strong> {DeployAddress.ClinicCategory}
+								<br/>
+								<strong>Balance: </strong> {this.getBalance(DeployAddress.ClinicCategory)} ETH
+							</div>
 						</div>
-						<div class="ui red segment">
-							<strong>Name: </strong> InsuranceCategory
-							<br />
-							<strong>Address: </strong> {DeployAddress.InsuranceCategory}
-							<br />
-							<strong>Balance: </strong> {this.getBalance(DeployAddress.InsuranceCategory)} ETH
+
+						<h4>Insurance Static Contracts</h4>
+						<div class="ui segments">
+							<div class="ui segment">
+								<strong>Name: </strong> ContractPIList
+								<br />
+								<strong>Address: </strong> {DeployAddress.ContractPIList}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
+							</div>
+							<div class="ui red segment">
+								<strong>Name: </strong> InsuranceCategory
+								<br />
+								<strong>Address: </strong> {DeployAddress.InsuranceCategory}
+								<br />
+								<strong>Balance: </strong> {this.getBalance(DeployAddress.InsuranceCategory)} ETH
+							</div>
 						</div>
 					</div>
-				</div>
+				</Form>
 			</Layout>
 		);
 	}

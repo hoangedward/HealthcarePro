@@ -3,7 +3,7 @@ import ContractPI from '../../ethereum/ContractPI';
 import Accounts from '../../ethereum/const/Accounts.json';
 
 const Cp = {
-	ItemNames: { 1: 'Fever', 2: 'Backache', 3: 'Stomach ache', 4: 'Toothache', 5: 'Cancel', 6: 'General examination' },
+	ItemNames: { 1: 'Fever', 2: 'Backache', 3: 'Stomach ache', 4: 'Toothache', 5: 'Cancer', 6: 'General examination' },
 	StatusNames: ['NEW', 'WAITING_FOR_PAID', 'CHECKING', 'DONE', 'CANCELLED'],
 	StatusColors: ['olive', 'blue', 'brown', 'green', 'black'],
 

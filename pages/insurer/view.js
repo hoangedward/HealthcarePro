@@ -33,14 +33,15 @@ class CampaignIndex extends Component {
 			totalContractValue: summary[5],
 			startDate: summary[6],
 			endDate: summary[7],
-			balance: summary[8]
+			balance: summary[8],
+			loading: false
 		});
 
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false,
+		loading: true,
 	};
 
 	isEnableButton(name) {
@@ -58,6 +59,8 @@ class CampaignIndex extends Component {
 
 	onWithdraw = async event => {
 		event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
 
 		const contractPI = ContractPI(this.state.address);
 
@@ -81,7 +84,7 @@ class CampaignIndex extends Component {
 		return (
 			<Layout>
 				<h3>Insurance Contract Infomation</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Segment.Group>

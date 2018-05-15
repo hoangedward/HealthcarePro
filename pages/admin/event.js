@@ -17,11 +17,15 @@ class CampaignIndex extends Component {
 
 	state = {
 		errorMessage: '',
-		loading: false,
+		loading: true,
 		address: '',
 		contractType: '',
 		eventList: []
 	};
+
+	async componentDidMount() {
+		this.setState({ loading: false });
+	}
 
 	onSearch = async event => {
 
@@ -107,7 +111,7 @@ class CampaignIndex extends Component {
 							<Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
 						</a>
 					</Link>
-					<Form error={!!this.state.errorMessage}>
+					<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 						<Message error header="Oops!" content={this.state.errorMessage} />
 						<h4>Search Event Infomation</h4>
 						<p>Please input contract address to see all its event until now:</p>

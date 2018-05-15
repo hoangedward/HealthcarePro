@@ -5,9 +5,13 @@ import { Link } from '../../../routes';
 
 class CampaignIndex extends Component {
 
+	async componentDidMount() {
+		this.setState( { loading: false } );
+	  }
+
 	state = {
 		errorMessage: '',
-		loading: false
+		loading: true
 	};
 
 	render() {
@@ -15,7 +19,7 @@ class CampaignIndex extends Component {
 			<Layout>
 				<div>
 					<h3>New Contract with Insurer</h3>
-					<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
+					<Form onSubmit={this.onSubmit} error={!!this.state.errorMessage} loading={this.state.loading}>
 
 						<Card.Group>
 							<Card>

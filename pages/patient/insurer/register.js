@@ -37,7 +37,8 @@ class CampaignIndex extends Component {
 		this.setState( {
 			pack: this.props.pack,
 			packId: _packId,
-			period: _period
+			period: _period,
+			loading: false
 		} );
 	}
 
@@ -163,7 +164,7 @@ class CampaignIndex extends Component {
 
 	state = {
 		errorMessage: '',
-		loading: false,
+		loading: true,
 		packId: '',
 		period: ''
 	};
@@ -171,15 +172,17 @@ class CampaignIndex extends Component {
 	render() {
 		return (
 			<Layout>
-				<div>
-					<h3>Please confirm your registration</h3>
-					<Form error={!!this.state.errorMessage}>
-						<Message error header="Oops!" content={this.state.errorMessage} />
+				<Form loading={this.state.loading}>
+					<div>
+						<h3>Please confirm your registration</h3>
+						<Form error={!!this.state.errorMessage}>
+							<Message error header="Oops!" content={this.state.errorMessage} />
 
-						{this.renderInsuranceInformation()}
+							{this.renderInsuranceInformation()}
 
-					</Form>
-				</div>
+						</Form>
+					</div>
+				</Form>
 			</Layout>
 		);
 	}

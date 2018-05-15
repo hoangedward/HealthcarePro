@@ -35,13 +35,14 @@ class CampaignIndex extends Component {
 			totalContractValue: summary[5],
 			startDate: summary[6],
 			endDate: summary[7],
-			balance: summary[8]
+			balance: summary[8],
+			loading: false
 		} );
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false,
+		loading: true,
 		buttonStatus: [true, true],
 		confirmOpen: false,
 		cancelOpen: false
@@ -112,7 +113,7 @@ class CampaignIndex extends Component {
 		return (
 			<Layout>
 				<h3>Insurance Contract Infomation</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>
 						<Segment.Group>
@@ -128,27 +129,22 @@ class CampaignIndex extends Component {
 						</Segment.Group>
 						<div>
 							<ConfirmTransaction 
-								name='Confirm'
 								open={this.state.confirmOpen}
-								disabled={!this.isEnableButton("confirm")}
-								onClick={() => {this.setState({confirmOpen: true})}}
 								amount={this.state.totalContractValue}
 								toAccount={this.state.address}
 								onNo={() => {this.setState({confirmOpen: false})}}
 								onYes={this.onConfirm}
 								loading={this.state.loading}
 							/>
+							<Button color='teal' disabled={!this.isEnableButton("confirm")} onClick={() => {this.setState({confirmOpen: true})}}>Confirm</Button>
 
 							<Confirm
-								name='Cancel'
 								open={this.state.cancelOpen}
-								disabled={!this.isEnableButton("cancel")}
-								onClick={() => {this.setState({cancelOpen: true})}}
 								onNo={() => {this.setState({cancelOpen: false})}}
 								onYes={this.onCancel}
 								loading={this.state.loading}
-
 							/>
+							<Button color='grey' disabled={!this.isEnableButton("cancel")} onClick={() => {this.setState({cancelOpen: true})}}>Cancel</Button>
 
 							<Link route="/patient/insurer">
 								<a>

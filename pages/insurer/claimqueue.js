@@ -11,6 +11,8 @@ import { Pi } from '../../utils/pi';
 import { datetime } from '../../utils/datetime';
 import { eth } from '../../utils/eth';
 
+import {ConfirmTransaction, ConfirmTransaction2, Confirm} from '../../components/Confirm';
+
 class ClaimQueueIndex extends Component {
 
 	static async getInitialProps(props) {
@@ -52,14 +54,15 @@ class ClaimQueueIndex extends Component {
 			claimQueueArr[index++].paid = paid;
 		});
 
-		this.setState({claimQueueArr: claimQueueArr, address: this.props.address});
+		this.setState({claimQueueArr: claimQueueArr, address: this.props.address, loading: false});
 	}
 
 	state = {
 		errorMessage: '',
-		loading: false,
+		loading: true,
 		buttonStatus: [true, true],
-		claimQueueArr: []
+		claimQueueArr: [],
+		confirmOpen: false
 	};
 
 	renderContracts() {
@@ -80,13 +83,23 @@ class ClaimQueueIndex extends Component {
 								)
 								:
 								(
-									<Button as='div' labelPosition='right' size='medium' floated='right' onClick={this.onApprove(queue.cp, queue.amount)}>
-										<Button color='red' size='mini'>
-											<Icon name='hand outline left' />
-											Approve
-														</Button>
-										<Label size='mini' basic color='red' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
-									</Button>
+									<div>
+										<ConfirmTransaction 
+											open={this.state.confirmOpen}
+											amount={queue.amount}
+											toAccount={queue.cp}
+											onNo={() => {this.setState({confirmOpen: false})}}
+											onYes={this.onApprove(queue.cp, queue.amount)}
+											loading={this.state.loading}
+										/>
+										<Button as='div' labelPosition='right' size='medium' floated='right' onClick={() => {this.setState({confirmOpen: true})}}>
+											<Button color='red' size='mini'>
+												<Icon name='hand outline left' />
+												Approve
+											</Button>
+											<Label size='mini' basic color='red' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
+										</Button>
+									</div>
 								)
 						}
 						<strong>Contract CP: </strong>
@@ -147,7 +160,7 @@ class ClaimQueueIndex extends Component {
 		return (
 			<Layout>
 				<h3>Claim List</h3>
-				<Form error={!!this.state.errorMessage}>
+				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					{this.renderContracts()}
 					<p></p>

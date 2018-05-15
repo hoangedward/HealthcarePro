@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Grid, Label } from 'semantic-ui-react';
+import { Card, Button, Grid, Label, Form } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
@@ -17,12 +17,13 @@ class CampaignIndex extends Component {
     const campaigns = await
       ContractPIList.methods.getPatientContracts(Accounts.Patient).call();
 
-    this.setState( { campaigns: campaigns } );
+    this.setState( { campaigns: campaigns, loading: false } );
   }
 
   state = {
     contractStatus: [],
-    campaigns: []
+    campaigns: [],
+    loading: true
   };
 
   async getSummary(address) {
@@ -61,25 +62,27 @@ class CampaignIndex extends Component {
   render() {
     return (
       <Layout>
-        <div>
-          <h3>Your contracts with Insurer</h3>
-          <Link route="/patient/insurer/new">
-            <a>
-              <Button
-                content="New Contract"
-                icon="add circle"
-                primary
-              />
-            </a>
-          </Link>
-          <Link route="/patient">
-            <a>
-              <Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
-            </a>
-          </Link>
-          <p></p>
-          {this.renderCampaigns()}
-        </div>
+        <Form loading={this.state.loading}>
+          <div>
+            <h3>Your contracts with Insurer</h3>
+            <Link route="/patient/insurer/new">
+              <a>
+                <Button
+                  content="New Contract"
+                  icon="add circle"
+                  primary
+                />
+              </a>
+            </Link>
+            <Link route="/patient">
+              <a>
+                <Button content='Back' icon='left arrow' labelPosition='left' floated='right' />
+              </a>
+            </Link>
+            <p></p>
+            {this.renderCampaigns()}
+          </div>
+        </Form>
       </Layout>
     );
   }

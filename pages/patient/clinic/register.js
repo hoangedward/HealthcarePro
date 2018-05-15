@@ -28,11 +28,13 @@ const items = {
 
 class CampaignIndex extends Component {
 
+    async componentDidMount() {
+        this.setState( { loading: false } );
+    }
+
     state = {
         errorMessage: '',
-        loading: false,
-        packId: '',
-        period: '',
+        loading: true,
         totalPrice: 0,
         itemState: [],
         insuranceAddress: ''
@@ -137,7 +139,7 @@ class CampaignIndex extends Component {
             <Layout>
                 <div>
                     <h3>Your contract with {this.props.clinic_name}</h3>
-                    <Form error={!!this.state.errorMessage}>
+                    <Form error={!!this.state.errorMessage} loading={this.state.loading}>
                         <Message error header="Oops!" content={this.state.errorMessage} />
                         <Segment.Group>
                             <Segment>
