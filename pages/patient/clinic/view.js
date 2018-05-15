@@ -16,7 +16,7 @@ import { eth } from '../../../utils/eth';
 
 import {ConfirmTransaction, Confirm} from '../../../components/Confirm';
 
-class CampaignIndex extends Component {
+class PatientClinicViewIndex extends Component {
 
 	static async getInitialProps(props) {
 		return {
@@ -207,4 +207,4 @@ class CampaignIndex extends Component {
 	}
 }
 
-export default CampaignIndex;
+export default PatientClinicViewIndex;

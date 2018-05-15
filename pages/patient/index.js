@@ -3,7 +3,7 @@ import { Button } from 'semantic-ui-react';
 import Layout from '../../components/Layout';
 import { Link } from '../../routes';
 
-class CampaignIndex extends Component {
+class PatientIndex extends Component {
 
   render() {
     return (
@@ -31,4 +31,4 @@ class CampaignIndex extends Component {
   }
 }
 
-export default CampaignIndex;
+export default PatientIndex;

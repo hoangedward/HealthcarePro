@@ -26,7 +26,7 @@ const items = {
     ]
 };
 
-class CampaignIndex extends Component {
+class PatientClinicRegisterIndex extends Component {
 
     async componentDidMount() {
         this.setState( { loading: false } );
@@ -184,4 +184,4 @@ class CampaignIndex extends Component {
     }
 }
 
-export default CampaignIndex;
+export default PatientClinicRegisterIndex;

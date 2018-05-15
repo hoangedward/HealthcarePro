@@ -14,7 +14,7 @@ import { Pi } from '../../../utils/pi';
 import { datetime } from '../../../utils/datetime';
 import { eth } from '../../../utils/eth';
 
-class CampaignIndex extends Component {
+class PatientInsurerViewIndex extends Component {
 
 	static async getInitialProps(props) {
 		return {
@@ -159,4 +159,4 @@ class CampaignIndex extends Component {
 	}
 }
 
-export default CampaignIndex;
+export default PatientInsurerViewIndex;

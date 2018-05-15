@@ -7,7 +7,7 @@ import web3 from '../../ethereum/web3';
 import Accounts from '../../ethereum/const/Accounts.json';
 import DeployAddress from '../../ethereum/deployed_address.json';
 
-class CampaignIndex extends Component {
+class AdminIndex extends Component {
 
 	state = {
 		balance: [],
@@ -120,4 +120,4 @@ class CampaignIndex extends Component {
 	}
 }
 
-export default CampaignIndex;
+export default AdminIndex;

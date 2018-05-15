@@ -13,7 +13,7 @@ import DeployAddress from '../../ethereum/deployed_address.json';
 import { eth } from '../../utils/eth';
 import { datetime } from '../../utils/datetime';
 
-class CampaignIndex extends Component {
+class EventIndex extends Component {
 
 	state = {
 		errorMessage: '',
@@ -165,4 +165,4 @@ class CampaignIndex extends Component {
 	}
 }
 
-export default CampaignIndex;
+export default EventIndex;

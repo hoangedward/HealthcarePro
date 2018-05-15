@@ -3,7 +3,7 @@ import { Form, Button, Input, Message, Card, Image, List, Icon } from 'semantic-
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 
-class CampaignIndex extends Component {
+class PatientClinicNewIndex extends Component {
 
     async componentDidMount() {
         this.setState( { loading: false } );
@@ -87,4 +87,4 @@ class CampaignIndex extends Component {
     }
 }
 
-export default CampaignIndex;
+export default PatientClinicNewIndex;

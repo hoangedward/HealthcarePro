@@ -10,7 +10,7 @@ import Accounts from '../../../ethereum/const/Accounts.json';
 
 import { Pi } from '../../../utils/pi';
 
-class CampaignIndex extends Component {
+class PatientInsurerIndex extends Component {
 
   async componentDidMount() {
     const accounts = await web3.eth.getAccounts();
@@ -33,7 +33,7 @@ class CampaignIndex extends Component {
     this.setState({ contractStatus: _contractStatus });
   }
 
-  renderCampaigns() {
+  renderContracts() {
     const items = this.state.campaigns.map(address => {
       this.getSummary(address);
       return {
@@ -80,7 +80,7 @@ class CampaignIndex extends Component {
               </a>
             </Link>
             <p></p>
-            {this.renderCampaigns()}
+            {this.renderContracts()}
           </div>
         </Form>
       </Layout>
@@ -88,4 +88,4 @@ class CampaignIndex extends Component {
   }
 }
 
-export default CampaignIndex;
+export default PatientInsurerIndex;

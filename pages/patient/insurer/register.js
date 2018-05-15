@@ -9,7 +9,7 @@ import web3 from '../../../ethereum/web3';
 import deployed_address from '../../../ethereum/deployed_address.json';
 import Accounts from '../../../ethereum/const/Accounts.json';
 
-class CampaignIndex extends Component {
+class PatientInsurerRegisterIndex extends Component {
 
 	static async getInitialProps(props) {
 		return {pack: props.query.pack};
@@ -188,4 +188,4 @@ class CampaignIndex extends Component {
 	}
 }
 
-export default CampaignIndex;
+export default PatientInsurerRegisterIndex;
