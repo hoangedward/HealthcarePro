@@ -114,15 +114,23 @@ contract ContractCP {
         _status = Status.DONE;
     }
     
-    function patientCancel() external {
-        require(msg.sender == _patient);
+    function patientCancel(address inPatient) external {
+        require(inPatient == _patient);
         require(_status == Status.NEW);
         _status = Status.CANCELLED;
         selfdestruct(msg.sender);
     }
+
+    function canCancel(address inPatient) external view returns (bool) {
+		return inPatient == _patient && _status == Status.NEW;
+	}
     
     function getPatient() external view returns (address) {
         return _patient;
+    }
+
+    function getClinic() external view returns (address) {
+        return _clinic;
     }
     
     function getCheckItems() external view returns (uint[]) {
