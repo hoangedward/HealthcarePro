@@ -19,6 +19,8 @@ class CampaignIndex extends Component {
 		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
 		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
 		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
+		balanceMap[DeployAddress.ContractCPList] = await web3.eth.getBalance(DeployAddress.ContractCPList);
+		balanceMap[DeployAddress.ClinicCategory] = await web3.eth.getBalance(DeployAddress.ClinicCategory);
 		balanceMap[DeployAddress.ContractPIList] = await web3.eth.getBalance(DeployAddress.ContractPIList);
 		balanceMap[DeployAddress.InsuranceCategory] = await web3.eth.getBalance(DeployAddress.InsuranceCategory);
 		this.setState({ balance: balanceMap });
@@ -71,6 +73,24 @@ class CampaignIndex extends Component {
 							<strong>Address: </strong> {Accounts.Insurer}
 							<br />
 							<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
+						</div>
+					</div>
+
+					<h4>Clinic Static Contracts</h4>
+					<div className="ui segments">
+						<div className="ui segment">
+							<strong>Name: </strong> ContractCPList
+							<br/>
+							<strong>Address: </strong> {DeployAddress.ContractCPList}
+							<br/>
+							<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractCPList)} ETH
+						</div>
+						<div className="ui segment blue">
+							<strong>Name: </strong> ClinicCategory
+							<br/>
+							<strong>Address: </strong> {DeployAddress.ClinicCategory}
+							<br/>
+							<strong>Balance: </strong> {this.getBalance(DeployAddress.ClinicCategory)} ETH
 						</div>
 					</div>
 

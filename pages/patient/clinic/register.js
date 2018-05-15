@@ -31,8 +31,6 @@ class CampaignIndex extends Component {
     state = {
         errorMessage: '',
         loading: false,
-        packId: '',
-        period: '',
         totalPrice: 0,
         itemState: [],
         insuranceAddress: ''
