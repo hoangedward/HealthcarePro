@@ -20,6 +20,7 @@ const ipfsAPI = require('ipfs-api');
 // cd go-ipfs
 // ipfs daemon
 const ipfs = ipfsAPI({ host: 'localhost', port: '5001', protocol: 'http' });
+// const ipfs = ipfsAPI({host: 'ipfs.infura.io', port: '5001', protocol: 'https'})
 
 class ClinicDocumentIndex extends Component {
 

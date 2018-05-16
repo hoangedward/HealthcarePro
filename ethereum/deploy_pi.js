@@ -3,8 +3,9 @@ const Web3 = require('web3');
 const InsuranceCategory = require('./build/InsuranceCategory.json');
 const ContractPIList = require('./build/ContractPIList.json');
 const Accounts = require('./const/Accounts.json');
+const {ganache} = require('./ganache.js');
 
-const provider = new Web3HttpProvider('http://localhost:8545');
+const provider = new Web3HttpProvider(ganache.host);
 const web3 = new Web3(provider);
 
 const deployed_address = require('./deployed_address.js');
