@@ -45,19 +45,28 @@ class InsurerViewIndex extends Component {
 	};
 
 	isEnableButton(name) {
-		if (name == "withdraw") {
-			if (this.state.endDate >= Date.now()) {
+		if (name == "claimQueue") {
+			if (this.state.status != 4 && this.state.status != 5) {
 				return true;
 			}
 			return false;
 		}
-		else if (name == "claimQueue") {
-			return true;
+		else if (name == "confirm") {
+			if (this.state.status == 1) {
+				return true;
+			}
+			return false;
+		}
+		else if (name == "reject") {
+			if (this.state.status == 1) {
+				return true;
+			}
+			return false;
 		}
 
-	}
+	};
 
-	onWithdraw = async event => {
+	onConfirm = async event => {
 		event.preventDefault();
 
 		this.setState({ loading: true, errorMessage: '' });
@@ -66,7 +75,30 @@ class InsurerViewIndex extends Component {
 
 		try {
 			await contractPI.methods
-				.requestForWithdraw()
+				.insurerConfirm()
+				.send({
+					from: Accounts.Insurer,
+					gas: 4000000
+				});
+
+			Router.pushRoute('/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
+
+		this.setState({ loading: false });
+	};
+
+	onReject = async event => {
+		event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
+
+		const contractPI = ContractPI(this.state.address);
+
+		try {
+			await contractPI.methods
+				.insurerReject()
 				.send({
 					from: Accounts.Insurer,
 					gas: 4000000
@@ -99,7 +131,8 @@ class InsurerViewIndex extends Component {
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.state.balance, 'ether')} ETH</Segment>
 						</Segment.Group>
 						<div>
-							<Button color='teal' disabled={!this.isEnableButton("withdraw")} onClick={this.onWithdraw}>Withdraw</Button>
+							<Button primary disabled={!this.isEnableButton("confirm")} onClick={this.onConfirm}>Confirm</Button>
+							<Button color='red' disabled={!this.isEnableButton("reject")} onClick={this.onReject}>Reject</Button>
 							<Link route={`/insurer/claimqueue/${this.state.address}`}>
 								<a>
 									<Button color='olive' disabled={!this.isEnableButton("claimQueue")} >Claim Queue</Button>

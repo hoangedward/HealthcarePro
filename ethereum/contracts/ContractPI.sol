@@ -11,7 +11,7 @@ contract ContractPI {
      * Status of Contract
      * - NEW: when Patient deploy the contract
      */
-    enum Status {NEW, VALID, EXPIRED, CANCELLED}
+    enum Status {NEW, PATIENT_CONFIRMED, VALID, EXPIRED, REJECTED, CANCELLED}
     
     struct ClaimRequest {
         address requestedContract;
@@ -55,14 +55,31 @@ contract ContractPI {
         require(inContractValue >= totalContractValue);
         
         _contractValue = msg.value;
+
+        _status = Status.PATIENT_CONFIRMED;
+        
+    }
+
+    function insurerConfirm() external {
+        require(msg.sender == _insurer);
+        require(_status == Status.PATIENT_CONFIRMED);
+
         _startDate = now;
         _endDate = _startDate + monthToMiliseconds(_period);
+
         // Transfer money to insurer
         _insurer.transfer(address(this).balance);
         _status = Status.VALID;
-        
+
         emit ContractSigned(now, msg.sender, _insurer, _packId, _period, _contractValue);
-        
+    }
+
+    function insurerReject() external {
+        require(msg.sender == _insurer);
+        require(_status == Status.PATIENT_CONFIRMED);
+        // Return money back to Patient
+        _patient.transfer(address(this).balance);
+        _status = Status.REJECTED;
     }
     
     function patientCancel(address inPatient) external {

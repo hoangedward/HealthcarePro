@@ -10,15 +10,21 @@ const Pi = {
 	renderStatus: function renderStatus(status) {
 		var _status = "N/A";
 		if (status == 0) {
-			_status = "[NEW] Waiting for patient confirm";
+			_status = "[NEW] Waiting for Patient confirm";
 		}
 		else if (status == 1) {
-			_status = "[VALID] Patient can use now";
+			_status = "[CONFIRMED] by Patient";
 		}
 		else if (status == 2) {
-			_status = "[EXPIRED] Insurer can withdraw";
+			_status = "[CONFIRMED] by Insurer. Valid to use!!!";
 		}
 		else if (status == 3) {
+			_status = "[EXPIRED] Insurer can withdraw";
+		}
+		else if (status == 4) {
+			_status = "[REJECTED] by Insurer";
+		}
+		else if (status == 5) {
 			_status = "[CANCELLED] by Patient";
 		}
 		return _status;
@@ -29,13 +35,19 @@ const Pi = {
 		if (status == 0) {
 			color = 'olive';
 		}
-		else if (status == 1) {
-			color = 'green';
+		if (status == 1) {
+			color = 'blue';
 		}
 		else if (status == 2) {
-			color = 'brown';
+			color = 'green';
 		}
 		else if (status == 3) {
+			color = 'brown';
+		}
+		else if (status == 4) {
+			color = 'red';
+		}
+		else if (status == 5) {
 			color = 'black';
 		}
 		return color;
