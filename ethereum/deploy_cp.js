@@ -13,13 +13,13 @@ const deployed_address = require('./deployed_address.js');
 const deploy = async () => {
 
   // ClinicCategory
-  console.log('Attempting to deploy ClinicCategory from account', Accounts['Clinic']);
+  console.log('Attempting to deploy ClinicCategory from account', Accounts['Admin']);
 
   const resultClinicCategory = await new web3.eth.Contract(
     JSON.parse(ClinicCategory.interface)
   )
     .deploy({ data: ClinicCategory.bytecode, arguments: [Accounts['Clinic']] })
-    .send({ gas: '4000000', from: Accounts['Clinic'] });
+    .send({ gas: '4000000', from: Accounts['Admin'] });
 
   console.log('Contract ClinicCategory deployed to', resultClinicCategory.options.address);
   

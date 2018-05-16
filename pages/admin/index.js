@@ -16,7 +16,6 @@ class AdminIndex extends Component {
 
 	async componentDidMount() {
 		var balanceMap = [];
-		balanceMap[Accounts.Admin] = await web3.eth.getBalance(Accounts.Admin);
 		balanceMap[Accounts.Patient] = await web3.eth.getBalance(Accounts.Patient);
 		balanceMap[Accounts.Clinic] = await web3.eth.getBalance(Accounts.Clinic);
 		balanceMap[Accounts.Insurer] = await web3.eth.getBalance(Accounts.Insurer);
@@ -27,12 +26,18 @@ class AdminIndex extends Component {
 		this.setState({ balance: balanceMap, loading: false });
 	}
 
+	roundAmount(amount) {
+		console.log('Amount = ' + amount);
+		console.log('ROUND = ' + parseFloat(amount).toFixed(2));
+		return parseFloat(amount).toFixed(2);
+	}
+
 	getBalance(account) {
 		var balance = this.state.balance[account];
 		if (typeof balance === "undefined") {
 			balance = '0';
 		}
-		return web3.utils.fromWei('' + balance, 'ether');
+		return this.roundAmount(web3.utils.fromWei('' + balance, 'ether'));
 	}
 
 	render() {
@@ -47,29 +52,22 @@ class AdminIndex extends Component {
 							</a>
 						</Link>
 						<h4>Account Infomation</h4>
-						<div class="ui segments">
-							<div class="ui segment">
-								<strong>Name: </strong> Admin
-								<br />
-								<strong>Address: </strong> {Accounts.Admin}
-								<br />
-								<strong>Balance: </strong> {this.getBalance(Accounts.Admin)} ETH
-							</div>
-							<div class="ui red segment">
+						<div className="ui segments">
+							<div className="ui red segment">
 								<strong>Name: </strong> Patient
 								<br />
 								<strong>Address: </strong> {Accounts.Patient}
 								<br />
 								<strong>Balance: </strong> {this.getBalance(Accounts.Patient)} ETH
 							</div>
-							<div class="ui blue segment">
+							<div className="ui blue segment">
 								<strong>Name: </strong> Clinic
 								<br />
 								<strong>Address: </strong> {Accounts.Clinic}
 								<br />
 								<strong>Balance: </strong> {this.getBalance(Accounts.Clinic)} ETH
 							</div>
-							<div class="ui green segment">
+							<div className="ui green segment">
 								<strong>Name: </strong> Insurer
 								<br />
 								<strong>Address: </strong> {Accounts.Insurer}
@@ -97,15 +95,15 @@ class AdminIndex extends Component {
 						</div>
 
 						<h4>Insurance Static Contracts</h4>
-						<div class="ui segments">
-							<div class="ui segment">
+						<div className="ui segments">
+							<div className="ui segment">
 								<strong>Name: </strong> ContractPIList
 								<br />
 								<strong>Address: </strong> {DeployAddress.ContractPIList}
 								<br />
 								<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
 							</div>
-							<div class="ui red segment">
+							<div className="ui red segment">
 								<strong>Name: </strong> InsuranceCategory
 								<br />
 								<strong>Address: </strong> {DeployAddress.InsuranceCategory}
