@@ -16,6 +16,7 @@ contract ContractPI {
     struct ClaimRequest {
         address requestedContract;
         address patient;
+        address clinic;
         bool paid;
         uint amount;
     }
@@ -56,6 +57,8 @@ contract ContractPI {
         _contractValue = msg.value;
         _startDate = now;
         _endDate = _startDate + monthToMiliseconds(_period);
+        // Transfer money to insurer
+        _insurer.transfer(address(this).balance);
         _status = Status.VALID;
         
         emit ContractSigned(now, msg.sender, _insurer, _packId, _period, _contractValue);
@@ -90,7 +93,7 @@ contract ContractPI {
         
         uint totalAmount = _insuranceCategory.calculateClaimAmount(_packId, _period, cp.getCheckItems(), cp.getCheckPrices());
         if(totalAmount > 0) {
-          _claimQueue[inContractCP] = ClaimRequest(inContractCP, _patient, false, totalAmount);
+          _claimQueue[inContractCP] = ClaimRequest(inContractCP, _patient, cp.getClinic(), false, totalAmount);
           
           _claimAddressQueue.push(inContractCP);
           
@@ -108,10 +111,10 @@ contract ContractPI {
         require(request.paid == false);
         require(msg.value >= request.amount);
         ContractCP cp = ContractCP(inContractCP);
-        cp.insurerPay.gas(4000000).value(request.amount)();
+        cp.getClinic().transfer(request.amount);
         request.paid = true;
         
-        emit AcceptClaim(inContractCP, _patient, request.amount);
+        emit AcceptClaim(inContractCP, _patient, cp.getClinic(), request.amount);
     }
     
     function requestForWithdraw() external payable {
@@ -122,7 +125,7 @@ contract ContractPI {
         msg.sender.transfer(address(this).balance);
     }
     
-    function getClaimQueue() external view returns (address[], address[], uint[], bool[]) {
+    function getClaimQueue() external view returns (address[], address[], address[], uint[], bool[]) {
         // // Test
         // uint length = 2;
         // address[] memory addressList = new address[](length);
@@ -141,17 +144,19 @@ contract ContractPI {
 
         address[] memory addressList = new address[](_claimAddressQueue.length);
         address[] memory patientList = new address[](_claimAddressQueue.length);
+        address[] memory clinicList = new address[](_claimAddressQueue.length);
         uint[] memory amountList = new uint[](_claimAddressQueue.length);
         bool[] memory paidList = new bool[](_claimAddressQueue.length);
         for(uint i = 0; i < _claimAddressQueue.length; i++) {
             ClaimRequest memory request = _claimQueue[_claimAddressQueue[i]];
             addressList[i] = request.requestedContract;
             patientList[i] = request.patient;
+            clinicList[i] = request.clinic;
             paidList[i] = request.paid;
             amountList[i] = request.amount;
         }
         
-        return (addressList, patientList, amountList, paidList);
+        return (addressList, patientList, clinicList, amountList, paidList);
     }
     
     function monthToMiliseconds(uint inMonth) internal pure returns (uint) {
@@ -197,6 +202,6 @@ contract ContractPI {
     
     event ClaimRequested(address, address, uint);
     
-    event AcceptClaim(address, address, uint);
+    event AcceptClaim(address, address, address, uint);
 
 }

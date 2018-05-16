@@ -43,13 +43,19 @@ class ClaimQueueIndex extends Component {
 		});
 
 		index = 0;
-		const amountList = claimQueue[2];
+		const clinicList = claimQueue[2];
+		clinicList.map(clinic => {
+			claimQueueArr[index++].clinic = clinic;
+		});
+
+		index = 0;
+		const amountList = claimQueue[3];
 		amountList.map(amount => {
 			claimQueueArr[index++].amount = amount;
 		});
 
 		index = 0;
-		const paidList = claimQueue[3];
+		const paidList = claimQueue[4];
 		paidList.map(paid => {
 			claimQueueArr[index++].paid = paid;
 		});
@@ -87,7 +93,7 @@ class ClaimQueueIndex extends Component {
 										<ConfirmTransaction 
 											open={this.state.confirmOpen}
 											amount={queue.amount}
-											toAccount={queue.cp}
+											toAccount={queue.clinic}
 											onNo={() => {this.setState({confirmOpen: false})}}
 											onYes={this.onApprove(queue.cp, queue.amount)}
 											loading={this.state.loading}
@@ -112,6 +118,8 @@ class ClaimQueueIndex extends Component {
 				),
 				description: (
 					<div>
+						<strong>Clinic: </strong>{queue.clinic}
+						<div/>
 						<strong>Patient: </strong>{queue.patient}
 						<p></p>
 						<Link route={`/clinic/document/${queue.cp}`}>

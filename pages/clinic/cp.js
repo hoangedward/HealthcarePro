@@ -43,6 +43,10 @@ const Cp = {
 		return (names);
 	},
 
+	renderPayStatus: function renderPayStatus(status) {
+		return status == '1' ? '(Paid)' : '(Unpaid)';
+	},
+
 	renderPeriod: function renderPeriod(period) {
 		var _period = "-";
 		if (period == 6) {

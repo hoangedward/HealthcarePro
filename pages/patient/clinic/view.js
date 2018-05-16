@@ -37,7 +37,9 @@ class PatientClinicViewIndex extends Component {
 			document: summary[6],
 			contractPi: summary[7],
 			patientPaidAmount: summary[8],
-			insurerPaidAmount: summary[9],
+			patientPayStatus: summary[9],
+			insurerPaidAmount: summary[10],
+			insurerPayStatus: summary[11],
 			loading: false
 		} );
 	}
@@ -159,8 +161,8 @@ class PatientClinicViewIndex extends Component {
 							<Segment><strong>Clinic Address: </strong>{this.state.clinic}</Segment>
 							<Segment><strong>Checked Items: </strong>{Cp.renderCheckedItems(this.state.checkedItems).join(', ')}</Segment>
 							<Segment><strong>Total Value: </strong><EtherUint value={this.state.totalContractValue}/></Segment>
-							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.state.patientPaidAmount, 'ether')} ETH</Segment>
-							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.state.insurerPaidAmount, 'ether')} ETH</Segment>
+							<Segment><strong>Patient payment: </strong>{eth.fromWei(this.state.patientPaidAmount, 'ether')} ETH {this.state.patientPaidAmount == 0 ? '' : Cp.renderPayStatus(this.state.patientPayStatus)}</Segment>
+							<Segment><strong>Insurer payment: </strong>{eth.fromWei(this.state.insurerPaidAmount, 'ether')} ETH {this.state.insurerPaidAmount == 0 ? '' : Cp.renderPayStatus(this.state.insurerPayStatus)}</Segment>
 							<Segment><strong>Balance: </strong>{eth.fromWei(this.state.balance, 'ether')} ETH</Segment>
 							<Segment>
 								<Link route={`/clinic/document/${this.state.address}`}>

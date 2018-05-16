@@ -101,7 +101,7 @@ contract ContractCP {
     
     function checkForPay() internal {
         require(_status == Status.WAITING_FOR_PAID);
-        if(_insurerPaid && _patientPaid) {
+        if(_patientPaid) {
             _status = Status.CHECKING;
         }
         emit ReadyToCheck();
@@ -158,7 +158,7 @@ contract ContractCP {
         return _documentLink;
     }
 
-    function getSummary() external view returns (Status, address, address, uint[], uint, uint, string, address, uint, uint) {
+    function getSummary() external view returns (Status, address, address, uint[], uint, uint, string, address, uint, bool, uint, bool) {
         uint totalContractValue = _contractClinicCategory.calFee(_checkItems);
         return (
             _status,
@@ -170,7 +170,9 @@ contract ContractCP {
             _documentLink,
             _contractPI,
             _patientPaidAmount,
-            _insurerPaidAmount
+            _patientPaid,
+            _insurerPaidAmount,
+            _insurerPaid
         );
     }
 
