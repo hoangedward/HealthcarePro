@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Card, List } from 'semantic-ui-react';
+import { Form, Button, Message, Card } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
 import { Router } from '../../../routes';
@@ -8,6 +8,8 @@ import ContractPIList from '../../../ethereum/ContractPIList';
 import web3 from '../../../ethereum/web3';
 import deployed_address from '../../../ethereum/deployed_address.json';
 import Accounts from '../../../ethereum/const/Accounts.json';
+
+import { Pack1, Pack2 } from './pack';
 
 class PatientInsurerRegisterIndex extends Component {
 
@@ -53,12 +55,7 @@ class PatientInsurerRegisterIndex extends Component {
 			price = "20.00 ETH";
 			item = (
 				<div>
-					<List bulleted>
-						<List.Item>Fever</List.Item>
-						<List.Item>Backache</List.Item>
-						<List.Item>Stomach ache</List.Item>
-						<List.Item>Toothache</List.Item>
-					</List>
+					<Pack1 />
 				</div>
 			);
 		}
@@ -67,12 +64,7 @@ class PatientInsurerRegisterIndex extends Component {
 			price = "30.00 ETH";
 			item = (
 				<div>
-					<List bulleted>
-						<List.Item>Fever</List.Item>
-						<List.Item>Backache</List.Item>
-						<List.Item>Stomach ache</List.Item>
-						<List.Item>Toothache</List.Item>
-					</List>
+					<Pack1 />
 				</div>
 			);
 		}
@@ -81,14 +73,7 @@ class PatientInsurerRegisterIndex extends Component {
 			price = "30.00 ETH";
 			item = (
 				<div>
-					<List bulleted>
-						<List.Item>Fever</List.Item>
-						<List.Item>Backache</List.Item>
-						<List.Item>Stomach ache</List.Item>
-						<List.Item>Toothache</List.Item>
-						<List.Item>Cancer</List.Item>
-						<List.Item>General examination</List.Item>
-					</List>
+					<Pack2 />
 				</div>
 			);
 		}
@@ -97,14 +82,7 @@ class PatientInsurerRegisterIndex extends Component {
 			price = "40.00 ETH";
 			item = (
 				<div>
-					<List bulleted>
-						<List.Item>Fever</List.Item>
-						<List.Item>Backache</List.Item>
-						<List.Item>Stomach ache</List.Item>
-						<List.Item>Toothache</List.Item>
-						<List.Item>Cancer</List.Item>
-						<List.Item>General examination</List.Item>
-					</List>
+					<Pack2 />
 				</div>
 			);
 		}

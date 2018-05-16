@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Form, Button, Message, Card, List } from 'semantic-ui-react';
+import { Form, Button, Message, Card, Grid } from 'semantic-ui-react';
 import Layout from '../../../components/Layout';
 import { Link } from '../../../routes';
+
+import { Pack1, Pack2 } from './pack';
 
 class PatientInsurerNewIndex extends Component {
 
@@ -31,12 +33,7 @@ class PatientInsurerNewIndex extends Component {
 										We share with you
 									</Card.Meta>
 									<Card.Description>
-										<List bulleted>
-											<List.Item>Fever</List.Item>
-											<List.Item>Backache</List.Item>
-											<List.Item>Stomach ache</List.Item>
-											<List.Item>Toothache</List.Item>
-										</List>
+										<Pack1 />
 									</Card.Description>
 								</Card.Content>
 								<Card.Content extra>
@@ -74,14 +71,7 @@ class PatientInsurerNewIndex extends Component {
 										You are all covered
 									</Card.Meta>
 									<Card.Description>
-										<List bulleted>
-											<List.Item>Fever</List.Item>
-											<List.Item>Backache</List.Item>
-											<List.Item>Stomach ache</List.Item>
-											<List.Item>Toothache</List.Item>
-											<List.Item>Cancer</List.Item>
-											<List.Item>	General examination</List.Item>
-										</List>
+									<Pack2 />
 									</Card.Description>
 								</Card.Content>
 								<Card.Content extra>
