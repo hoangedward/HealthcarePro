@@ -9,14 +9,11 @@ contract ContractCPList {
     mapping(address => address[]) private _patientContractList;
     mapping(address => address[]) private _clinicContractList;
 
-    /**
-     * Create a ContractCP and save it to the list of contracts of Patient;
-     * @param inClinic address of Clinic account
-     * @param inPatient address of Patient account
-     * @param inClinicCategory address of Clinic Cateogry Contract
-     * @param inCheckItems list of items that Patient want to check
-     * @param inContractcp address of Patient's insurance contract
-     */
+    event ContractEvent(
+        address addressCP,
+        bool isAdd
+    );
+
     function createContract(address inClinic, address inPatient, address inClinicCategory, uint[] inCheckItems, address inContractcp) external {
         require(msg.sender == inPatient);
 
@@ -27,22 +24,15 @@ contract ContractCPList {
         // Add to Clinic contracts list
         address[] storage currentContractListOfClinic = _clinicContractList[inClinic];
         currentContractListOfClinic.push(cp);
+
+        // Notify adding new ContractCP
+        emit ContractEvent(cp, true);
     }
 
-    /**
-     * Returns list of contracts of a patient
-     * @param inPatient address of patient
-     * @return address[] list of contract addresses
-     */
     function getPatientContracts(address inPatient) external view returns (address[]) {
         return _patientContractList[inPatient];
     }
 
-    /**
-     * Returns list of contracts of a clinic
-     * @param inClinic address of clinic
-     * @return address[] list of contract addresses
-     */
     function getClinicContracts(address inClinic) external view returns (address[]) {
         return _clinicContractList[inClinic];
     }
@@ -53,12 +43,18 @@ contract ContractCPList {
 			if(contractList[i] == inContract) {
 				ContractCP cp = ContractCP(inContract);
 				if(cp.canCancel(msg.sender) == false) {
+                    // Failed
 					return 1;
 				}
 				address patient = cp.getPatient();
 				address clinic = cp.getClinic();
 				removeContract(clinic, patient, i);
 				cp.patientCancel(msg.sender);
+
+                // Notify removing the existing contract
+                emit ContractEvent(address(cp), false);
+
+                // Success
 				return 0;
 			}
 		}
