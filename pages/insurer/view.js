@@ -52,13 +52,13 @@ class InsurerViewIndex extends Component {
 			return false;
 		}
 		else if (name == "confirm") {
-			if (this.state.status == 1) {
+			if (this.state.status == 0) {
 				return true;
 			}
 			return false;
 		}
 		else if (name == "reject") {
-			if (this.state.status == 1) {
+			if (this.state.status == 0) {
 				return true;
 			}
 			return false;

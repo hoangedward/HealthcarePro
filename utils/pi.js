@@ -10,13 +10,13 @@ const Pi = {
 	renderStatus: function renderStatus(status) {
 		var _status = "N/A";
 		if (status == 0) {
-			_status = "[NEW] Waiting for Patient confirm";
+			_status = "[NEW] Waiting for Insurer confirm";
 		}
 		else if (status == 1) {
-			_status = "[CONFIRMED] by Patient";
+			_status = "[CONFIRMED] by Insurer";
 		}
 		else if (status == 2) {
-			_status = "[CONFIRMED] by Insurer. Valid to use!!!";
+			_status = "[CONFIRMED] by Patient. Valid to use!!!";
 		}
 		else if (status == 3) {
 			_status = "[EXPIRED] Insurer can withdraw";

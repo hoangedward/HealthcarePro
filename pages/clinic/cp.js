@@ -44,7 +44,19 @@ const Cp = {
 	},
 
 	renderPayStatus: function renderPayStatus(status) {
-		return status == '1' ? '(Paid)' : '(Unpaid)';
+		if(status == 0) {
+			return '(PENDING)';
+		}
+		else if(status == 1) {
+			return '(CONFIRMED)';
+		}
+		else if(status == 2) {
+			return '(PAID)';
+		}
+		else if(status == 3) {
+			return '(REJECTED)';
+		}
+		return '(N/A)';
 	},
 
 	renderPeriod: function renderPeriod(period) {

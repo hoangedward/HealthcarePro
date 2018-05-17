@@ -6,6 +6,8 @@ import "./ClinicCategory.sol";
 contract ContractCP {
     
     enum Status {NEW, WAITING_FOR_PAID, CHECKING, DONE, CANCELLED}
+
+    enum PayStatus {PENDING, CONFIRMED, PAID, REJECTED}
     
     address private _clinic;
     address private _patient;
@@ -15,9 +17,9 @@ contract ContractCP {
     uint private _totalFee;
     
     address private _contractPI;
-    bool private _patientPaid;
+    PayStatus private _patientPaid;
     uint private _patientPaidAmount;
-    bool private _insurerPaid;
+    PayStatus private _insurerPaid;
     uint private _insurerPaidAmount;
 
     // For simply, I just want to store 1 document link
@@ -63,7 +65,7 @@ contract ContractCP {
         }
         else {
             // No insurance
-            _insurerPaid = true;
+            _insurerPaid = PayStatus.PAID;
         }
         _patientPaidAmount = _totalFee - _insurerPaidAmount;
 
@@ -78,9 +80,9 @@ contract ContractCP {
         require(msg.sender == _patient);
         require(_status == Status.WAITING_FOR_PAID);
         require(_patientPaidAmount > 0);
-        require(_patientPaid == false);
+        require(_patientPaid == PayStatus.PENDING);
         require(msg.value >= _patientPaidAmount);
-        _patientPaid = true;
+        _patientPaid = PayStatus.CONFIRMED;
 
         emit PatientPaid(_patientPaidAmount);
         
@@ -90,18 +92,26 @@ contract ContractCP {
     function insurerPay() external payable {
         require(_status == Status.WAITING_FOR_PAID);
         require(_insurerPaidAmount > 0);
-        require(_insurerPaid == false);
+        require(_insurerPaid == PayStatus.PENDING);
         require(msg.sender == _contractPI);
         require(msg.value >= _insurerPaidAmount);
-        _insurerPaid = true;
+        _insurerPaid = PayStatus.CONFIRMED;
         emit InsurerPaid(_patientPaidAmount);
         
         checkForPay();
     }
+
+    function transferToClinic() external payable {
+        require(msg.sender == _contractPI);
+        require(_insurerPaidAmount > 0);
+        require(_insurerPaid == PayStatus.CONFIRMED);
+        _clinic.transfer(_insurerPaidAmount);
+        _insurerPaid == PayStatus.PAID;
+    }
     
     function checkForPay() internal {
         require(_status == Status.WAITING_FOR_PAID);
-        if(_patientPaid) {
+        if(_patientPaid == PayStatus.CONFIRMED && _insurerPaid == PayStatus.CONFIRMED) {
             _status = Status.CHECKING;
         }
         emit ReadyToCheck();
@@ -110,8 +120,9 @@ contract ContractCP {
     function patientConfirm() external payable {
         require(msg.sender == _patient);
         require(_status == Status.CHECKING);
-        _clinic.transfer(address(this).balance);
+        _clinic.transfer(_patientPaidAmount);
         _status = Status.DONE;
+        _patientPaid = PayStatus.PAID;
     }
     
     function patientCancel(address inPatient) external {
@@ -158,7 +169,7 @@ contract ContractCP {
         return _documentLink;
     }
 
-    function getSummary() external view returns (Status, address, address, uint[], uint, uint, string, address, uint, bool, uint, bool) {
+    function getSummary() external view returns (Status, address, address, uint[], uint, uint, string, address, uint, PayStatus, uint, PayStatus) {
         uint totalContractValue = _contractClinicCategory.calFee(_checkItems);
         return (
             _status,

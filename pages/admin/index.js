@@ -75,42 +75,6 @@ class AdminIndex extends Component {
 								<strong>Balance: </strong> {this.getBalance(Accounts.Insurer)} ETH
 							</div>
 						</div>
-
-						<h4>Clinic Static Contracts</h4>
-						<div className="ui segments">
-							<div className="ui segment">
-								<strong>Name: </strong> ContractCPList
-								<br/>
-								<strong>Address: </strong> {DeployAddress.ContractCPList}
-								<br/>
-								<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractCPList)} ETH
-							</div>
-							<div className="ui segment blue">
-								<strong>Name: </strong> ClinicCategory
-								<br/>
-								<strong>Address: </strong> {DeployAddress.ClinicCategory}
-								<br/>
-								<strong>Balance: </strong> {this.getBalance(DeployAddress.ClinicCategory)} ETH
-							</div>
-						</div>
-
-						<h4>Insurance Static Contracts</h4>
-						<div className="ui segments">
-							<div className="ui segment">
-								<strong>Name: </strong> ContractPIList
-								<br />
-								<strong>Address: </strong> {DeployAddress.ContractPIList}
-								<br />
-								<strong>Balance: </strong> {this.getBalance(DeployAddress.ContractPIList)} ETH
-							</div>
-							<div className="ui red segment">
-								<strong>Name: </strong> InsuranceCategory
-								<br />
-								<strong>Address: </strong> {DeployAddress.InsuranceCategory}
-								<br />
-								<strong>Balance: </strong> {this.getBalance(DeployAddress.InsuranceCategory)} ETH
-							</div>
-						</div>
 					</div>
 				</Form>
 			</Layout>

@@ -55,9 +55,9 @@ class ClaimQueueIndex extends Component {
 		});
 
 		index = 0;
-		const paidList = claimQueue[4];
-		paidList.map(paid => {
-			claimQueueArr[index++].paid = paid;
+		const statusList = claimQueue[4];
+		statusList.map(status => {
+			claimQueueArr[index++].status = status;
 		});
 
 		this.setState({claimQueueArr: claimQueueArr, address: this.props.address, loading: false});
@@ -77,7 +77,7 @@ class ClaimQueueIndex extends Component {
 				header: (
 					<div>
 						{
-							queue.paid ?
+							queue.status == 2 ?
 								(
 									<Button disabled as='div' labelPosition='right' size='mini' floated='right'>
 										<Button color='gray' size='mini'>
@@ -88,20 +88,33 @@ class ClaimQueueIndex extends Component {
 									</Button>
 								)
 								:
+							queue.status == 1 ?	
+								(
+									<div>
+										<Button as='div' labelPosition='right' size='medium' floated='right' onClick={this.onApprove(queue.cp, queue.amount)}>
+											<Button color='red' size='mini'>
+												<Icon name='hand outline left' />
+												Approve
+											</Button>
+											<Label size='mini' basic color='red' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
+										</Button>
+									</div>
+								)
+								:
 								(
 									<div>
 										<ConfirmTransaction 
 											open={this.state.confirmOpen}
 											amount={queue.amount}
-											toAccount={queue.clinic}
+											toAccount={queue.cp}
 											onNo={() => {this.setState({confirmOpen: false})}}
-											onYes={this.onApprove(queue.cp, queue.amount)}
+											onYes={this.onConfirm(queue.cp, queue.amount)}
 											loading={this.state.loading}
 										/>
 										<Button as='div' labelPosition='right' size='medium' floated='right' onClick={() => {this.setState({confirmOpen: true})}}>
-											<Button color='red' size='mini'>
+											<Button primary size='mini'>
 												<Icon name='hand outline left' />
-												Approve
+												Confirm
 											</Button>
 											<Label size='mini' basic color='red' pointing='left'>{eth.fromWei(queue.amount, 'ether')}</Label>
 										</Button>
@@ -149,6 +162,31 @@ class ClaimQueueIndex extends Component {
 		try {
 			await contractPI.methods
 				.insurerAcceptClaim(cp)
+				.send({
+					from: Accounts.Insurer,
+					gas: 4000000
+				});
+
+			Router.pushRoute('/insurer');
+		} catch (err) {
+			this.setState({ errorMessage: err.message });
+		}
+
+		this.setState({ loading: false });
+
+	}
+
+	onConfirm = (cp, amount) => async event => {
+
+		event.preventDefault();
+
+		this.setState({ loading: true, errorMessage: '' });
+
+		const contractPI = ContractPI(this.state.address);
+
+		try {
+			await contractPI.methods
+				.insurerConfirmClaim(cp)
 				.send({
 					from: Accounts.Insurer,
 					gas: 4000000,

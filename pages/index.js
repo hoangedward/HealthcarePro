@@ -34,11 +34,6 @@ class HomeIndex extends Component {
               <Button basic color='blue' content="Insurer" onClick={this.defaultOnClick} />
             </a>
           </Link>
-          <Link route="/admin">
-            <a>
-              <Button content='Admin' color='brown' floated='right' onClick={this.defaultOnClick} />
-            </a>
-          </Link>
         </div>
         </Form>
       </Layout>

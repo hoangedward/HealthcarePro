@@ -50,13 +50,13 @@ class PatientInsurerViewIndex extends Component {
 
 	isEnableButton(name) {
 		if (name == "confirm") {
-			if (this.state.status == 0) {
+			if (this.state.status == 1) {
 				return true;
 			}
 			return false;
 		}
 		else if (name == "cancel") {
-			if (this.state.status == 0) {
+			if (this.state.status == 0 || this.state.status == 1) {
 				return true;
 			}
 			return false;
