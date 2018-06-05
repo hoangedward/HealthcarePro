@@ -70,7 +70,7 @@ class ClinicDocumentIndex extends Component {
 	render() {
 		return (
 			<Layout>
-				<h3>Clinic Document</h3>
+				<h3>Medical Document</h3>
 				<Form error={!!this.state.errorMessage} loading={this.state.loading}>
 					<Message error header="Oops!" content={this.state.errorMessage} />
 					<div>

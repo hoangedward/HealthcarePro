@@ -131,7 +131,7 @@ class PatientInsurerViewIndex extends Component {
 							<ConfirmTransaction 
 								open={this.state.confirmOpen}
 								amount={this.state.totalContractValue}
-								toAccount={this.state.address}
+								toAccount={this.state.insurer}
 								onNo={() => {this.setState({confirmOpen: false})}}
 								onYes={this.onConfirm}
 								loading={this.state.loading}

@@ -58,7 +58,14 @@ contract ContractPI {
         
         _contractValue = msg.value;
 
+         // Transfer money to insurer
+        _insurer.transfer(address(this).balance);
+
+        _startDate = now;
+        _endDate = _startDate + monthToMiliseconds(_period);
         _status = Status.VALID;
+
+        emit ContractSigned(now, msg.sender, _insurer, _packId, _period, _contractValue);
         
     }
 
@@ -66,14 +73,8 @@ contract ContractPI {
         require(msg.sender == _insurer);
         require(_status == Status.NEW);
 
-        _startDate = now;
-        _endDate = _startDate + monthToMiliseconds(_period);
-
-        // Transfer money to insurer
-        _insurer.transfer(address(this).balance);
         _status = Status.INSURER_CONFIRMED;
-
-        emit ContractSigned(now, msg.sender, _insurer, _packId, _period, _contractValue);
+        
     }
 
     function insurerReject() external {
